@@ -18,17 +18,13 @@ terraform {
 module "resources-vpc" {
   source = "./vpc"
 
-  vpc_tag_name = "Resources VPC"
-  public_subnet_tag_name = "Resources VPC Public Subnet"
-  private_subnet_tag_name = "Resources VPC Private Subnet"
-  internet_gateway_tag_name = "Resources VPC Internet Gateway"
+  name = "resources"
+  tag_name = "Resources"
 }
 
 module "sandbox-vpc" {
   source = "./vpc"
 
-  vpc_tag_name = "Sandbox VPC"
-  public_subnet_tag_name = "Sandbox VPC Public Subnet"
-  private_subnet_tag_name = "Sandbox VPC Private Subnet"
-  internet_gateway_tag_name = "Sandbox VPC Internet Gateway"
+  name = "sandbox"
+  tag_name = "Sandbox"
 }
