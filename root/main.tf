@@ -6,23 +6,29 @@ provider "aws" {
   region = "us-east-1"
 }
 
-data "aws_s3_bucket" "tf-state-bucket" {
-  bucket = "andrew-jarombek-terraform-state"
-}
-
 terraform {
   backend "s3" {
-    bucket = "${data.aws_s3_bucket.tf-state-bucket.bucket}"
+    bucket = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global/root"
+    key = "global-aws-infrastructure/root"
     region = "us-east-1"
   }
 }
 
-resource "aws_vpc" "resources-vpc" {
-  cidr_block = "10.0.0.0/16"
+module "resources-vpc" {
+  source = "./vpc"
+
+  vpc_tag_name = "Resources VPC"
+  public_subnet_tag_name = "Resources VPC Public Subnet"
+  private_subnet_tag_name = "Resources VPC Private Subnet"
+  internet_gateway_tag_name = "Resources VPC Internet Gateway"
 }
 
-resource "aws_vpc" "sandbox-vpc" {
-  cidr_block = "10.0.0.0/16"
+module "sandbox-vpc" {
+  source = "./vpc"
+
+  vpc_tag_name = "Sandbox VPC"
+  public_subnet_tag_name = "Sandbox VPC Public Subnet"
+  private_subnet_tag_name = "Sandbox VPC Private Subnet"
+  internet_gateway_tag_name = "Sandbox VPC Internet Gateway"
 }
