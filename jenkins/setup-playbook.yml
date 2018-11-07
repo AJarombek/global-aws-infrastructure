@@ -1,0 +1,26 @@
+# Ansible Playbook for my Jenkins AMI
+# Author: Andrew Jarombek
+# Date: 11/5/2018
+
+# Use Ansible's local mode to provision on the machine the playbook is run on
+- hosts: localhost
+  connection: local
+  sudo: yes
+
+  tasks:
+
+    - name: Add Java 8 Repository
+      # 'become' executes a task under the default user, which is root
+      become: yes
+      apt_repository: repo='ppa:webupd8team/jaba'
+
+    - name: Accept Java 8 License
+      become: yes
+
+    - name: Install Oracle Java 8
+      become: yes
+      apt: name={{item}} state=latest
+      with_items:
+        - oracle-java8-installer
+        - ca-certificates
+        - oracle-java8-set-default
