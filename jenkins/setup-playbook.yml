@@ -5,22 +5,39 @@
 # Use Ansible's local mode to provision on the machine the playbook is run on
 - hosts: localhost
   connection: local
-  sudo: yes
+  become: yes
 
   tasks:
 
-    - name: Add Java 8 Repository
-      # 'become' executes a task under the default user, which is root
+    - name: Install Java8, Git and Wget
       become: yes
-      apt_repository: repo='ppa:webupd8team/jaba'
-
-    - name: Accept Java 8 License
-      become: yes
-
-    - name: Install Oracle Java 8
-      become: yes
-      apt: name={{item}} state=latest
+      # {{item}} is replaced with each item in "with_items"
+      apt: pkg={{item}} state=installed
+      # You can think of "with_items" as creating a for loop around this task
       with_items:
-        - oracle-java8-installer
-        - ca-certificates
-        - oracle-java8-set-default
+        - openjdk-8-jdk
+        - git
+        - wget
+
+    - name: Download Jenkins
+      become: yes
+      # 'command' cares about the returned code from the shell command
+      command: "{{item}} || /bin/true"
+      ignore_errors: True
+      with_items:
+        - wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | apt-key add -
+        - sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+    - name: Update APT Packages
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      become: yes
+      apt:
+        pkg: "{{item}}"
+        state: installed
+        force: yes
+      with_items:
+        - jenkins
