@@ -17,9 +17,6 @@ terraform {
   }
 }
 
-# Fetch the availability zones for this account
-data "aws_availability_zones" "all" {}
-
 # Retrieve the custom baked AMI for the jenkins server
 data "aws_ami" "jenkins-ami" {
   # If more than one result matches the filters, use the most recent AMI
@@ -38,6 +35,7 @@ data "aws_ami" "jenkins-ami" {
   owners = ["739088120071"]
 }
 
+# Security group for the resources VPC
 data "aws_security_group" "public-subnet-security-group" {
   filter {
     name = "group-name"
@@ -45,6 +43,19 @@ data "aws_security_group" "public-subnet-security-group" {
   }
 }
 
+data "aws_vpc" "resources-vpc" {
+  tags {
+    Name = "Resources VPC"
+  }
+}
+
+data "aws_subnet" "resources-vpc-public-subnet" {
+  tags {
+    Name = "Resources VPC Public Subnet"
+  }
+}
+
+# Load a bash file that starts up a Jenkins server
 data "template_file" "jenkins-startup" {
   template = "${file("jenkins-setup.sh")}"
 
@@ -70,7 +81,9 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
 
 resource "aws_autoscaling_group" "jenkins-server-asg" {
   launch_configuration = "${aws_launch_configuration.jenkins-server-lc.id}"
-  availability_zones = ["${data.aws_availability_zones.all.names}"]
+
+  # Needed when using an autoscaling group in a VPC
+  vpc_zone_identifier = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
 
   max_size = "${var.max_size}"
   min_size = "${var.min_size}"
@@ -91,7 +104,9 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
 
 resource "aws_elb" "jenkins-server-elb" {
   name = "global-jenkins-server-elb"
-  availability_zones = ["${data.aws_availability_zones.all.names}"]
+
+  # Required for an Elastic Load Balancer in a VPC
+  subnets = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
 
   security_groups = [
     "${aws_security_group.jenkins-server-elb-security-group.id}",
@@ -120,6 +135,7 @@ resource "aws_elb" "jenkins-server-elb" {
 
 resource "aws_security_group" "jenkins-server-lc-security-group" {
   name = "global-jenkins-server-lc-security-group"
+  vpc_id = "${data.aws_vpc.resources-vpc.id}"
 
   ingress {
     from_port = "${var.instance_port}"
@@ -135,6 +151,7 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
 
 resource "aws_security_group" "jenkins-server-elb-security-group" {
   name = "global-jenkins-server-elb-security-group"
+  vpc_id = "${data.aws_vpc.resources-vpc.id}"
 
   # Outbound requests for health checks
   egress {
