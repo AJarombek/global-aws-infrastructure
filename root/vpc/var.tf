@@ -1,6 +1,8 @@
-# Varaibles for creating a VPC
-# Author: Andrew Jarombek
-# Date: 11/4/2018
+/**
+ * Varaibles for creating a VPC
+ * Author: Andrew Jarombek
+ * Date: 11/4/2018
+ */
 
 # naming resources
 variable "name" {

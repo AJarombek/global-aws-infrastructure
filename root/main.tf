@@ -1,6 +1,8 @@
-# Top-Level AWS Infrastructure for my cloud
-# Author: Andrew Jarombek
-# Date: 11/3/2018
+/**
+ * Top-Level AWS Infrastructure for my cloud
+ * Author: Andrew Jarombek
+ * Date: 11/3/2018
+ */
 
 provider "aws" {
   region = "us-east-1"

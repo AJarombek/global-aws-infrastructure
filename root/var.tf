@@ -1,6 +1,8 @@
-# Variables for my clouds Top-Level AWS Infrastructure
-# Author: Andrew Jarombek
-# Date: 11/4/2018
+/**
+ * Variables for my clouds Top-Level AWS Infrastructure
+ * Author: Andrew Jarombek
+ * Date: 11/4/2018
+ */
 
 # Variables for Resources VPC
 variable "resources_vpc_cidr" {

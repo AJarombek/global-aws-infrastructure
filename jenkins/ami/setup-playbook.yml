@@ -19,9 +19,11 @@
         - git
         - wget
 
+    # Downloading Jenkins - https://jenkins.io/doc/book/installing/#debianubuntu
     - name: Download Jenkins
       become: yes
-      # 'command' cares about the returned code from the shell command
+      # 'command' cares about the returned code from the shell command.
+      # Ansible playbook fails if an error is returned.
       command: "{{item}} || /bin/true"
       ignore_errors: True
       with_items:
