@@ -38,10 +38,29 @@ data "aws_ami" "jenkins-ami" {
   owners = ["739088120071"]
 }
 
+data "aws_security_group" "public-subnet-security-group" {
+  filter {
+    name = "group-name"
+    values = ["resources-vpc-public-security"]
+  }
+}
+
+data "template_file" "jenkins-startup" {
+  template = "${file("jenkins-setup.sh")}"
+
+  vars {
+    server_port = "${var.instance_port}"
+  }
+}
+
 resource "aws_launch_configuration" "jenkins-server-lc" {
+  name = "global-jenkins-server-lc"
   image_id = "${data.aws_ami.jenkins-ami.id}"
   instance_type = "t2.micro"
-  security_groups = ["${}"]
+  security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
+
+  # Script to run during instance startup
+  user_data = "${data.template_file.jenkins-startup.rendered}"
 
   lifecycle {
     # Create a replacement before destroying
@@ -56,7 +75,74 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
   max_size = "${var.max_size}"
   min_size = "${var.min_size}"
 
+  load_balancers = ["${aws_elb.jenkins-server-elb.id}"]
   health_check_type = "ELB"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tag {
+    key = "Name"
+    propagate_at_launch = true
+    value = "global-jenkins-server-asg"
+  }
+}
+
+resource "aws_elb" "jenkins-server-elb" {
+  name = "global-jenkins-server-elb"
+  availability_zones = ["${data.aws_availability_zones.all.names}"]
+
+  security_groups = [
+    "${aws_security_group.jenkins-server-elb-security-group.id}",
+    "${data.aws_security_group.public-subnet-security-group.id}"
+  ]
+
+  listener {
+    instance_port = "${var.instance_port}"
+    instance_protocol = "http"
+    lb_port = 80
+    lb_protocol = "http"
+  }
+
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    timeout = 3
+    interval = 30
+    target = "HTTP:${var.instance_port}/"
+  }
+
+  tags {
+    Name = "global-jenkins-server-elb"
+  }
+}
+
+resource "aws_security_group" "jenkins-server-lc-security-group" {
+  name = "global-jenkins-server-lc-security-group"
+
+  ingress {
+    from_port = "${var.instance_port}"
+    protocol = "tcp"
+    to_port = "${var.instance_port}"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "jenkins-server-elb-security-group" {
+  name = "global-jenkins-server-elb-security-group"
+
+  # Outbound requests for health checks
+  egress {
+    from_port = 0
+    protocol = "-1"
+    to_port = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   lifecycle {
     create_before_destroy = true

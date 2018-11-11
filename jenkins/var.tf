@@ -13,3 +13,8 @@ variable "min_size" {
   description = "Min number of instances in the auto scaling group"
   default = 1
 }
+
+variable "instance_port" {
+  description = "The port on the EC2 instances to receive requests from the load balancer"
+  default = 8080
+}
