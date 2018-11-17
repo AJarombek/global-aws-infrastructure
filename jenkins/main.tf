@@ -125,7 +125,7 @@ resource "aws_elb" "jenkins-server-elb" {
     unhealthy_threshold = 2
     timeout = 3
     interval = 30
-    target = "HTTP:${var.instance_port}/"
+    target = "TCP:${var.instance_port}"
   }
 
   tags {
