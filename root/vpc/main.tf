@@ -14,6 +14,59 @@ resource "aws_vpc" "vpc" {
   }
 }
 
+resource "aws_internet_gateway" "vpc-igw" {
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.tag_name} VPC Internet Gateway"
+  }
+}
+
+resource "aws_network_acl" "network-acl" {
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  egress {
+    action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    rule_no = 10
+  }
+
+  ingress {
+    action = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    rule_no = 20
+  }
+
+  tags {
+    Name = "${var.tag_name} ACL"
+  }
+}
+
+# https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html
+resource "aws_vpc_dhcp_options" "vpc-dns-resolver" {
+  domain_name_servers = ["AmazonProvidedDNS"]
+  domain_name = "ec2.internal"
+
+  tags {
+    Name = "${var.tag_name} DHCP Options"
+  }
+}
+
+resource "aws_vpc_dhcp_options_association" "vpc-dns-resolver-association" {
+  dhcp_options_id = "${aws_vpc_dhcp_options.vpc-dns-resolver.id}"
+  vpc_id = "${aws_vpc.vpc.id}"
+}
+
+#--------------
+# Public Subnet
+#--------------
+
 resource "aws_subnet" "public-subnet" {
   cidr_block = "${var.public_subnet_cidr}"
   vpc_id = "${aws_vpc.vpc.id}"
@@ -23,29 +76,12 @@ resource "aws_subnet" "public-subnet" {
   }
 }
 
-resource "aws_subnet" "private-subnet" {
-  cidr_block = "${var.private_subnet_cidr}"
-  vpc_id = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name = "${var.tag_name} VPC Private Subnet"
-  }
-}
-
-resource "aws_internet_gateway" "resources-vpc-igw" {
-  vpc_id = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name = "${var.tag_name} VPC Internet Gateway"
-  }
-}
-
-resource "aws_route_table" "routing_table" {
+resource "aws_route_table" "routing-table-public" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   route {
     cidr_block = "${var.routing_table_cidr}"
-    gateway_id = "${aws_internet_gateway.resources-vpc-igw.id}"
+    gateway_id = "${aws_internet_gateway.vpc-igw.id}"
   }
 
   tags {
@@ -53,12 +89,12 @@ resource "aws_route_table" "routing_table" {
   }
 }
 
-resource "aws_route_table_association" "routing_table_association" {
-  route_table_id = "${aws_route_table.routing_table.id}"
+resource "aws_route_table_association" "routing-table-association-public" {
+  route_table_id = "${aws_route_table.routing-table-public.id}"
   subnet_id = "${aws_subnet.public-subnet.id}"
 }
 
-resource "aws_security_group" "public_subnet_security" {
+resource "aws_security_group" "public-subnet-security" {
   name = "${var.name}-vpc-public-security"
   description = "Allow all incoming connections to public resources"
   vpc_id = "${aws_vpc.vpc.id}"
@@ -94,22 +130,56 @@ resource "aws_security_group" "public_subnet_security" {
   }
 
   egress {
-    from_port = 80
-    protocol = "tcp"
-    to_port = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port = 22
-    protocol = "tcp"
-    to_port = 22
+    from_port = 0
+    protocol = "-1"
+    to_port = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags {
     Name = "${var.tag_name} VPC Public Subnet Security"
   }
+}
+
+#---------------
+# Private Subnet
+#---------------
+
+resource "aws_subnet" "private-subnet" {
+  cidr_block = "${var.private_subnet_cidr}"
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.tag_name} VPC Private Subnet"
+  }
+}
+
+resource "aws_route_table" "routing-table-private" {
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  route {
+    cidr_block = "${var.routing_table_cidr}"
+    nat_gateway_id = "${aws_nat_gateway.nat-gateway.id}"
+  }
+
+  tags {
+    Name = "${var.tag_name} VPC Private Subnet RT"
+  }
+}
+
+resource "aws_eip" "nat-elastic-ip" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "nat-gateway" {
+  allocation_id = "${aws_eip.nat-elastic-ip.id}"
+  subnet_id = "${aws_subnet.public-subnet.id}"
+  depends_on = ["aws_internet_gateway.vpc-igw"]
+}
+
+resource "aws_route_table_association" "routing-table-association-private" {
+  route_table_id = "${aws_route_table.routing-table-private.id}"
+  subnet_id = "${aws_subnet.private-subnet.id}"
 }
 
 resource "aws_security_group" "private-subnet-security" {
@@ -145,6 +215,13 @@ resource "aws_security_group" "private-subnet-security" {
     to_port = -1
     protocol = "icmp"
     cidr_blocks = ["${var.public_subnet_cidr}"]
+  }
+
+  egress {
+    from_port = 0
+    protocol = "-1"
+    to_port = 0
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags {

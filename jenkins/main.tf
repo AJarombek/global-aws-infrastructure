@@ -69,6 +69,7 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
   image_id = "${data.aws_ami.jenkins-ami.id}"
   instance_type = "t2.micro"
   security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
+  associate_public_ip_address = true
 
   # Script to run during instance startup
   user_data = "${data.template_file.jenkins-startup.rendered}"
