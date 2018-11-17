@@ -6,6 +6,8 @@
 
 resource "aws_vpc" "vpc" {
   cidr_block = "${var.vpc_cidr}"
+  enable_dns_support = "${var.enable_dns_support}"
+  enable_dns_hostnames = "${var.enable_dns_hostnames}"
 
   tags {
     Name = "${var.tag_name} VPC"
@@ -88,6 +90,20 @@ resource "aws_security_group" "public_subnet_security" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 80
+    protocol = "tcp"
+    to_port = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 22
+    protocol = "tcp"
+    to_port = 22
     cidr_blocks = ["0.0.0.0/0"]
   }
 

@@ -25,6 +25,8 @@ module "resources-vpc" {
   tag_name = "Resources"
 
   # Optional arguments
+  enable_dns_support = true
+  enable_dns_hostnames = true
   # routing_table_cidr = "192.168.1.123/32"
 }
 
@@ -36,6 +38,8 @@ module "sandbox-vpc" {
   tag_name = "Sandbox"
 
   # Optional arguments
+  enable_dns_support = true
+  enable_dns_hostnames = true
   # routing_table_cidr = "192.168.1.123/32"
 }
 

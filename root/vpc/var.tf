@@ -19,6 +19,16 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "enable_dns_support" {
+  description = "Setting DNS support to 'true' enables private DNS"
+  default = false
+}
+
+variable "enable_dns_hostnames" {
+  description = "Setting DNS hostnames to 'true' enables private DNS"
+  default = false
+}
+
 # aws_subnet resources
 variable "public_subnet_cidr" {
   description = "The CIDR for the Resources VPC public subnet"
