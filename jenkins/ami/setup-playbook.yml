@@ -35,7 +35,7 @@
       apt:
         update_cache: yes
 
-    - name: Install Jenkins
+    - name: Install Jenkins & NFS
       become: yes
       apt:
         pkg: "{{item}}"
@@ -43,3 +43,4 @@
         force: yes
       with_items:
         - jenkins
+        - nfs-common
