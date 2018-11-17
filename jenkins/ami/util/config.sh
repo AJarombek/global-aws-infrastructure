@@ -24,3 +24,9 @@ aws efs describe-file-systems \
     --region us-east-1 \
     --creation-token jenkins-fs \
     --query FileSystems[0].FileSystemId
+
+# Execute build-ami.sh
+bash build-ami.sh
+
+# Test Instance
+ssh -i "testing.pem" ubuntu@ec2-34-228-162-214.compute-1.amazonaws.com

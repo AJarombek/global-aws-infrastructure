@@ -10,10 +10,18 @@ EFS_ID="$(aws efs describe-file-systems \
     --creation-token jenkins-fs \
     --query FileSystems[0].FileSystemId)"
 
-if [ -z "$EFS_ID" ]
+if [ ${EFS_ID} = "null" ]
 then
     echo "No EFS exists with creation-token 'jenkins-fs'"
     exit 1
 else
     echo "Baking AMI with EFS: ${EFS_ID}"
 fi
+
+# Validate that the Packer image is valid
+echo "Validating AMI Template"
+packer validate jenkins-image.json
+
+# Create a new machine image
+echo "Building AMI"
+packer build jenkins-image.json
