@@ -1,8 +1,7 @@
 {
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "efs_id": "{{env `EFS_ID`}}"
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -30,10 +29,6 @@
     {
       "type": "ansible-local",
       "playbook_file": "./setup-playbook.yml"
-    },
-    {
-      "type": "shell",
-      "script": "./mount-efs.sh"
     }
   ]
 }

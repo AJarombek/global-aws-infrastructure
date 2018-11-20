@@ -6,3 +6,12 @@ This repository contains all the global infrastructure-as-code (IaC) for Andrew 
 repositories are referenced in separate directories and README.md files.
 
 Here is the current infrastructure for Andrew Jarombek:
+
+### Directories
+
+| Directory Name    | Description                                                              |
+|-------------------|--------------------------------------------------------------------------|
+| `backend`         | The Terraform backend, consisting of an S3 bucket.                       |
+| `root`            | Root Terraform scripts for creating the accounts VPCs and IAM policies.  |
+| `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.            |
+| `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.            |

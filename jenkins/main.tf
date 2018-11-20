@@ -55,12 +55,19 @@ data "aws_subnet" "resources-vpc-public-subnet" {
   }
 }
 
+data "aws_efs_file_system" "jenkins-efs" {
+  tags {
+    Name = "Jenkins EFS"
+  }
+}
+
 # Load a bash file that starts up a Jenkins server
 data "template_file" "jenkins-startup" {
   template = "${file("jenkins-setup.sh")}"
 
   vars {
-    server_port = "${var.instance_port}"
+    MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
+    MOUNT_LOCATION = "/mnt/efs/JENKINS_HOME"
   }
 }
 

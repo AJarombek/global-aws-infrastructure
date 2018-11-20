@@ -1,6 +1,8 @@
 ### Overview
 
-The infrastructure defined in this directory relates to the Jenkins server running in the resources VPC.
+The infrastructure defined in this directory relates to the Jenkins server running in the resources VPC.  The AMI used
+by the Jenkins server is baked with Packer and an Ansible playbook.  An EFS is mounted to maintain the JENKINS_HOME
+directory across EC2 instances.
 
 ### Files
 
