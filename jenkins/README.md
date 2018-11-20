@@ -6,9 +6,9 @@ directory across EC2 instances.
 
 ### Files
 
-| Filename          | Description                                                                       |
-|-------------------|-----------------------------------------------------------------------------------|
-| ami               | Contains code to generate an AMI for the Jenkins server using Packer and Ansible  |
-| main.tf           | Main Terraform module code for creating a Jenkins server                          |
-| var.tf            | Variables for main.tf                                                             |
-| jenkins-setup.sh  | A script that runs as soon as the EC2 instance for the Jenkins server boots up    |
+| Filename            | Description                                                                       |
+|---------------------|-----------------------------------------------------------------------------------|
+| `ami`               | Contains code to generate an AMI for the Jenkins server using Packer and Ansible  |
+| `main.tf`           | Main Terraform module code for creating a Jenkins server                          |
+| `var.tf`            | Variables for main.tf                                                             |
+| `jenkins-setup.sh`  | A script that runs as soon as the EC2 instance for the Jenkins server boots up    |

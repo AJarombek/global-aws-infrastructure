@@ -42,8 +42,3 @@ module "sandbox-vpc" {
   enable_dns_hostnames = true
   # routing_table_cidr = "192.168.1.123/32"
 }
-
-# Route53 Config
-resource "aws_route53_zone" "jarombek-com" {
-  name = "jarombek.com."
-}
