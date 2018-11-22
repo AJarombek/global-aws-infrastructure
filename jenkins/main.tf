@@ -67,8 +67,17 @@ data "template_file" "jenkins-startup" {
 
   vars {
     MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
-    MOUNT_LOCATION = "/mnt/efs/JENKINS_HOME"
+    MOUNT_LOCATION = "efs"
   }
+}
+
+data "aws_iam_role" "jenkins-server-role" {
+  name = "jenkins-role"
+}
+
+resource "aws_iam_instance_profile" "jenkins-instance-profile" {
+  name = "global-jenkis-server-instance-profile"
+  role = "${data.aws_iam_role.jenkins-server-role.name}"
 }
 
 resource "aws_launch_configuration" "jenkins-server-lc" {
@@ -77,6 +86,7 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
   instance_type = "t2.micro"
   security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
   associate_public_ip_address = true
+  iam_instance_profile = "${aws_iam_instance_profile.jenkins-instance-profile.name}"
 
   # Script to run during instance startup
   user_data = "${data.template_file.jenkins-startup.rendered}"

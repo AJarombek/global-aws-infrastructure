@@ -17,23 +17,46 @@ terraform {
   }
 }
 
+# ----------
+# IAM Groups
+# ----------
+
 resource "aws_iam_group" "admin-group" {
   name = "admin-group"
   path = "/admin/"
 }
 
-resource "aws_iam_user" "jenkins-user" {
-  name = "jenkins-user"
+# ---------
+# IAM Users
+# ---------
+
+resource "aws_iam_user" "andy-user" {
+  name = "andy-user"
   path = "/admin/"
 }
 
 resource "aws_iam_user_group_membership" "jenkins-user-groups" {
   groups = ["${aws_iam_group.admin-group.id}"]
-  user = "${aws_iam_user.jenkins-user.id}"
+  user = "${aws_iam_user.andy-user.id}"
 }
 
-resource "aws_iam_user_policy" "jenkins-user-policy" {
-  name = "jenkins-user-policy"
-  user = "${aws_iam_user.jenkins-user.id}"
-  policy = "${file("jenkins-user-policy.json")}"
+resource "aws_iam_user_policy" "andy-user-policy" {
+  name = "andy-user-policy"
+  user = "${aws_iam_user.andy-user.id}"
+  policy = "${file("policies/andy-user-policy.json")}"
+}
+
+# ---------
+# IAM Roles
+# ---------
+
+resource "aws_iam_role" "jenkins-role" {
+  name = "jenkins-role"
+  path = "/admin/"
+  assume_role_policy = "${file("policies/jenkins-assume-role-policy.json")}"
+}
+
+resource "aws_iam_role_policy" "jenkins-role-policy" {
+  policy = "${file("policies/jenkins-role-policy.json")}"
+  role = "${aws_iam_role.jenkins-role.id}"
 }
