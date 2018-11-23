@@ -67,7 +67,7 @@ data "template_file" "jenkins-startup" {
 
   vars {
     MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
-    MOUNT_LOCATION = "efs"
+    MOUNT_LOCATION = "/var/lib/jenkins"
   }
 }
 

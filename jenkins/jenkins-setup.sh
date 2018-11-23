@@ -21,9 +21,12 @@ sudo mount \
 # Make Jenkins the owner of the EFS directory
 sudo chown jenkins:jenkins ${MOUNT_LOCATION}
 
-# Change the location of JENKINS_HOME in the config file /etc/default/jenkins
-# Command says 'globally substitute JENKINS_HOME=/var/lib/$NAME with JENKINS_HOME=${MOUNT_LOCATION}'
-sudo sed -i -e "s#JENKINS_HOME=/var/lib/\$NAME#JENKINS_HOME=${MOUNT_LOCATION}#g" /etc/default/jenkins
+# If EFS does not have jenkins mounted, reinstall Jenkins.
+if [ ! -e /var/lib/jenkins/jobs ]
+then
+    echo "Initial EFS Deployment... Reinstalling Jenkins"
+    sudo apt-get --assume-yes install --reinstall jenkins
+fi
 
 sudo echo "${MOUNT_TARGET}:/ ${MOUNT_LOCATION} nfsdefaults,vers=4.1 0 0" >> /etc/fstab
 

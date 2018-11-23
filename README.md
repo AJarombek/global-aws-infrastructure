@@ -9,9 +9,11 @@ Here is the current infrastructure for Andrew Jarombek:
 
 ### Directories
 
-| Directory Name    | Description                                                              |
-|-------------------|--------------------------------------------------------------------------|
-| `backend`         | The Terraform backend, consisting of an S3 bucket.                       |
-| `root`            | Root Terraform scripts for creating the accounts VPCs and IAM policies.  |
-| `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.            |
-| `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.            |
+| Directory Name    | Description                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| `backend`         | The Terraform backend, consisting of an S3 bucket.                          |
+| `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
+| `iam`             | Terraform scripts for creating IAM users, groups, roles, and policies.      |
+| `route53`         | Terraform scripts for creating DNS records for the account.                 |
+| `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.               |
+| `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.               |
