@@ -10,5 +10,5 @@ with the help of two provisioners.  The first provisioner is a Bash script and t
 |--------------------------|---------------------------------------------------------------------------------------------|
 | `jenkins-image.json`     | Packer image configuration file.  Defines the template AMI, provisioners, and the AMI name  |
 | `setup-jenkins-image.sh` | The Bash script provisioner for the AMI.  Installs Ansible                                  |
-| `setup-playbook.yml`     | The Ansible playbook provisioner for the AMI.  Installs Java, Jenkins, and NFS for EFS      |
+| `setup-playbook.yml`     | The Ansible playbook provisioner for the AMI.  Installs Java, Jenkins, NFS for EFS, etc.    |
 | `util/`                  | Folder for utility Bash scripts that assisted in baking the AMI                             |
