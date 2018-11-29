@@ -64,8 +64,8 @@
       ignore_errors: True
       with_items:
         - python --version
+        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - python get-pip.py
         - pip --version
-        # - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
-        # - python get-pip.py
         - pip install awscli
         - aws --version

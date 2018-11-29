@@ -176,6 +176,14 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Port 443 needs to be open for Terraform
+  egress {
+    from_port = 443
+    protocol = "tcp"
+    to_port = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port = 2049
     protocol = "tcp"
@@ -211,6 +219,13 @@ resource "aws_security_group" "jenkins-server-elb-security-group" {
     from_port = 22
     protocol = "tcp"
     to_port = 22
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 443
+    protocol = "tcp"
+    to_port = 443
     cidr_blocks = ["0.0.0.0/0"]
   }
 

@@ -11,6 +11,8 @@ Here is the current infrastructure for Andrew Jarombek:
 
 | Directory Name    | Description                                                                 |
 |-------------------|-----------------------------------------------------------------------------|
+| `apps`            | Infrastructure for individual applications.                                 |
+| `apps-sandabox`   | Infrastructure for prototype applications in the Sandbox VPC.               |
 | `backend`         | The Terraform backend, consisting of an S3 bucket.                          |
 | `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
 | `iam`             | Terraform scripts for creating IAM users, groups, roles, and policies.      |
