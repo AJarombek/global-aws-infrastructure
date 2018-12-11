@@ -17,6 +17,10 @@ terraform {
   }
 }
 
+#-----------------------
+# Existing AWS Resources
+#-----------------------
+
 # Retrieve the custom baked AMI for the jenkins server
 data "aws_ami" "jenkins-ami" {
   # If more than one result matches the filters, use the most recent AMI
@@ -61,6 +65,8 @@ data "aws_efs_file_system" "jenkins-efs" {
   }
 }
 
+data "aws_region" "current" {}
+
 # Load a bash file that starts up a Jenkins server
 data "template_file" "jenkins-startup" {
   template = "${file("jenkins-setup.sh")}"
@@ -68,6 +74,8 @@ data "template_file" "jenkins-startup" {
   vars {
     MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
     MOUNT_LOCATION = "/var/lib/jenkins"
+    REGION = "${data.aws_region.current.name}"
+    ALLOCATION_ID = "${aws_eip.jenkins-server-eip.allocation_id}"
   }
 }
 
@@ -75,9 +83,21 @@ data "aws_iam_role" "jenkins-server-role" {
   name = "jenkins-role"
 }
 
+#------------------------------
+# New AWS Resources for Jenkins
+#------------------------------
+
 resource "aws_iam_instance_profile" "jenkins-instance-profile" {
   name = "global-jenkis-server-instance-profile"
   role = "${data.aws_iam_role.jenkins-server-role.name}"
+}
+
+resource "aws_eip" "jenkins-server-eip" {
+  vpc = true
+
+  tags {
+    Name = "global-jenkins-server-eip"
+  }
 }
 
 resource "aws_launch_configuration" "jenkins-server-lc" {
@@ -103,8 +123,8 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
   # Needed when using an autoscaling group in a VPC
   vpc_zone_identifier = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
 
-  max_size = "${var.max_size}"
-  min_size = "${var.min_size}"
+  max_size = "${var.max_size_on}"
+  min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
 
   load_balancers = ["${aws_elb.jenkins-server-elb.id}"]
@@ -124,42 +144,66 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
 resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekday-morning" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-online-weekday-morning"
+
+  max_size = "${var.max_size_on}"
+  min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
+
   recurrence = "${var.online_cron_weekday_morning}"
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekday-morning" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-offline-weekday-morning"
-  desired_capacity = "${var.desired_capacity_on}"
+
+  max_size = "${var.max_size_off}"
+  min_size = "${var.min_size_off}"
+  desired_capacity = "${var.desired_capacity_off}"
+
   recurrence = "${var.offline_cron_weekday_morning}"
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekday-afternoon" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-online-weekday-afternoon"
+
+  max_size = "${var.max_size_on}"
+  min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
+
   recurrence = "${var.online_cron_weekday_afternoon}"
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekday-afternoon" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-offline-weekday-afternoon"
-  desired_capacity = "${var.desired_capacity_on}"
+
+  max_size = "${var.max_size_off}"
+  min_size = "${var.min_size_off}"
+  desired_capacity = "${var.desired_capacity_off}"
+
   recurrence = "${var.offline_cron_weekday_afternoon}"
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekend" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-online-weekend"
+
+  max_size = "${var.max_size_on}"
+  min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
+
   recurrence = "${var.online_cron_weekend}"
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekend" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
   scheduled_action_name = "jenkins-server-offline-weekend"
-  desired_capacity = "${var.desired_capacity_on}"
+
+  max_size = "${var.max_size_off}"
+  min_size = "${var.min_size_off}"
+  desired_capacity = "${var.desired_capacity_off}"
+
   recurrence = "${var.offline_cron_weekend}"
 }
 

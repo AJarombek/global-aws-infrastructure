@@ -53,10 +53,23 @@ resource "aws_iam_user_policy" "andy-user-policy" {
 resource "aws_iam_role" "jenkins-role" {
   name = "jenkins-role"
   path = "/admin/"
-  assume_role_policy = "${file("policies/jenkins-assume-role-policy.json")}"
+  assume_role_policy = "${file("policies/assume-role-policy.json")}"
 }
 
-resource "aws_iam_role_policy" "jenkins-role-policy" {
-  policy = "${file("policies/jenkins-role-policy.json")}"
-  role = "${aws_iam_role.jenkins-role.id}"
+resource "aws_iam_role_policy_attachment" "jenkins-role-admin-policy" {
+  policy_arn = "${aws_iam_policy.admin-policy.arn}"
+  role = "${aws_iam_role.jenkins-role.name}"
+}
+
+resource "aws_iam_role_policy_attachment" "jenkins-role-elastic-ip-policy" {
+  policy_arn = "${aws_iam_policy.elastic-ip-policy.arn}"
+  role = "${aws_iam_role.jenkins-role.name}"
+}
+
+resource "aws_iam_policy" "admin-policy" {
+  policy = "${file("policies/admin-policy.json")}"
+}
+
+resource "aws_iam_policy" "elastic-ip-policy" {
+  policy = "${file("policies/elastic-ip-role-policy.json")}"
 }

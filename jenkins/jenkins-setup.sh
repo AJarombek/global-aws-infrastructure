@@ -6,6 +6,11 @@
 
 echo "START jenkins-setup.sh"
 
+# Associate an Elastic IP with this virtual machine
+# The URL http://169.254.169.254 contains metadata about instances
+INSTANCE_ID="$(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
+aws --region ${REGION} ec2 associate-address --instance-id ${INSTANCE_ID} --allocation-id ${ALLOCATION_ID}
+
 echo "Mount Location: ${MOUNT_LOCATION}"
 echo "Mount Target: ${MOUNT_TARGET}"
 

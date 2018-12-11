@@ -4,13 +4,23 @@
  * Date: 11/11/2018
  */
 
-variable "max_size" {
-  description = "Max number of instances in the auto scaling group"
+variable "max_size_on" {
+  description = "Max number of instances in the auto scaling group during an online period"
   default = 2
 }
 
-variable "min_size" {
-  description = "Min number of instances in the auto scaling group"
+variable "min_size_on" {
+  description = "Min number of instances in the auto scaling group during an online period"
+  default = 1
+}
+
+variable "max_size_off" {
+  description = "Max number of instances in the auto scaling group during an offline period"
+  default = 0
+}
+
+variable "min_size_off" {
+  description = "Min number of instances in the auto scaling group during an offline period"
   default = 0
 }
 
