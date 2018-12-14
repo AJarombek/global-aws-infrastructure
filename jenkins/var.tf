@@ -6,7 +6,7 @@
 
 variable "max_size_on" {
   description = "Max number of instances in the auto scaling group during an online period"
-  default = 2
+  default = 1
 }
 
 variable "min_size_on" {
@@ -46,7 +46,7 @@ variable "offline_cron_weekday_morning" {
 
 variable "online_cron_weekday_afternoon" {
   description = "The cron syntax for when the Jenkins server should be online weekday afternoons"
-  default = "30 22 * * 1-5"
+  default = "0 22 * * 1-5"
 }
 
 variable "offline_cron_weekday_afternoon" {

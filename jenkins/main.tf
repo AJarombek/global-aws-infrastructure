@@ -75,7 +75,7 @@ data "template_file" "jenkins-startup" {
     MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
     MOUNT_LOCATION = "/var/lib/jenkins"
     REGION = "${data.aws_region.current.name}"
-    ALLOCATION_ID = "${aws_eip.jenkins-server-eip.allocation_id}"
+    ALLOCATION_ID = "${aws_eip.jenkins-server-eip.id}"
   }
 }
 
@@ -103,7 +103,7 @@ resource "aws_eip" "jenkins-server-eip" {
 resource "aws_launch_configuration" "jenkins-server-lc" {
   name = "global-jenkins-server-lc"
   image_id = "${data.aws_ami.jenkins-ami.id}"
-  instance_type = "t2.micro"
+  instance_type = "t2.nano"
   security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.jenkins-instance-profile.name}"
@@ -129,6 +129,7 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
 
   load_balancers = ["${aws_elb.jenkins-server-elb.id}"]
   health_check_type = "ELB"
+  health_check_grace_period = 600
 
   lifecycle {
     create_before_destroy = true

@@ -22,7 +22,7 @@ module "saintsxctf-com-vpc" {
 
   # Mandatory arguments
   name = "saintsxctfcom"
-  tag_name = "SaintsXCTFCom"
+  tag_name = "SaintsXCTFcom"
 
   # Optional arguments
   enable_dns_support = true

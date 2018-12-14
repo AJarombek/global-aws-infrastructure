@@ -22,7 +22,7 @@ module "jarombek-com-vpc" {
 
   # Mandatory arguments
   name = "jarombekcom"
-  tag_name = "JarombekCom"
+  tag_name = "Jarombekcom"
 
   # Optional arguments
   enable_dns_support = true

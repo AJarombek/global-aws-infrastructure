@@ -99,46 +99,26 @@ resource "aws_security_group" "public-subnet-security" {
   description = "Allow all incoming connections to public resources"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # ICMP is used for sending error messages or operational information.  ICMP has no ports,
-  # and a common tool that uses ICMP is ping.
-  ingress {
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port = 0
-    protocol = "-1"
-    to_port = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags {
     Name = "${var.tag_name} VPC Public Subnet Security"
   }
+}
+
+resource "aws_security_group_rule" "public-subnet-security-rule" {
+  count = "${length(var.public_subnet_sg_rules)}"
+
+  security_group_id = "${aws_security_group.public-subnet-security.id}"
+  type = "${lookup(element(var.public_subnet_sg_rules, count.index), "type", "ingress")}"
+
+  from_port = "${lookup(element(var.public_subnet_sg_rules, count.index), "from_port", 0)}"
+  to_port = "${lookup(element(var.public_subnet_sg_rules, count.index), "to_port", 0)}"
+  protocol = "${lookup(element(var.public_subnet_sg_rules, count.index), "protocol", "-1")}"
+
+  cidr_blocks = ["${lookup(element(var.public_subnet_sg_rules, count.index), "cidr_blocks", null)}"]
+
+  source_security_group_id = "${lookup(
+    element(var.public_subnet_sg_rules, count.index), "source_sg", ${aws_security_group.private-subnet-security.id}
+  )}"
 }
 
 #---------------
@@ -187,44 +167,25 @@ resource "aws_security_group" "private-subnet-security" {
   description = "Allow traffic only from the public subnet"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  ingress {
-    # Default port for MongoDB
-    from_port = 27017
-    to_port = 27017
-    protocol = "tcp"
-    cidr_blocks = ["${var.public_subnet_cidr}"]
-  }
-
-  ingress {
-    # Ports MongoDB uses to communicate between servers
-    from_port = 27019
-    to_port = 27019
-    protocol = "tcp"
-    cidr_blocks = ["${var.public_subnet_cidr}"]
-  }
-
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["${var.public_subnet_cidr}"]
-  }
-
-  ingress {
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["${var.public_subnet_cidr}"]
-  }
-
-  egress {
-    from_port = 0
-    protocol = "-1"
-    to_port = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags {
     Name = "${var.tag_name} VPC Private Subnet Security"
   }
+}
+
+resource "aws_security_group_rule" "private-subnet-security-rule" {
+  count = "${length(var.private_subnet_sg_rules)}"
+  self = "${aws_security_group.public-subnet-security.id}"
+
+  security_group_id = "${aws_security_group.private-subnet-security.id}"
+  type = "${lookup(element(var.private_subnet_sg_rules, count.index), "type", "ingress")}"
+
+  from_port = "${lookup(element(var.private_subnet_sg_rules, count.index), "from_port", 0)}"
+  to_port = "${lookup(element(var.private_subnet_sg_rules, count.index), "to_port", 0)}"
+  protocol = "${lookup(element(var.private_subnet_sg_rules, count.index), "protocol", "-1")}"
+
+  cidr_blocks = ["${lookup(element(var.private_subnet_sg_rules, count.index), "cidr_blocks", null)}"]
+
+  source_security_group_id = "${lookup(
+    element(var.private_subnet_sg_rules, count.index), "source_sg", ${aws_security_group.public-subnet-security.id}
+  )}"
 }
