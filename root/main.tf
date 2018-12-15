@@ -7,6 +7,7 @@
 locals {
   resources_public_subnet_cidr = "10.0.1.0/24"
   sandbox_public_subnet_cidr = "10.0.1.0/24"
+  public_cidr = "0.0.0.0/0"
 }
 
 provider "aws" {
@@ -41,8 +42,8 @@ module "resources-vpc" {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
+      # 'null' is coming in Terraform v0.12
+      # source_security_group_id = null
     },
     {
       # ICMP is used for sending error messages or operational information.  ICMP has no ports,
@@ -51,24 +52,18 @@ module "resources-vpc" {
       from_port = -1
       to_port = -1
       protocol = "icmp"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     },
     {
       type = "ingress"
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     },
     {
       type = "ingress"
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     },
     {
       # Outbound traffic for health checks
@@ -76,9 +71,15 @@ module "resources-vpc" {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     }
+  ]
+
+  public_subnet_sg_cidr_blocks = [
+    "${local.public_cidr}",
+    "${local.public_cidr}",
+    "${local.public_cidr}",
+    "${local.public_cidr}",
+    "${local.public_cidr}"
   ]
 
   private_subnet_sg_rules = [
@@ -87,8 +88,6 @@ module "resources-vpc" {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = ["${local.resources_public_subnet_cidr}"]
-      source_security_group_id = null
     },
     {
       # Inbound traffic for ping
@@ -96,8 +95,6 @@ module "resources-vpc" {
       from_port = -1
       to_port = -1
       protocol = "icmp"
-      cidr_blocks = ["${local.resources_public_subnet_cidr}"]
-      source_security_group_id = null
     },
     {
       # Outbound traffic for health checks
@@ -105,9 +102,13 @@ module "resources-vpc" {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     }
+  ]
+
+  private_subnet_sg_cidr_blocks = [
+    "${local.resources_public_subnet_cidr}",
+    "${local.resources_public_subnet_cidr}",
+    "${local.public_cidr}"
   ]
 }
 
@@ -130,8 +131,6 @@ module "sandbox-vpc" {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     },
     {
       # Outbound traffic for health checks
@@ -139,10 +138,14 @@ module "sandbox-vpc" {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-      source_security_group_id = null
     }
   ]
 
+  public_subnet_sg_cidr_blocks = [
+    "${local.public_cidr}",
+    "${local.public_cidr}"
+  ]
+
   private_subnet_sg_rules = []
+  private_subnet_sg_cidr_blocks = []
 }

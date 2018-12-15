@@ -41,6 +41,12 @@ variable "public_subnet_sg_rules" {
   default = []
 }
 
+variable "public_subnet_sg_cidr_blocks" {
+  description = "A list of CIDR blocks for the security group rules in the VPC public subnet"
+  type = "list"
+  default = []
+}
+
 variable "private_subnet_cidr" {
   description = "The CIDR for the VPC private subnet"
   default = "10.0.2.0/24"
@@ -48,6 +54,12 @@ variable "private_subnet_cidr" {
 
 variable "private_subnet_sg_rules" {
   description = "A list of security group rules for the VPC private subnet"
+  type = "list"
+  default = []
+}
+
+variable "private_subnet_sg_cidr_blocks" {
+  description = "A list of CIDR blocks for the security group rules in the VPC private subnet"
   type = "list"
   default = []
 }

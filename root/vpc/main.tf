@@ -108,17 +108,13 @@ resource "aws_security_group_rule" "public-subnet-security-rule" {
   count = "${length(var.public_subnet_sg_rules)}"
 
   security_group_id = "${aws_security_group.public-subnet-security.id}"
-  type = "${lookup(element(var.public_subnet_sg_rules, count.index), "type", "ingress")}"
+  type = "${lookup(var.public_subnet_sg_rules[count.index], "type", "ingress")}"
 
-  from_port = "${lookup(element(var.public_subnet_sg_rules, count.index), "from_port", 0)}"
-  to_port = "${lookup(element(var.public_subnet_sg_rules, count.index), "to_port", 0)}"
-  protocol = "${lookup(element(var.public_subnet_sg_rules, count.index), "protocol", "-1")}"
+  from_port = "${lookup(var.public_subnet_sg_rules[count.index], "from_port", 0)}"
+  to_port = "${lookup(var.public_subnet_sg_rules[count.index], "to_port", 0)}"
+  protocol = "${lookup(var.public_subnet_sg_rules[count.index], "protocol", "-1")}"
 
-  cidr_blocks = ["${lookup(element(var.public_subnet_sg_rules, count.index), "cidr_blocks", null)}"]
-
-  source_security_group_id = "${lookup(
-    element(var.public_subnet_sg_rules, count.index), "source_sg", ${aws_security_group.private-subnet-security.id}
-  )}"
+  cidr_blocks = ["${element(var.public_subnet_sg_cidr_blocks, "${count.index}")}"]
 }
 
 #---------------
@@ -174,18 +170,13 @@ resource "aws_security_group" "private-subnet-security" {
 
 resource "aws_security_group_rule" "private-subnet-security-rule" {
   count = "${length(var.private_subnet_sg_rules)}"
-  self = "${aws_security_group.public-subnet-security.id}"
 
   security_group_id = "${aws_security_group.private-subnet-security.id}"
-  type = "${lookup(element(var.private_subnet_sg_rules, count.index), "type", "ingress")}"
+  type = "${lookup(var.private_subnet_sg_rules[count.index], "type", "ingress")}"
 
-  from_port = "${lookup(element(var.private_subnet_sg_rules, count.index), "from_port", 0)}"
-  to_port = "${lookup(element(var.private_subnet_sg_rules, count.index), "to_port", 0)}"
-  protocol = "${lookup(element(var.private_subnet_sg_rules, count.index), "protocol", "-1")}"
+  from_port = "${lookup(var.private_subnet_sg_rules[count.index], "from_port", 0)}"
+  to_port = "${lookup(var.private_subnet_sg_rules[count.index], "to_port", 0)}"
+  protocol = "${lookup(var.private_subnet_sg_rules[count.index], "protocol", "-1")}"
 
-  cidr_blocks = ["${lookup(element(var.private_subnet_sg_rules, count.index), "cidr_blocks", null)}"]
-
-  source_security_group_id = "${lookup(
-    element(var.private_subnet_sg_rules, count.index), "source_sg", ${aws_security_group.public-subnet-security.id}
-  )}"
+  cidr_blocks = ["${element(var.private_subnet_sg_cidr_blocks, "${count.index}")}"]
 }
