@@ -28,7 +28,7 @@ data "aws_ami" "jenkins-ami" {
 
   filter {
     name = "name"
-    values = ["global-jenkins-server*"]
+    values = ["global-jenkins-server"]
   }
 
   filter {
@@ -103,7 +103,7 @@ resource "aws_eip" "jenkins-server-eip" {
 resource "aws_launch_configuration" "jenkins-server-lc" {
   name = "global-jenkins-server-lc"
   image_id = "${data.aws_ami.jenkins-ami.id}"
-  instance_type = "t2.nano"
+  instance_type = "t2.micro"
   security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.jenkins-instance-profile.name}"

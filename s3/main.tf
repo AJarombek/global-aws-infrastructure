@@ -1,7 +1,7 @@
 /**
- * Route53 Configuration for my cloud
+ * S3 Configuration for my cloud
  * Author: Andrew Jarombek
- * Date: 11/19/2018
+ * Date: 1/20/2019
  */
 
 provider "aws" {
@@ -12,12 +12,7 @@ terraform {
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/route53"
+    key = "global-aws-infrastructure/s3"
     region = "us-east-1"
   }
-}
-
-# Route53 Config
-resource "aws_route53_zone" "jarombek-com" {
-  name = "jarombek.org."
 }

@@ -19,3 +19,4 @@ Here is the current infrastructure for Andrew Jarombek:
 | `route53`         | Terraform scripts for creating DNS records for the account.                 |
 | `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.               |
 | `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.               |
+| `s3`              | Terraform scripts for global S3 assets.                                     |

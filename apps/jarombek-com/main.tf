@@ -30,8 +30,10 @@ module "jarombek-com-vpc" {
   tag_name = "Jarombekcom"
 
   # Optional arguments
+  public_subnet_count = 2
   enable_dns_support = true
   enable_dns_hostnames = true
+  enable_nat_gateway = false
   public_subnet_cidr = "${local.jarombek_com_public_subnet_cidr}"
 
   public_subnet_sg_rules = [

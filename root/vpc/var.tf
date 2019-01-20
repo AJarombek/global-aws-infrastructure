@@ -30,6 +30,11 @@ variable "enable_dns_hostnames" {
 }
 
 # aws_subnet resources
+variable "public_subnet_count" {
+  description = "The number of public subnets in the VPC"
+  default = 1
+}
+
 variable "public_subnet_cidr" {
   description = "The CIDR for the VPC public subnet"
   default = "10.0.1.0/24"
@@ -62,6 +67,11 @@ variable "private_subnet_sg_cidr_blocks" {
   description = "A list of CIDR blocks for the security group rules in the VPC private subnet"
   type = "list"
   default = []
+}
+
+variable "enable_nat_gateway" {
+  description = "Turn on or off the NAT gateway, giving internet access to the private subnet (NAT costs a lot!)"
+  default = false
 }
 
 # aws_route_table resources

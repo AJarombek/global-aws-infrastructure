@@ -30,8 +30,10 @@ module "saintsxctf-com-vpc" {
   tag_name = "SaintsXCTFcom"
 
   # Optional arguments
+  public_subnet_count = 2
   enable_dns_support = true
   enable_dns_hostnames = true
+  enable_nat_gateway = false
   public_subnet_cidr = "${local.saintsxctf_public_subnet_cidr}"
 
   public_subnet_sg_rules = [

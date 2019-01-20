@@ -31,8 +31,10 @@ module "resources-vpc" {
   tag_name = "Resources"
 
   # Optional arguments
+  public_subnet_count = 1
   enable_dns_support = true
   enable_dns_hostnames = true
+  enable_nat_gateway = false
   public_subnet_cidr = "${local.resources_public_subnet_cidr}"
 
   public_subnet_sg_rules = [
@@ -120,8 +122,10 @@ module "sandbox-vpc" {
   tag_name = "Sandbox"
 
   # Optional arguments
+  public_subnet_count = 1
   enable_dns_support = true
   enable_dns_hostnames = true
+  enable_nat_gateway = false
   public_subnet_cidr = "${local.sandbox_public_subnet_cidr}"
 
   public_subnet_sg_rules = [

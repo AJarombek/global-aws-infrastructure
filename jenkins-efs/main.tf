@@ -55,6 +55,10 @@ resource "aws_security_group" "jenkins-efs-security" {
     protocol = "tcp"
     cidr_blocks = ["${data.aws_vpc.resources-vpc.cidr_block}"]
   }
+
+  tags {
+    Name = "Jenkins EFS Security"
+  }
 }
 
 resource "aws_efs_mount_target" "jenkins-efs-mount" {

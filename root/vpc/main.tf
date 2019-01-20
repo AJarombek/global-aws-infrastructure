@@ -4,6 +4,11 @@
  * Date: 11/4/2018
  */
 
+locals {
+  nat_gateway = "${var.enable_nat_gateway ? 1 : 0}"
+  multiple_public_subnets = "${var.public_subnet_count > 1}"
+}
+
 resource "aws_vpc" "vpc" {
   cidr_block = "${var.vpc_cidr}"
   enable_dns_support = "${var.enable_dns_support}"
@@ -68,11 +73,13 @@ resource "aws_vpc_dhcp_options_association" "vpc-dns-resolver-association" {
 #--------------
 
 resource "aws_subnet" "public-subnet" {
+  count = "${var.public_subnet_count}"
+
   cidr_block = "${var.public_subnet_cidr}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Public Subnet"
+    Name = "${var.tag_name} VPC Public Subnet ${local.multiple_public_subnets ? "${count.index}" : ""}"
   }
 }
 
@@ -90,8 +97,10 @@ resource "aws_route_table" "routing-table-public" {
 }
 
 resource "aws_route_table_association" "routing-table-association-public" {
+  count = "${var.public_subnet_count}"
+
   route_table_id = "${aws_route_table.routing-table-public.id}"
-  subnet_id = "${aws_subnet.public-subnet.id}"
+  subnet_id = "${aws_subnet.public-subnet.${count.index}.id}"
 }
 
 resource "aws_security_group" "public-subnet-security" {
@@ -131,6 +140,8 @@ resource "aws_subnet" "private-subnet" {
 }
 
 resource "aws_route_table" "routing-table-private" {
+  count = "${local.nat_gateway}"
+
   vpc_id = "${aws_vpc.vpc.id}"
 
   route {
@@ -144,16 +155,22 @@ resource "aws_route_table" "routing-table-private" {
 }
 
 resource "aws_eip" "nat-elastic-ip" {
+  count = "${local.nat_gateway}"
+
   vpc = true
 }
 
 resource "aws_nat_gateway" "nat-gateway" {
+  count = "${local.nat_gateway}"
+
   allocation_id = "${aws_eip.nat-elastic-ip.id}"
   subnet_id = "${aws_subnet.public-subnet.id}"
   depends_on = ["aws_internet_gateway.vpc-igw"]
 }
 
 resource "aws_route_table_association" "routing-table-association-private" {
+  count = "${local.nat_gateway}"
+
   route_table_id = "${aws_route_table.routing-table-private.id}"
   subnet_id = "${aws_subnet.private-subnet.id}"
 }

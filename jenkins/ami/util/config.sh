@@ -7,10 +7,10 @@
 brew install packer
 
 # Validate that the Packer image is valid
-packer validate image.json
+packer validate jenkins-image.json
 
 # Create a new machine image
-packer build image.json
+packer build jenkins-image.json
 
 # AWS CLI for EFS
 aws efs describe-file-systems help
