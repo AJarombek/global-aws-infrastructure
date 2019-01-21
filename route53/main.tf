@@ -18,6 +18,38 @@ terraform {
 }
 
 # Route53 Config
-resource "aws_route53_zone" "jarombek-com" {
+resource "aws_route53_zone" "jarombek-org" {
   name = "jarombek.org."
+}
+
+resource "aws_route53_record" "jarombek-org-ns" {
+  name = "jarombek.org."
+  type = "NS"
+  zone_id = "${aws_route53_zone.jarombek-org.zone_id}"
+  ttl = 172800
+
+  records = [
+    "${aws_route53_zone.jarombek-org.name_servers.0}",
+    "${aws_route53_zone.jarombek-org.name_servers.1}",
+    "${aws_route53_zone.jarombek-org.name_servers.2}",
+    "${aws_route53_zone.jarombek-org.name_servers.3}"
+  ]
+}
+
+resource "aws_route53_zone" "jarombek-net" {
+  name = "jarombek.net."
+}
+
+resource "aws_route53_record" "jarombek-net-ns" {
+  name = "jarombek.net."
+  type = "NS"
+  zone_id = "${aws_route53_zone.jarombek-org.zone_id}"
+  ttl = 172800
+
+  records = [
+    "${aws_route53_zone.jarombek-net.name_servers.0}",
+    "${aws_route53_zone.jarombek-net.name_servers.1}",
+    "${aws_route53_zone.jarombek-net.name_servers.2}",
+    "${aws_route53_zone.jarombek-net.name_servers.3}"
+  ]
 }

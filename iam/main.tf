@@ -71,5 +71,5 @@ resource "aws_iam_policy" "admin-policy" {
 }
 
 resource "aws_iam_policy" "elastic-ip-policy" {
-  policy = "${file("policies/elastic-ip-role-policy.json")}"
+  policy = "${file("policies/elastic-ip-policy.json")}"
 }
