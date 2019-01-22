@@ -66,10 +66,18 @@ resource "aws_iam_role_policy_attachment" "jenkins-role-elastic-ip-policy" {
   role = "${aws_iam_role.jenkins-role.name}"
 }
 
+# ------------
+# IAM Policies
+# ------------
+
 resource "aws_iam_policy" "admin-policy" {
+  name = "admin-policy"
+  path = "/admin/"
   policy = "${file("policies/admin-policy.json")}"
 }
 
 resource "aws_iam_policy" "elastic-ip-policy" {
+  name = "admin-policy"
+  path = "/resource/"
   policy = "${file("policies/elastic-ip-policy.json")}"
 }
