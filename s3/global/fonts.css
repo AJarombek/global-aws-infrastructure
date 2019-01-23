@@ -7,29 +7,29 @@
 @font-face {
     font-family: Sylexiad;
     font-weight: normal;
-    src: url("https://asset.jarombek.com/fonts/SylexiadSansThin.ttf") format("truetype");
+    src: url("https://global.jarombek.io/fonts/SylexiadSansThin.ttf") format("truetype");
 }
 
 @font-face {
     font-family: Sylexiad-Bold;
     font-weight: bold;
-    src: url("https://asset.jarombek.com/fonts/SylexiadSansThin-Bold.ttf") format("truetype");
+    src: url("https://global.jarombek.io/fonts/SylexiadSansThin-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: Dyslexie;
     font-weight: bold;
-    src: url("https://asset.jarombek.com/fonts/dyslexie-bold.ttf") format("truetype");
+    src: url("https://global.jarombek.io/fonts/dyslexie-bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: Fantasque-Bold;
     font-weight: bold;
-    src: url("https://asset.jarombek.com/fonts/FantasqueSansMono-Bold.ttf") format("truetype");
+    src: url("https://global.jarombek.io/fonts/FantasqueSansMono-Bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: Longway;
     font-weight: bold;
-    src: url("https://asset.jarombek.com/fonts/Longway-Regular.otf") format("opentype");
+    src: url("https://global.jarombek.io/fonts/Longway-Regular.otf") format("opentype");
 }
