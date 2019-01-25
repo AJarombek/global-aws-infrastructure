@@ -28,7 +28,7 @@ data "aws_ami" "jenkins-ami" {
 
   filter {
     name = "name"
-    values = ["global-jenkins-server"]
+    values = ["global-jenkins-server*"]
   }
 
   filter {

@@ -17,22 +17,10 @@ terraform {
   }
 }
 
-resource "aws_iam_policy" "global-jarombek-io-policy" {
-  name = "admin-policy"
-  path = "/jarombek-io/"
-  policy = "${file("../iam/policies/global-jarombek-io-policy.json")}"
-}
-
-resource "aws_iam_policy" "www-global-jarombek-io-policy" {
-  name = "admin-policy"
-  path = "/jarombek-io/"
-  policy = "${file("../iam/policies/www-global-jarombek-io-policy.json")}"
-}
-
 resource "aws_s3_bucket" "global-jarombek-io" {
-  bucket = "global-jarombek-io"
+  bucket = "global.jarombek.io"
   acl = "public-read"
-  policy = "${aws_iam_policy.global-jarombek-io-policy.policy}"
+  policy = "${file("../iam/policies/global-jarombek-io-policy.json")}"
 
   tags {
     Name = "global.jarombek.io"
@@ -51,9 +39,9 @@ resource "aws_s3_bucket" "global-jarombek-io" {
 }
 
 resource "aws_s3_bucket" "www-global-jarombek-io" {
-  bucket = "global-jarombek-io"
+  bucket = "www.global.jarombek.io"
   acl = "public-read"
-  policy = "${aws_iam_policy.www-global-jarombek-io-policy.policy}"
+  policy = "${file("../iam/policies/www-global-jarombek-io-policy.json")}"
 
   tags {
     Name = "www.global.jenkins.io"

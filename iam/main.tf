@@ -77,7 +77,7 @@ resource "aws_iam_policy" "admin-policy" {
 }
 
 resource "aws_iam_policy" "elastic-ip-policy" {
-  name = "admin-policy"
+  name = "elastic-ip-policy"
   path = "/resource/"
   policy = "${file("policies/elastic-ip-policy.json")}"
 }
