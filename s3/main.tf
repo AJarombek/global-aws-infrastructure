@@ -17,6 +17,11 @@ terraform {
   }
 }
 
+locals {
+  # A unique identifier for the S3 origin.  This is needed for CloudFront.
+  s3_origin_id = "globalJarombekIO"
+}
+
 resource "aws_s3_bucket" "global-jarombek-io" {
   bucket = "global.jarombek.io"
   acl = "public-read"
@@ -50,6 +55,81 @@ resource "aws_s3_bucket" "www-global-jarombek-io" {
   website {
     redirect_all_requests_to = "https://global.jenkins.io"
   }
+}
+
+resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
+  origin {
+    domain_name = "${aws_s3_bucket.global-jarombek-io.bucket_regional_domain_name}"
+    origin_id = "${local.s3_origin_id}"
+
+    s3_origin_config {
+      origin_access_identity =
+        "${aws_cloudfront_origin_access_identity.origin-access-identity.cloudfront_access_identity_path}"
+    }
+  }
+
+  # Whether the cloudfront distribution is enabled to accept uer requests
+  enabled = true
+
+  # Whether the cloudfront distribution can use ipv6
+  is_ipv6_enabled = true
+
+  comment = "global.jarombek.io CloudFront Distribution"
+  default_root_object = "index.json"
+
+  # Configure an S3 bucket to store cloudfront access logs
+  logging_config {
+    bucket = "global.logs.jarombek.io"
+    include_cookies = false
+    prefix = "logs"
+  }
+
+  # Extra CNAMEs for this distribution
+  aliases = ["global.jarombek.io"]
+
+  price_class = ""
+
+  default_cache_behavior {
+    # Which HTTP verbs CloudFront processes
+    allowed_methods = ["GET"]
+
+    # Which HTTP verbs CloudFront caches responses to requests
+    cached_methods = ["GET"]
+
+    forwarded_values {
+      cookies {
+        forward = "none"
+      }
+      query_string = false
+    }
+
+    target_origin_id = "${local.s3_origin_id}"
+    viewer_protocol_policy = "allow-all"
+
+    # Determines the amount of time an object exists in the CloudFront cache
+    min_ttl = 0
+    default_ttl = 3600
+    max_ttl = 86400
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations = ["US"]
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  tags {
+    Environment = "production"
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "origin-access-identity" {
+  comment = "global.jarombek.io origin access identity"
 }
 
 resource "aws_s3_bucket_object" "index-json" {

@@ -48,7 +48,7 @@ resource "aws_route53_zone" "jarombek-io-zone" {
 }
 
 resource "aws_route53_zone" "jarombek-io-resources-vpc-zone" {
-  name = "jarombek.io."
+  name = "jenkins.jarombek.io."
 
   vpc {
     vpc_id = "${data.aws_vpc.resources-vpc.id}"
@@ -66,6 +66,20 @@ resource "aws_route53_record" "jarombek-io-ns" {
     "${aws_route53_zone.jarombek-io-zone.name_servers.1}",
     "${aws_route53_zone.jarombek-io-zone.name_servers.2}",
     "${aws_route53_zone.jarombek-io-zone.name_servers.3}"
+  ]
+}
+
+resource "aws_route53_record" "jenkins-jarombek-io-ns" {
+  name = "jenkins.jarombek.io."
+  type = "NS"
+  zone_id = "${aws_route53_zone.jarombek-io-resources-vpc-zone.zone_id}"
+  ttl = 172800
+
+  records = [
+    "${aws_route53_zone.jarombek-io-resources-vpc-zone.name_servers.0}",
+    "${aws_route53_zone.jarombek-io-resources-vpc-zone.name_servers.1}",
+    "${aws_route53_zone.jarombek-io-resources-vpc-zone.name_servers.2}",
+    "${aws_route53_zone.jarombek-io-resources-vpc-zone.name_servers.3}"
   ]
 }
 
