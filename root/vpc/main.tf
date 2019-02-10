@@ -6,8 +6,17 @@
 
 locals {
   nat_gateway = "${var.enable_nat_gateway ? 1 : 0}"
+
+  # The number of private subnets that use a Nat Gateway
+  private_subnet_with_nat = "${var.enable_nat_gateway ? "${var.private_subnet_count}" : 0}"
+
   multiple_public_subnets = "${var.public_subnet_count > 1}"
+  multiple_private_subnets = "${var.private_subnet_count > 1}"
 }
+
+#----------------------
+# General VPC Resources
+#----------------------
 
 resource "aws_vpc" "vpc" {
   cidr_block = "${var.vpc_cidr}"
@@ -75,7 +84,8 @@ resource "aws_vpc_dhcp_options_association" "vpc-dns-resolver-association" {
 resource "aws_subnet" "public-subnet" {
   count = "${var.public_subnet_count}"
 
-  cidr_block = "${var.public_subnet_cidr}"
+  cidr_block = "${local.multiple_public_subnets ? "${element(var.public_subnet_cidrs, "${count.index}")}" :
+                                                      "${var.public_subnet_cidr}"}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
@@ -100,7 +110,7 @@ resource "aws_route_table_association" "routing-table-association-public" {
   count = "${var.public_subnet_count}"
 
   route_table_id = "${aws_route_table.routing-table-public.id}"
-  subnet_id = "${aws_subnet.public-subnet.${count.index}.id}"
+  subnet_id = "${aws_subnet.public-subnet.*.id[count.index]}"
 }
 
 resource "aws_security_group" "public-subnet-security" {
@@ -131,11 +141,14 @@ resource "aws_security_group_rule" "public-subnet-security-rule" {
 #---------------
 
 resource "aws_subnet" "private-subnet" {
-  cidr_block = "${var.private_subnet_cidr}"
+  count = "${var.private_subnet_count}"
+
+  cidr_block = "${local.multiple_private_subnets ? "${element(var.private_subnet_cidrs, "${count.index}")}" :
+                                                      "${var.private_subnet_cidr}"}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Private Subnet"
+    Name = "${var.tag_name} VPC Private Subnet ${local.multiple_private_subnets ? "${count.index}" : ""}"
   }
 }
 
@@ -169,10 +182,10 @@ resource "aws_nat_gateway" "nat-gateway" {
 }
 
 resource "aws_route_table_association" "routing-table-association-private" {
-  count = "${local.nat_gateway}"
+  count = "${local.private_subnet_with_nat}"
 
   route_table_id = "${aws_route_table.routing-table-private.id}"
-  subnet_id = "${aws_subnet.private-subnet.id}"
+  subnet_id = "${aws_subnet.private-subnet.*.id[count.index]}"
 }
 
 resource "aws_security_group" "private-subnet-security" {

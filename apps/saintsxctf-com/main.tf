@@ -5,7 +5,8 @@
  */
 
 locals {
-  saintsxctf_public_subnet_cidr = "10.0.1.0/24"
+  saintsxctf_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+  saintsxctf_private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
   public_cidr = "0.0.0.0/0"
 }
 
@@ -31,10 +32,12 @@ module "saintsxctf-com-vpc" {
 
   # Optional arguments
   public_subnet_count = 2
+  private_subnet_count = 2
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
-  public_subnet_cidr = "${local.saintsxctf_public_subnet_cidr}"
+  public_subnet_cidrs = "${local.saintsxctf_public_subnet_cidrs}"
+  private_subnet_cidrs = "${local.saintsxctf_private_subnet_cidrs}"
 
   public_subnet_sg_rules = [
     {

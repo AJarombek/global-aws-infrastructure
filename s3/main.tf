@@ -22,6 +22,10 @@ locals {
   s3_origin_id = "globalJarombekIO"
 }
 
+#------------------------
+# S3 Bucket Configuration
+#------------------------
+
 resource "aws_s3_bucket" "global-jarombek-io" {
   bucket = "global.jarombek.io"
   acl = "public-read"
@@ -87,7 +91,8 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
   # Extra CNAMEs for this distribution
   aliases = ["global.jarombek.io"]
 
-  price_class = ""
+  # The pricing model for CloudFront
+  price_class = "PriceClass_100"
 
   default_cache_behavior {
     # Which HTTP verbs CloudFront processes
@@ -104,7 +109,9 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
     }
 
     target_origin_id = "${local.s3_origin_id}"
-    viewer_protocol_policy = "allow-all"
+
+    # Which protocols to use which accessing items from CloudFront
+    viewer_protocol_policy = "https-only"
 
     # Determines the amount of time an object exists in the CloudFront cache
     min_ttl = 0
@@ -119,6 +126,7 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
     }
   }
 
+  # The SSL certificate for CloudFront
   viewer_certificate {
     cloudfront_default_certificate = true
   }
@@ -131,6 +139,10 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
 resource "aws_cloudfront_origin_access_identity" "origin-access-identity" {
   comment = "global.jarombek.io origin access identity"
 }
+
+#-------------------
+# S3 Bucket Contents
+#-------------------
 
 resource "aws_s3_bucket_object" "index-json" {
   bucket = "${aws_s3_bucket.global-jarombek-io.id}"
