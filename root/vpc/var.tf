@@ -59,25 +59,13 @@ variable "public_subnet_cidrs" {
   default = []
 }
 
-variable "basic_public_subnet_sg_rules" {
-  description = "Whether or not basic public subnet security group rules are used"
+variable "enable_public_security_group" {
+  description = "Whether or not public subnet security groups are used"
   default = true
 }
 
 variable "public_subnet_sg_rules" {
   description = "A list of security group rules for the VPC public subnet"
-  type = "list"
-  default = []
-}
-
-variable "public_subnet_sg_rules_advanced" {
-  description = "A map of security group rules for each VPC public subnet"
-  type = "map"
-  default = {}
-}
-
-variable "public_subnet_sg_cidr_blocks" {
-  description = "A list of CIDR blocks for the security group rules in the VPC public subnet"
   type = "list"
   default = []
 }
@@ -102,25 +90,13 @@ variable "private_subnet_cidrs" {
   default = []
 }
 
-variable "basic_private_subnet_sg_rules" {
-  description = "Whether or not basic private subnet security group rules are used"
+variable "enable_private_security_group" {
+  description = "Whether or not private subnet security groups are used"
   default = true
 }
 
 variable "private_subnet_sg_rules" {
   description = "A list of security group rules for the VPC private subnet"
-  type = "list"
-  default = []
-}
-
-variable "private_subnet_sg_rules_advanced" {
-  description = "A map of security group rules for each VPC private subnet"
-  type = "map"
-  default = {}
-}
-
-variable "private_subnet_sg_cidr_blocks" {
-  description = "A list of CIDR blocks for the security group rules in the VPC private subnet"
   type = "list"
   default = []
 }

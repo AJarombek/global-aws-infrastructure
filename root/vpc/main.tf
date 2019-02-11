@@ -6,6 +6,8 @@
 
 locals {
   nat_gateway = "${var.enable_nat_gateway ? 1 : 0}"
+  public_security_group = "${var.enable_public_security_group ? 1 : 0}"
+  private_security_group = "${var.enable_private_security_group ? 1 : 0}"
 
   # The number of private subnets that use a Nat Gateway
   private_subnet_with_nat = "${var.enable_nat_gateway ? "${var.private_subnet_count}" : 0}"
@@ -84,12 +86,12 @@ resource "aws_vpc_dhcp_options_association" "vpc-dns-resolver-association" {
 resource "aws_subnet" "public-subnet" {
   count = "${var.public_subnet_count}"
 
-  cidr_block = "${local.multiple_public_subnets ? "${element(var.public_subnet_cidrs, "${count.index}")}" :
-                                                      "${var.public_subnet_cidr}"}"
+  cidr_block = "${local.multiple_public_subnets ?
+                    element(var.public_subnet_cidrs, count.index) : var.public_subnet_cidr}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Public Subnet ${local.multiple_public_subnets ? "${count.index}" : ""}"
+    Name = "${var.tag_name} VPC Public Subnet ${local.multiple_public_subnets ? count.index : ""}"
   }
 }
 
@@ -114,6 +116,8 @@ resource "aws_route_table_association" "routing-table-association-public" {
 }
 
 resource "aws_security_group" "public-subnet-security" {
+  count = "${local.public_security_group}"
+
   name = "${var.name}-vpc-public-security"
   description = "Allow all incoming connections to public resources"
   vpc_id = "${aws_vpc.vpc.id}"
@@ -133,7 +137,7 @@ resource "aws_security_group_rule" "public-subnet-security-rule" {
   to_port = "${lookup(var.public_subnet_sg_rules[count.index], "to_port", 0)}"
   protocol = "${lookup(var.public_subnet_sg_rules[count.index], "protocol", "-1")}"
 
-  cidr_blocks = ["${element(var.public_subnet_sg_cidr_blocks, "${count.index}")}"]
+  cidr_blocks = "${lookup(var.public_subnet_sg_rules[count.index], "cidr_blocks", list())}"
 }
 
 #---------------
@@ -143,12 +147,12 @@ resource "aws_security_group_rule" "public-subnet-security-rule" {
 resource "aws_subnet" "private-subnet" {
   count = "${var.private_subnet_count}"
 
-  cidr_block = "${local.multiple_private_subnets ? "${element(var.private_subnet_cidrs, "${count.index}")}" :
-                                                      "${var.private_subnet_cidr}"}"
+  cidr_block = "${local.multiple_private_subnets ?
+                    element(var.private_subnet_cidrs, count.index) : var.private_subnet_cidr}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Private Subnet ${local.multiple_private_subnets ? "${count.index}" : ""}"
+    Name = "${var.tag_name} VPC Private Subnet ${local.multiple_private_subnets ? count.index : ""}"
   }
 }
 
@@ -189,6 +193,8 @@ resource "aws_route_table_association" "routing-table-association-private" {
 }
 
 resource "aws_security_group" "private-subnet-security" {
+  count = "${local.private_security_group}"
+
   name = "${var.name}-vpc-private-security"
   description = "Allow traffic only from the public subnet"
   vpc_id = "${aws_vpc.vpc.id}"
@@ -208,5 +214,5 @@ resource "aws_security_group_rule" "private-subnet-security-rule" {
   to_port = "${lookup(var.private_subnet_sg_rules[count.index], "to_port", 0)}"
   protocol = "${lookup(var.private_subnet_sg_rules[count.index], "protocol", "-1")}"
 
-  cidr_blocks = ["${element(var.private_subnet_sg_cidr_blocks, "${count.index}")}"]
+  cidr_blocks = "${lookup(var.private_subnet_sg_rules[count.index], "cidr_blocks", list())}"
 }

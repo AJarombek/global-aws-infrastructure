@@ -9,60 +9,59 @@ locals {
   saintsxctf_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
   saintsxctf_private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
 
-  saintsxctf_public_subnet_sg_rules = {
-    "0" = [
-      {
-        # Inbound traffic from the internet
-        type = "ingress"
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = "${local.public_cidr}"
-      },
-      # Inbound traffic for SSH
-      {
-        type = "ingress"
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = "${local.public_cidr}"
-      },
-      {
-        # Inbound traffic for ping
-        type = "ingress"
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = "${local.public_cidr}"
-      },
-      {
-        # Outbound traffic for health checks
-        type = "egress"
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = "${local.public_cidr}"
-      }
-    ],
-    "1" = [
-      # Inbound traffic for SSH
-      {
-        type = "ingress"
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = "${local.public_cidr}"
-      },
-      {
-        # Inbound traffic for ping
-        type = "ingress"
-        from_port = -1
-        to_port = -1
-        protocol = "icmp"
-        cidr_blocks = "${local.public_cidr}"
-      }
-    ]
-  }
+  saintsxctf_public_subnet_sg_rules_0 = [
+    {
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    # Inbound traffic for SSH
+    {
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Inbound traffic for ping
+      type = "ingress"
+      from_port = -1
+      to_port = -1
+      protocol = "icmp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for health checks
+      type = "egress"
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = "${local.public_cidr}"
+    }
+  ]
+
+  saintsxctf_public_subnet_sg_rules_1 = [
+    # Inbound traffic for SSH
+    {
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Inbound traffic for ping
+      type = "ingress"
+      from_port = -1
+      to_port = -1
+      protocol = "icmp"
+      cidr_blocks = "${local.public_cidr}"
+    }
+  ]
 
   saintsxctf_private_subnet_sg_rules = [
     # Inbound traffic for SSH
@@ -113,21 +112,22 @@ module "saintsxctf-com-vpc" {
   public_subnet_cidrs = "${local.saintsxctf_public_subnet_cidrs}"
   private_subnet_cidrs = "${local.saintsxctf_private_subnet_cidrs}"
 
-  basic_public_subnet_sg_rules = false
-  public_subnet_sg_rules_advanced = "${local.saintsxctf_public_subnet_sg_rules}"
+  enable_public_security_group = false
 
-  public_subnet_sg_cidr_blocks = [
-    "${local.public_cidr}",
-    "${local.public_cidr}",
-    "${local.public_cidr}",
-    "${local.public_cidr}"
-  ]
-
-  basic_private_subnet_sg_rules = true
+  enable_private_security_group = true
   private_subnet_sg_rules = "${local.saintsxctf_private_subnet_sg_rules}"
+}
 
-  private_subnet_sg_cidr_blocks = [
-    "${local.public_cidr}",
-    "${local.public_cidr}"
-  ]
+module "saintsxctf-com-public-subnet-security-group-0" {
+  source = "../../root/security-group"
+
+  # Mandatory arguments
+  # Optional arguments
+}
+
+module "saintsxctf-com-public-subnet-security-group-1" {
+  source = "../../root/security-group"
+
+  # Mandatory arguments
+  # Optional arguments
 }
