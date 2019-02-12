@@ -4,6 +4,12 @@
  * Date: 2/11/2019
  */
 
+# Needed since terraform modules do not support the 'count' property
+variable "enabled" {
+  description = "Whether or not the security group should be created"
+  default = true
+}
+
 #-----------------
 # Naming Variables
 #-----------------
@@ -22,6 +28,12 @@ variable "tag_name" {
 
 variable "vpc_id" {
   description = "VPC identifier for the security group"
+}
+
+variable "description" {
+  description = "Information about the security group"
+  type = "string"
+  default = "Security Group"
 }
 
 variable "sg_rules" {

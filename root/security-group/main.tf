@@ -4,9 +4,15 @@
  * Date: 2/11/2019
  */
 
-resource "aws_security_group" "public-subnet-security" {
+locals {
+  count = "${var.enabled ? 1 : 0}"
+}
+
+resource "aws_security_group" "security" {
+  count = "${local.count}"
+
   name = "${var.name}"
-  description = "Allow all incoming connections to public resources"
+  description = "${var.description}"
   vpc_id = "${var.vpc_id}"
 
   tags {
@@ -14,15 +20,15 @@ resource "aws_security_group" "public-subnet-security" {
   }
 }
 
-resource "aws_security_group_rule" "public-subnet-security-rule" {
+resource "aws_security_group_rule" "security-rule" {
   count = "${length(var.sg_rules)}"
 
-  security_group_id = "${aws_security_group.public-subnet-security.id}"
+  security_group_id = "${aws_security_group.security.id}"
   type = "${lookup(var.sg_rules[count.index], "type", "ingress")}"
 
   from_port = "${lookup(var.sg_rules[count.index], "from_port", 0)}"
   to_port = "${lookup(var.sg_rules[count.index], "to_port", 0)}"
   protocol = "${lookup(var.sg_rules[count.index], "protocol", "-1")}"
 
-  cidr_blocks = "${lookup(var.sg_rules[count.index], "cidr_blocks", list())}"
+  cidr_blocks = ["${lookup(var.sg_rules[count.index], "cidr_blocks", "")}"]
 }

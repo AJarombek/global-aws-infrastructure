@@ -6,11 +6,9 @@
 
 locals {
   nat_gateway = "${var.enable_nat_gateway ? 1 : 0}"
-  public_security_group = "${var.enable_public_security_group ? 1 : 0}"
-  private_security_group = "${var.enable_private_security_group ? 1 : 0}"
 
   # The number of private subnets that use a Nat Gateway
-  private_subnet_with_nat = "${var.enable_nat_gateway ? "${var.private_subnet_count}" : 0}"
+  private_subnet_with_nat = "${var.enable_nat_gateway ? var.private_subnet_count : 0}"
 
   multiple_public_subnets = "${var.public_subnet_count > 1}"
   multiple_private_subnets = "${var.private_subnet_count > 1}"
@@ -91,7 +89,7 @@ resource "aws_subnet" "public-subnet" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Public Subnet ${local.multiple_public_subnets ? count.index : ""}"
+    Name = "${var.tag_name} VPC Public Subnet ${local.multiple_public_subnets ? count.index : 0}"
   }
 }
 
@@ -115,29 +113,17 @@ resource "aws_route_table_association" "routing-table-association-public" {
   subnet_id = "${aws_subnet.public-subnet.*.id[count.index]}"
 }
 
-resource "aws_security_group" "public-subnet-security" {
-  count = "${local.public_security_group}"
+module "public-subnet-security" {
+  source = "../security-group"
+  enabled = "${var.enable_public_security_group}"
 
+  # Mandatory arguments
   name = "${var.name}-vpc-public-security"
-  description = "Allow all incoming connections to public resources"
+  tag_name = "${var.tag_name} VPC Public Subnet Security"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "${var.tag_name} VPC Public Subnet Security"
-  }
-}
-
-resource "aws_security_group_rule" "public-subnet-security-rule" {
-  count = "${length(var.public_subnet_sg_rules)}"
-
-  security_group_id = "${aws_security_group.public-subnet-security.id}"
-  type = "${lookup(var.public_subnet_sg_rules[count.index], "type", "ingress")}"
-
-  from_port = "${lookup(var.public_subnet_sg_rules[count.index], "from_port", 0)}"
-  to_port = "${lookup(var.public_subnet_sg_rules[count.index], "to_port", 0)}"
-  protocol = "${lookup(var.public_subnet_sg_rules[count.index], "protocol", "-1")}"
-
-  cidr_blocks = "${lookup(var.public_subnet_sg_rules[count.index], "cidr_blocks", list())}"
+  # Optional arguments
+  sg_rules = "${var.public_subnet_sg_rules}"
 }
 
 #---------------
@@ -152,7 +138,7 @@ resource "aws_subnet" "private-subnet" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${var.tag_name} VPC Private Subnet ${local.multiple_private_subnets ? count.index : ""}"
+    Name = "${var.tag_name} VPC Private Subnet ${local.multiple_private_subnets ? count.index : 0}"
   }
 }
 
@@ -192,27 +178,15 @@ resource "aws_route_table_association" "routing-table-association-private" {
   subnet_id = "${aws_subnet.private-subnet.*.id[count.index]}"
 }
 
-resource "aws_security_group" "private-subnet-security" {
-  count = "${local.private_security_group}"
+module "private-subnet-security" {
+  source = "../security-group"
+  enabled = "${var.enable_private_security_group}"
 
+  # Mandatory arguments
   name = "${var.name}-vpc-private-security"
-  description = "Allow traffic only from the public subnet"
+  tag_name = "${var.tag_name} VPC Private Subnet Security"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "${var.tag_name} VPC Private Subnet Security"
-  }
-}
-
-resource "aws_security_group_rule" "private-subnet-security-rule" {
-  count = "${length(var.private_subnet_sg_rules)}"
-
-  security_group_id = "${aws_security_group.private-subnet-security.id}"
-  type = "${lookup(var.private_subnet_sg_rules[count.index], "type", "ingress")}"
-
-  from_port = "${lookup(var.private_subnet_sg_rules[count.index], "from_port", 0)}"
-  to_port = "${lookup(var.private_subnet_sg_rules[count.index], "to_port", 0)}"
-  protocol = "${lookup(var.private_subnet_sg_rules[count.index], "protocol", "-1")}"
-
-  cidr_blocks = "${lookup(var.private_subnet_sg_rules[count.index], "cidr_blocks", list())}"
+  # Optional arguments
+  sg_rules = "${var.private_subnet_sg_rules}"
 }

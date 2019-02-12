@@ -70,7 +70,14 @@ locals {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs}"
+      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs[0]}"
+    },
+    {
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs[1]}"
     },
     {
       # Outbound traffic for health checks
@@ -78,7 +85,7 @@ locals {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs}"
+      cidr_blocks = "${local.public_cidr}"
     }
   ]
 }
@@ -122,12 +129,24 @@ module "saintsxctf-com-public-subnet-security-group-0" {
   source = "../../root/security-group"
 
   # Mandatory arguments
+  name = "saintsxctfcom-vpc-public-security-0"
+  tag_name = "SaintsXCTFcom VPC Public Subnet Security 0"
+  vpc_id = "${module.saintsxctf-com-vpc.vpc_id}"
+
   # Optional arguments
+  sg_rules = "${local.saintsxctf_public_subnet_sg_rules_0}"
+  description = "Allow all incoming connections to public resources"
 }
 
 module "saintsxctf-com-public-subnet-security-group-1" {
   source = "../../root/security-group"
 
   # Mandatory arguments
+  name = "saintsxctfcom-vpc-public-security-1"
+  tag_name = "SaintsXCTFcom VPC Public Subnet Security 1"
+  vpc_id = "${module.saintsxctf-com-vpc.vpc_id}"
+
   # Optional arguments
+  sg_rules = "${local.saintsxctf_public_subnet_sg_rules_1}"
+  description = "Allow incoming SSH connections to bastion host"
 }
