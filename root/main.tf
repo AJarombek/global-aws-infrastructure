@@ -118,7 +118,7 @@ terraform {
 }
 
 module "resources-vpc" {
-  source = "./vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc"
 
   # Mandatory arguments
   name = "resources"
@@ -141,7 +141,7 @@ module "resources-vpc" {
 }
 
 module "sandbox-vpc" {
-  source = "./vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc"
 
   # Mandatory arguments
   name = "sandbox"

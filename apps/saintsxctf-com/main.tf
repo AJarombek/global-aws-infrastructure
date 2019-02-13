@@ -18,8 +18,8 @@ locals {
       protocol = "tcp"
       cidr_blocks = "${local.public_cidr}"
     },
-    # Inbound traffic for SSH
     {
+      # Inbound traffic for SSH
       type = "ingress"
       from_port = 22
       to_port = 22
@@ -45,8 +45,8 @@ locals {
   ]
 
   saintsxctf_public_subnet_sg_rules_1 = [
-    # Inbound traffic for SSH
     {
+      # Inbound traffic for SSH
       type = "ingress"
       from_port = 22
       to_port = 22
@@ -64,8 +64,8 @@ locals {
   ]
 
   saintsxctf_private_subnet_sg_rules = [
-    # Inbound traffic for SSH
     {
+      # Inbound traffic for SSH
       type = "ingress"
       from_port = 22
       to_port = 22
@@ -104,7 +104,7 @@ terraform {
 }
 
 module "saintsxctf-com-vpc" {
-  source = "../../root/vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc"
 
   # Mandatory arguments
   name = "saintsxctfcom"
@@ -126,7 +126,7 @@ module "saintsxctf-com-vpc" {
 }
 
 module "saintsxctf-com-public-subnet-security-group-0" {
-  source = "../../root/security-group"
+  source = "github.com/ajarombek/terraform-modules//security-group"
 
   # Mandatory arguments
   name = "saintsxctfcom-vpc-public-security-0"
@@ -139,7 +139,7 @@ module "saintsxctf-com-public-subnet-security-group-0" {
 }
 
 module "saintsxctf-com-public-subnet-security-group-1" {
-  source = "../../root/security-group"
+  source = "github.com/ajarombek/terraform-modules//security-group"
 
   # Mandatory arguments
   name = "saintsxctfcom-vpc-public-security-1"

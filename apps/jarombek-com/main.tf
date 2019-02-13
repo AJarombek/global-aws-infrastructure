@@ -62,7 +62,7 @@ terraform {
 }
 
 module "jarombek-com-vpc" {
-  source = "../../root/vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc"
 
   # Mandatory arguments
   name = "jarombekcom"

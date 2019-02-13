@@ -12,3 +12,6 @@ export AWS_ACCESS_KEY_ID=XXX
 export AWS_SECRET_ACCESS_KEY=XXX
 
 terraform apply
+
+# To update a remote module, use a get command
+terraform get -update
