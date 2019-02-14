@@ -60,6 +60,22 @@ locals {
       to_port = -1
       protocol = "icmp"
       cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTP
+      type = "egress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTP
+      type = "egress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
     }
   ]
 
@@ -76,6 +92,21 @@ locals {
       type = "ingress"
       from_port = 22
       to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs[1]}"
+    },
+    {
+      # Inbound traffic for MySQL
+      type = "ingress"
+      from_port = 3306
+      to_port = 3306
+      protocol = "tcp"
+      cidr_blocks = "${local.saintsxctf_public_subnet_cidrs[0]}"
+    },
+    {
+      type = "ingress"
+      from_port = 3306
+      to_port = 3306
       protocol = "tcp"
       cidr_blocks = "${local.saintsxctf_public_subnet_cidrs[1]}"
     },
