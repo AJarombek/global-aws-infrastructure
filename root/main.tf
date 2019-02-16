@@ -82,7 +82,10 @@ locals {
     }
   ]
 
-  sandox_public_subnet_sg_rules = [
+  resources_public_subnet_azs = ["us-east-1c"]
+  resources_private_subnet_azs = ["us-east-1c"]
+
+  sandbox_public_subnet_sg_rules = [
     {
       # Inbound traffic from the internet
       type = "ingress"
@@ -101,7 +104,9 @@ locals {
     }
   ]
 
-  sandox_private_subnet_sg_rules = []
+  sandbox_private_subnet_sg_rules = []
+  sandbox_public_subnet_azs = ["us-east-1a"]
+  sandbox_private_subnet_azs = ["us-east-1a"]
 }
 
 provider "aws" {
@@ -130,6 +135,9 @@ module "resources-vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
+
+  public_subnet_azs = "${local.resources_public_subnet_azs}"
+  private_subnet_azs = "${local.resources_private_subnet_azs}"
   public_subnet_cidr = "${local.resources_public_subnet_cidr}"
   private_subnet_cidr = "${local.resources_private_subnet_cidr}"
 
@@ -153,12 +161,15 @@ module "sandbox-vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
+
+  public_subnet_azs = "${local.sandbox_public_subnet_azs}"
+  private_subnet_azs = "${local.sandbox_private_subnet_azs}"
   public_subnet_cidr = "${local.sandbox_public_subnet_cidr}"
   private_subnet_cidr = "${local.sandbox_private_subnet_cidr}"
 
   enable_public_security_group = true
-  public_subnet_sg_rules = "${local.sandox_public_subnet_sg_rules}"
+  public_subnet_sg_rules = "${local.sandbox_public_subnet_sg_rules}"
 
   enable_private_security_group = true
-  private_subnet_sg_rules = "${local.sandox_private_subnet_sg_rules}"
+  private_subnet_sg_rules = "${local.sandbox_private_subnet_sg_rules}"
 }

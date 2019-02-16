@@ -119,6 +119,16 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     }
   ]
+
+  saintsxctf_public_subnet_azs = [
+    "us-east-1b",
+    "us-east-1d"
+  ]
+
+  saintsxctf_private_subnet_azs = [
+    "us-east-1c",
+    "us-east-1e"
+  ]
 }
 
 provider "aws" {
@@ -147,6 +157,9 @@ module "saintsxctf-com-vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
+
+  public_subnet_azs = "${local.saintsxctf_public_subnet_azs}"
+  private_subnet_azs = "${local.saintsxctf_private_subnet_azs}"
   public_subnet_cidrs = "${local.saintsxctf_public_subnet_cidrs}"
   private_subnet_cidrs = "${local.saintsxctf_private_subnet_cidrs}"
 
