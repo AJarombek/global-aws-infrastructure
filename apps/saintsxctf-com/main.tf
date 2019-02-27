@@ -19,6 +19,14 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
       # Inbound traffic for SSH
       type = "ingress"
       from_port = 22
@@ -46,6 +54,22 @@ locals {
 
   saintsxctf_public_subnet_sg_rules_1 = [
     {
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
       # Inbound traffic for SSH
       type = "ingress"
       from_port = 22
@@ -70,7 +94,7 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
-      # Outbound traffic for HTTP
+      # Outbound traffic for HTTPS
       type = "egress"
       from_port = 443
       to_port = 443
@@ -126,8 +150,8 @@ locals {
   ]
 
   saintsxctf_private_subnet_azs = [
-    "us-east-1c",
-    "us-east-1e"
+    "us-east-1e",
+    "us-east-1c"
   ]
 }
 

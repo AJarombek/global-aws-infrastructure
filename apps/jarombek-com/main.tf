@@ -19,6 +19,22 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Inbound traffic for SSH
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
       # Inbound traffic for ping
       type = "ingress"
       from_port = -1
@@ -37,6 +53,14 @@ locals {
   ]
 
   jarombek_com_private_subnet_sg_rules = [
+    {
+      # Inbound traffic for SSH
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.jarombek_com_public_subnet_cidrs[0]}"
+    },
     {
       # Outbound traffic for health checks
       type = "egress"
