@@ -29,10 +29,6 @@ data "aws_s3_bucket" "www-global-jarombek-io-bucket" {
   bucket = "www.global.jarombek.io"
 }
 
-data "aws_elb" "jenkins-server-elb" {
-  name = "global-jenkins-server-elb"
-}
-
 #------------------------------
 # New AWS Resources for Route53
 #------------------------------
@@ -53,18 +49,6 @@ resource "aws_route53_record" "jarombek-io-ns" {
     "${aws_route53_zone.jarombek-io-zone.name_servers.2}",
     "${aws_route53_zone.jarombek-io-zone.name_servers.3}"
   ]
-}
-
-resource "aws_route53_record" "jenkins-jarombek-io-a" {
-  name = "jenkins.jarombek.io"
-  type = "A"
-  zone_id = "${aws_route53_zone.jarombek-io-zone.zone_id}"
-
-  alias {
-    evaluate_target_health = true
-    name = "${data.aws_elb.jenkins-server-elb.dns_name}"
-    zone_id = "${data.aws_elb.jenkins-server-elb.zone_id}"
-  }
 }
 
 resource "aws_route53_record" "global-jarombek-io-a" {

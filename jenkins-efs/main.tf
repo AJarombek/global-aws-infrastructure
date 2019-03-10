@@ -19,13 +19,13 @@ terraform {
 
 data "aws_vpc" "resources-vpc" {
   tags {
-    Name = "Resources VPC"
+    Name = "resources-vpc"
   }
 }
 
 data "aws_subnet" "resources-vpc-public-subnet" {
   tags {
-    Name = "Resources VPC Public Subnet"
+    Name = "resources-vpc-public-subnet"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_efs_file_system" "jenkins-efs" {
   creation_token = "jenkins-fs"
 
   tags {
-    Name = "Jenkins EFS"
+    Name = "jenkins-efs"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_security_group" "jenkins-efs-security" {
   }
 
   tags {
-    Name = "Jenkins EFS Security"
+    Name = "jenkins-efs-security"
   }
 }
 

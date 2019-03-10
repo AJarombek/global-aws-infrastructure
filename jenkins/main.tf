@@ -49,19 +49,19 @@ data "aws_security_group" "public-subnet-security-group" {
 
 data "aws_vpc" "resources-vpc" {
   tags {
-    Name = "Resources VPC"
+    Name = "resources-vpc"
   }
 }
 
 data "aws_subnet" "resources-vpc-public-subnet" {
   tags {
-    Name = "Resources VPC Public Subnet"
+    Name = "resources-vpc-public-subnet"
   }
 }
 
 data "aws_efs_file_system" "jenkins-efs" {
   tags {
-    Name = "Jenkins EFS"
+    Name = "jenkins-efs"
   }
 }
 

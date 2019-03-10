@@ -6,11 +6,11 @@
 
 locals {
   public_cidr = "0.0.0.0/0"
-  resources_public_subnet_cidr = "10.0.1.0/24"
-  resources_private_subnet_cidr = "10.0.2.0/24"
+  resources_public_subnet_cidrs = ["10.0.1.0/24"]
+  resources_private_subnet_cidrs = ["10.0.2.0/24"]
 
-  sandbox_public_subnet_cidr = "10.0.1.0/24"
-  sandbox_private_subnet_cidr = "10.0.2.0/24"
+  sandbox_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+  sandbox_private_subnet_cidrs = []
 
   resources_public_subnet_sg_rules = [
     {
@@ -62,7 +62,7 @@ locals {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = "${local.resources_public_subnet_cidr}"
+      cidr_blocks = "${local.resources_public_subnet_cidrs[0]}"
     },
     {
       # Inbound traffic for ping
@@ -105,8 +105,8 @@ locals {
   ]
 
   sandbox_private_subnet_sg_rules = []
-  sandbox_public_subnet_azs = ["us-east-1a"]
-  sandbox_private_subnet_azs = ["us-east-1a"]
+  sandbox_public_subnet_azs = ["us-east-1a", "us-east-1b"]
+  sandbox_private_subnet_azs = []
 }
 
 provider "aws" {
@@ -127,7 +127,7 @@ module "resources-vpc" {
 
   # Mandatory arguments
   name = "resources"
-  tag_name = "Resources"
+  tag_name = "resources"
 
   # Optional arguments
   public_subnet_count = 1
@@ -136,10 +136,16 @@ module "resources-vpc" {
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
+  public_subnet_custom_names = true
+  public_subnet_names = ["resources-vpc-public-subnet"]
+
+  private_subnet_custom_names = true
+  private_subnet_names = ["resources-vpc-private-subnet"]
+
   public_subnet_azs = "${local.resources_public_subnet_azs}"
   private_subnet_azs = "${local.resources_private_subnet_azs}"
-  public_subnet_cidr = "${local.resources_public_subnet_cidr}"
-  private_subnet_cidr = "${local.resources_private_subnet_cidr}"
+  public_subnet_cidrs = "${local.resources_public_subnet_cidrs}"
+  private_subnet_cidrs = "${local.resources_private_subnet_cidrs}"
 
   enable_public_security_group = true
   public_subnet_sg_rules = "${local.resources_public_subnet_sg_rules}"
@@ -153,19 +159,25 @@ module "sandbox-vpc" {
 
   # Mandatory arguments
   name = "sandbox"
-  tag_name = "Sandbox"
+  tag_name = "sandbox"
 
   # Optional arguments
-  public_subnet_count = 1
-  private_subnet_count = 1
+  public_subnet_count = 2
+  private_subnet_count = 0
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
+  public_subnet_custom_names = true
+  public_subnet_names = ["sandbox-vpc-fearless-public-subnet", "sandbox-vpc-speaknow-public-subnet"]
+
+  private_subnet_custom_names = true
+  private_subnet_names = []
+
   public_subnet_azs = "${local.sandbox_public_subnet_azs}"
   private_subnet_azs = "${local.sandbox_private_subnet_azs}"
-  public_subnet_cidr = "${local.sandbox_public_subnet_cidr}"
-  private_subnet_cidr = "${local.sandbox_private_subnet_cidr}"
+  public_subnet_cidrs = "${local.sandbox_public_subnet_cidrs}"
+  private_subnet_cidrs = "${local.sandbox_private_subnet_cidrs}"
 
   enable_public_security_group = true
   public_subnet_sg_rules = "${local.sandbox_public_subnet_sg_rules}"

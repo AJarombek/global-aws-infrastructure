@@ -169,7 +169,7 @@ terraform {
 }
 
 module "saintsxctf-com-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.0"
 
   # Mandatory arguments
   name = "saintsxctfcom"
@@ -194,7 +194,7 @@ module "saintsxctf-com-vpc" {
 }
 
 module "saintsxctf-com-public-subnet-security-group-0" {
-  source = "github.com/ajarombek/terraform-modules//security-group"
+  source = "github.com/ajarombek/terraform-modules//security-group?ref=v0.1.0"
 
   # Mandatory arguments
   name = "saintsxctfcom-vpc-public-security-0"
@@ -207,7 +207,7 @@ module "saintsxctf-com-public-subnet-security-group-0" {
 }
 
 module "saintsxctf-com-public-subnet-security-group-1" {
-  source = "github.com/ajarombek/terraform-modules//security-group"
+  source = "github.com/ajarombek/terraform-modules//security-group?ref=v0.1.0"
 
   # Mandatory arguments
   name = "saintsxctfcom-vpc-public-security-1"
