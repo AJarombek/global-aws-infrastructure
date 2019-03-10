@@ -6,4 +6,5 @@ This directory contains all the infrastructure for my global S3 buckets.
 
 | Filename            | Description                                                                             |
 |---------------------|-----------------------------------------------------------------------------------------|
+| `global`            | Contents of the global S3 buckets                                                       |
 | `main.tf`           | The main Terraform module containing all the infrastructure for my global S3 buckets    |

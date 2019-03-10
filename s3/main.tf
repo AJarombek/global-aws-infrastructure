@@ -81,13 +81,6 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
   comment = "global.jarombek.io CloudFront Distribution"
   default_root_object = "index.json"
 
-  # Configure an S3 bucket to store cloudfront access logs
-  logging_config {
-    bucket = "global.logs.jarombek.io"
-    include_cookies = false
-    prefix = "logs"
-  }
-
   # Extra CNAMEs for this distribution
   aliases = ["global.jarombek.io"]
 
@@ -96,10 +89,10 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
 
   default_cache_behavior {
     # Which HTTP verbs CloudFront processes
-    allowed_methods = ["GET"]
+    allowed_methods = ["HEAD", "GET"]
 
     # Which HTTP verbs CloudFront caches responses to requests
-    cached_methods = ["GET"]
+    cached_methods = ["HEAD", "GET"]
 
     forwarded_values {
       cookies {
@@ -149,6 +142,13 @@ resource "aws_s3_bucket_object" "index-json" {
   key = "index.json"
   source = "global/index.json"
   etag = "${md5(file("global/index.json"))}"
+}
+
+resource "aws_s3_bucket_object" "aws-key-gen" {
+  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  key = "aws-key-gen.sh"
+  source = "global/aws-key-gen.sh"
+  etag = "${md5(file("global/aws-key-gen.sh"))}"
 }
 
 resource "aws_s3_bucket_object" "fonts-css" {
