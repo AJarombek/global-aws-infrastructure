@@ -69,3 +69,13 @@
         - pip --version
         - pip install awscli
         - aws --version
+
+    # JQ is used to parse JSON from Bash
+    - name: Install jq
+      become: yes
+      command: "{{item}}"
+      ignore_errors: True
+      with_items:
+        - add-apt-repository ppa:eugenesan/ppa
+        - apt-get update
+        - apt-get -y install jq

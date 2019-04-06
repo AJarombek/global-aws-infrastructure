@@ -5,54 +5,19 @@
  */
 
 locals {
-  jarombek_com_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
-  jarombek_com_private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
-  public_cidr = "0.0.0.0/0"
-
-  jarombek_com_public_subnet_sg_rules_0 = [
-    {
-      # Inbound traffic from the internet
-      type = "ingress"
-      from_port = 80
-      to_port = 80
-      protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Inbound traffic from the internet
-      type = "ingress"
-      from_port = 443
-      to_port = 443
-      protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Inbound traffic for SSH
-      type = "ingress"
-      from_port = 22
-      to_port = 22
-      protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Inbound traffic for ping
-      type = "ingress"
-      from_port = -1
-      to_port = -1
-      protocol = "icmp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Outbound traffic for health checks
-      type = "egress"
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = "${local.public_cidr}"
-    }
+  jarombek_com_public_subnet_cidrs = [
+    "10.0.1.0/24",
+    "10.0.2.0/24"
   ]
 
-  jarombek_com_public_subnet_sg_rules_1 = [
+  jarombek_com_private_subnet_cidrs = [
+    "10.0.3.0/24",
+    "10.0.4.0/24"
+  ]
+
+  public_cidr = "0.0.0.0/0"
+
+  jarombek_com_vpc_sg_rules = [
     {
       # Inbound traffic from the internet
       type = "ingress"
@@ -94,45 +59,12 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
-      # Outbound traffic for health checks
+      # Outbound traffic to the internet
       type = "egress"
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
       cidr_blocks = "${local.public_cidr}"
-    }
-  ]
-
-  jarombek_com_private_subnet_sg_rules = [
-    {
-      # Inbound traffic for SSH
-      type = "ingress"
-      from_port = 22
-      to_port = 22
-      protocol = "tcp"
-      cidr_blocks = "${local.jarombek_com_public_subnet_cidrs[0]}"
-    },
-    {
-      type = "ingress"
-      from_port = 22
-      to_port = 22
-      protocol = "tcp"
-      cidr_blocks = "${local.jarombek_com_public_subnet_cidrs[1]}"
-    },
-    {
-      # Inbound traffic for DocumentDB
-      type = "ingress"
-      from_port = 27017
-      to_port = 27017
-      protocol = "tcp"
-      cidr_blocks = "${local.jarombek_com_public_subnet_cidrs[0]}"
-    },
-    {
-      type = "ingress"
-      from_port = 27017
-      to_port = 27017
-      protocol = "tcp"
-      cidr_blocks = "${local.jarombek_com_public_subnet_cidrs[1]}"
     },
     {
       # Outbound traffic for health checks
@@ -169,11 +101,11 @@ terraform {
 }
 
 module "jarombek-com-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.3"
 
   # Mandatory arguments
-  name = "jarombekcom"
-  tag_name = "jarombekcom"
+  name = "jarombek-com"
+  tag_name = "jarombek-com"
 
   # Optional arguments
   public_subnet_count = 2
@@ -193,34 +125,6 @@ module "jarombek-com-vpc" {
   public_subnet_cidrs = "${local.jarombek_com_public_subnet_cidrs}"
   private_subnet_cidrs = "${local.jarombek_com_private_subnet_cidrs}"
 
-  enable_public_security_group = false
-
-  enable_private_security_group = true
-  private_subnet_sg_rules = "${local.jarombek_com_private_subnet_sg_rules}"
-}
-
-module "jarombek-com-public-subnet-security-group-0" {
-  source = "github.com/ajarombek/terraform-modules//security-group"
-
-  # Mandatory arguments
-  name = "jarombekcom-vpc-public-security-0"
-  tag_name = "jarombekcom-vpc-public-security-0"
-  vpc_id = "${module.jarombek-com-vpc.vpc_id}"
-
-  # Optional arguments
-  sg_rules = "${local.jarombek_com_public_subnet_sg_rules_0}"
-  description = "Allow all incoming connections to public resources"
-}
-
-module "jarombek-com-public-subnet-security-group-1" {
-  source = "github.com/ajarombek/terraform-modules//security-group"
-
-  # Mandatory arguments
-  name = "jarombekcom-vpc-public-security-1"
-  tag_name = "jarombekcom-vpc-public-security-1"
-  vpc_id = "${module.jarombek-com-vpc.vpc_id}"
-
-  # Optional arguments
-  sg_rules = "${local.jarombek_com_public_subnet_sg_rules_1}"
-  description = "Allow incoming SSH connections to bastion host"
+  enable_security_groups = true
+  sg_rules = "${local.jarombek_com_vpc_sg_rules}"
 }
