@@ -97,6 +97,7 @@ resource "aws_eip" "jenkins-server-eip" {
 
   tags {
     Name = "global-jenkins-server-eip"
+    Application = "jenkins-jarombek-io"
   }
 }
 
@@ -139,6 +140,12 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
     key = "Name"
     propagate_at_launch = true
     value = "global-jenkins-server-asg"
+  }
+
+  tag {
+    key = "Application"
+    propagate_at_launch = false
+    value = "jenkins-jarombek-io"
   }
 }
 
@@ -236,6 +243,7 @@ resource "aws_elb" "jenkins-server-elb" {
 
   tags {
     Name = "global-jenkins-server-elb"
+    Application = "jenkins-jarombek-io"
   }
 }
 
@@ -282,6 +290,11 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags {
+    Name = "global-jenkins-server-lc-security-group"
+    Application = "jenkins-jarombek-io"
+  }
 }
 
 resource "aws_security_group" "jenkins-server-elb-security-group" {
@@ -319,5 +332,10 @@ resource "aws_security_group" "jenkins-server-elb-security-group" {
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  tags {
+    Name = "global-jenkins-server-elb-security-group"
+    Application = "jenkins-jarombek-io"
   }
 }

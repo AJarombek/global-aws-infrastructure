@@ -31,3 +31,6 @@ echo ${Key} > ~/Documents/${KEY_NAME}.pem
 
 # Its required to change the private key permissions
 chmod 400 ~/Documents/${KEY_NAME}.pem
+
+# Add the key to the SSH agent
+ssh-add ~/Documents/${KEY_NAME}.pem

@@ -9,13 +9,14 @@
 
   tasks:
 
-    - name: Install Java8, Git, Wget & Unzip
+    - name: Install Java8, Python3, Git, Wget & Unzip
       become: yes
       # {{item}} is replaced with each item in "with_items"
       apt: pkg={{item}} state=installed
       # You can think of "with_items" as creating a for loop around this task
       with_items:
         - openjdk-8-jdk
+        - python3
         - git
         - wget
         - unzip
