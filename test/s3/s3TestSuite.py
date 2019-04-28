@@ -8,7 +8,9 @@ import masterTestFuncs as Test
 from s3 import s3TestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func, "")
+    lambda: Test.test(Func.s3_bucket_exists, "Test that the S3 Bucket Exists"),
+    lambda: Test.test(Func.s3_bucket_objects_correct, "Validate the S3 Buckets Contents"),
+    lambda: Test.test(Func.s3_bucket_cloudfront_distributed, "Ensure the S3 Bucket is Distributed with CloudFront")
 ]
 
 
