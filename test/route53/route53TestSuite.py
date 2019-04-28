@@ -8,7 +8,11 @@ import masterTestFuncs as Test
 from route53 import route53TestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func.jarombek_io_zone_exists, "Check if the jarombek.io Hosted Zone Exists in Route53")
+    lambda: Test.test(Func.jarombek_io_zone_exists, "Check if the jarombek.io Hosted Zone Exists in Route53"),
+    lambda: Test.test(Func.jarombek_io_zone_public, "Check if the jarombek.io Hosted Zone is Public"),
+    lambda: Test.test(Func.jarombek_io_ns_record_exists, "The jarombek.io 'NS' record exists"),
+    lambda: Test.test(Func.jarombek_io_a_record_exists, "The jarombek.io 'A' record exists"),
+    lambda: Test.test(Func.www_jarombek_io_a_record_exists, "The www.jarombek.io 'A' record exists")
 ]
 
 

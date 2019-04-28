@@ -8,7 +8,7 @@ import masterTestFuncs as Test
 from jenkinsRoute53 import jenkinsRoute53TestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func, "")
+    lambda: Test.test(Func.jenkins_jarombek_io_a_record_exists, "The jenkins.jarombek.io 'A' record exists")
 ]
 
 
