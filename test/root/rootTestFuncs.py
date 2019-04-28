@@ -8,6 +8,10 @@ import boto3
 
 ec2 = boto3.client('ec2')
 
+"""
+Tests for the Resources VPC
+"""
+
 
 def resources_vpc_exists() -> bool:
     """
@@ -26,7 +30,32 @@ def resources_vpc_configured() -> bool:
 
 
 def resources_internet_gateway_exists() -> bool:
+    """
+    Determine if the resources-vpc-internet-gateway exists
+    :return: True if it exists, False otherwise
+    """
     return len(get_internet_gateways('resources-vpc-internet-gateway')) == 1
+
+
+def resources_network_acl_exists() -> bool:
+    """
+    Determine if the resources-acl exists
+    :return: True if it exists, False otherwise
+    """
+    return len(get_network_acls('resources-acl')) == 1
+
+
+def resources_dns_resolver_exists() -> bool:
+    """
+    Determine if the resources-dhcp-options exists
+    :return: True if it exists, False otherwise
+    """
+    return len(get_dns_resolver('resources-dhcp-options')) == 1
+
+
+"""
+Tests for the Sandbox VPC
+"""
 
 
 def sandbox_vpc_exists() -> bool:
@@ -46,7 +75,27 @@ def sandbox_vpc_configured() -> bool:
 
 
 def sandbox_internet_gateway_exists() -> bool:
+    """
+    Determine if the sandbox-vpc-internet-gateway exists
+    :return: True if it exists, False otherwise
+    """
     return len(get_internet_gateways('sandbox-vpc-internet-gateway')) == 1
+
+
+def sandbox_network_acl_exists() -> bool:
+    """
+    Determine if the sandbox-acl exists
+    :return: True if it exists, False otherwise
+    """
+    return len(get_network_acls('sandbox-acl')) == 1
+
+
+def sandbox_dns_resolver_exists() -> bool:
+    """
+    Determine if the sandbox-dhcp-options exists
+    :return: True if it exists, False otherwise
+    """
+    return len(get_dns_resolver('sandbox-dhcp-options')) == 1
 
 
 """
@@ -86,6 +135,11 @@ def vpc_configured(name: str) -> bool:
 
 
 def get_internet_gateways(name: str) -> list:
+    """
+    Get a list of Internet Gateways that match a given name
+    :param name: Name of the Internet Gateway in AWS
+    :return: A list of Internet Gateway objects (dictionaries)
+    """
     igw = ec2.describe_internet_gateways(
         Filters=[{
             'Name': 'tag:Name',
@@ -95,4 +149,34 @@ def get_internet_gateways(name: str) -> list:
     return igw.get('InternetGateways')
 
 
-print(resources_internet_gateway_exists())
+def get_network_acls(name: str) -> list:
+    """
+    Get a list of Network ACLs that match a given name
+    :param name: Name of the Network ACL in AWS
+    :return: A list of Network ACL objects (dictionaries)
+    """
+    acls = ec2.describe_network_acls(
+        Filters=[{
+            'Name': 'tag:Name',
+            'Values': [name]
+        }]
+    )
+    return acls.get('NetworkAcls')
+
+
+def get_dns_resolver(name: str) -> list:
+    """
+    Get a list of DHCP Option sets that match a given name
+    :param name: Name of the DHCP Option set in AWS
+    :return: A list of DHCP Option set objects (dictionaries)
+    """
+    dhcp = ec2.describe_dhcp_options(
+        Filters=[{
+            'Name': 'tag:Name',
+            'Values': [name]
+        }]
+    )
+    return dhcp.get('DhcpOptions')
+
+
+print(resources_dns_resolver_exists())
