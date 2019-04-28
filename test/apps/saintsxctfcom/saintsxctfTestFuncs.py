@@ -1,5 +1,5 @@
 """
-Functions which represent Unit tests for the S3 backend infrastructure for Terraform
+Functions which represent Unit tests for the saints-xctf-com vpc infrastructure
 Author: Andrew Jarombek
 Date: 4/27/2019
 """
