@@ -12,7 +12,7 @@ locals {
   sandbox_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
   sandbox_private_subnet_cidrs = []
 
-  resources_public_subnet_sg_rules = [
+  resources_vpc_sg_rules = [
     {
       # Inbound traffic from the internet
       type = "ingress"
@@ -20,8 +20,13 @@ locals {
       to_port = 80
       protocol = "tcp"
       cidr_blocks = "${local.public_cidr}"
-      # 'null' is coming in Terraform v0.12
-      # source_security_group_id = null
+    },
+    {
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
     },
     {
       # ICMP is used for sending error messages or operational information.  ICMP has no ports,
@@ -40,44 +45,27 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
-      type = "ingress"
+      # Outbound traffic for health checks
+      type = "egress"
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTP
+      type = "egress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTPS
+      type = "egress"
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Outbound traffic for health checks
-      type = "egress"
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = "${local.public_cidr}"
-    }
-  ]
-
-  resources_private_subnet_sg_rules = [
-    {
-      type = "ingress"
-      from_port = 22
-      to_port = 22
-      protocol = "tcp"
-      cidr_blocks = "${local.resources_public_subnet_cidrs[0]}"
-    },
-    {
-      # Inbound traffic for ping
-      type = "ingress"
-      from_port = -1
-      to_port = -1
-      protocol = "icmp"
-      cidr_blocks = "${local.public_cidr}"
-    },
-    {
-      # Outbound traffic for health checks
-      type = "egress"
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
       cidr_blocks = "${local.public_cidr}"
     }
   ]
@@ -85,7 +73,7 @@ locals {
   resources_public_subnet_azs = ["us-east-1c"]
   resources_private_subnet_azs = ["us-east-1c"]
 
-  sandbox_public_subnet_sg_rules = [
+  sandbox_vpc_sg_rules = [
     {
       # Inbound traffic from the internet
       type = "ingress"
@@ -95,11 +83,48 @@ locals {
       cidr_blocks = "${local.public_cidr}"
     },
     {
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      type = "ingress"
+      from_port = -1
+      to_port = -1
+      protocol = "icmp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
       # Outbound traffic for health checks
       type = "egress"
       from_port = 0
       to_port = 0
       protocol = "-1"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTP
+      type = "egress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = "${local.public_cidr}"
+    },
+    {
+      # Outbound traffic for HTTPS
+      type = "egress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
       cidr_blocks = "${local.public_cidr}"
     }
   ]
@@ -147,11 +172,8 @@ module "resources-vpc" {
   public_subnet_cidrs = "${local.resources_public_subnet_cidrs}"
   private_subnet_cidrs = "${local.resources_private_subnet_cidrs}"
 
-  enable_public_security_group = true
-  public_subnet_sg_rules = "${local.resources_public_subnet_sg_rules}"
-
-  enable_private_security_group = true
-  private_subnet_sg_rules = "${local.resources_private_subnet_sg_rules}"
+  enable_security_groups = true
+  sg_rules = "${local.resources_vpc_sg_rules}"
 }
 
 module "sandbox-vpc" {
@@ -179,9 +201,6 @@ module "sandbox-vpc" {
   public_subnet_cidrs = "${local.sandbox_public_subnet_cidrs}"
   private_subnet_cidrs = "${local.sandbox_private_subnet_cidrs}"
 
-  enable_public_security_group = true
-  public_subnet_sg_rules = "${local.sandbox_public_subnet_sg_rules}"
-
-  enable_private_security_group = true
-  private_subnet_sg_rules = "${local.sandbox_private_subnet_sg_rules}"
+  enable_security_groups = true
+  private_subnet_sg_rules = "${local.sandbox_vpc_sg_rules}"
 }

@@ -6,6 +6,7 @@ Date: 4/27/2019
 
 import boto3
 from utils.vpc import VPC
+from utils.securityGroup import SecurityGroup
 
 ec2 = boto3.client('ec2')
 
@@ -174,6 +175,24 @@ def sandbox_fearless_public_subnet_configured() -> bool:
     return VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.0.1.0/24')
 
 
+def sandbox_fearless_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the sandbox 'fearless' public subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('sandbox-vpc')[0]
+    subnet = VPC.get_subnets('sandbox-vpc-fearless-public-subnet')[0]
+    route_table = VPC.get_route_table('sandbox-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('sandbox-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
+
+
 def sandbox_speaknow_public_subnet_exists() -> bool:
     """
     Determine if the sandbox-vpc-speaknow-public-subnet exists
@@ -191,6 +210,24 @@ def sandbox_speaknow_public_subnet_configured() -> bool:
     subnet = VPC.get_subnets('sandbox-vpc-speaknow-public-subnet')[0]
 
     return VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24')
+
+
+def sandbox_speaknow_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the sandbox 'speaknow' public subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('sandbox-vpc')[0]
+    subnet = VPC.get_subnets('sandbox-vpc-speaknow-public-subnet')[0]
+    route_table = VPC.get_route_table('sandbox-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('sandbox-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
 
 
 print(resources_public_subnet_rt_configured())

@@ -136,4 +136,21 @@ class VPC:
 
     @staticmethod
     def route_table_configured(route_table: dict, vpc_id: str, subnet_id: str, igw_id: str) -> bool:
-        pass
+        """
+        Determine if a route table is configured as expected
+        :param route_table: Dictionary containing information about a routing table
+        :param vpc_id: Identifier for a VPC the routing table should exist in
+        :param subnet_id: Identifier for a Subnet the routing table should be associated with
+        :param igw_id: Identifier for an Internet Gateway used by the routing table to route traffic to the internet
+        :return: True if the route table is configured as expected, False otherwise
+        """
+        return all([
+            route_table.get('VpcId') == vpc_id,
+            len([True for item in route_table.get('Associations') if item.get('SubnetId') == subnet_id]) == 1,
+            route_table.get('Routes')[0].get('DestinationCidrBlock') == '10.0.0.0/16',
+            route_table.get('Routes')[0].get('GatewayId') == 'local',
+            route_table.get('Routes')[0].get('State') == 'active',
+            route_table.get('Routes')[1].get('DestinationCidrBlock') == '0.0.0.0/0',
+            route_table.get('Routes')[1].get('GatewayId') == igw_id,
+            route_table.get('Routes')[1].get('State') == 'active'
+        ])
