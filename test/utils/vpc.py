@@ -118,3 +118,22 @@ class VPC:
             subnet.get('CidrBlock') == cidr,
             subnet.get('State') == 'available'
         ])
+
+    @staticmethod
+    def get_route_table(name: str) -> list:
+        """
+        Get a list of Route Tables that match a given name
+        :param name: Name of the Route Table in AWS
+        :return: A list of Route Table objects (dictionaries)
+        """
+        rts = ec2.describe_route_tables(
+            Filters=[{
+                'Name': 'tag:Name',
+                'Values': [name]
+            }]
+        )
+        return rts.get('RouteTables')
+
+    @staticmethod
+    def route_table_configured(route_table: dict, vpc_id: str, subnet_id: str, igw_id: str) -> bool:
+        pass
