@@ -5,7 +5,7 @@ Date: 4/27/2019
 """
 
 import boto3
-from utils.route53 import get_record
+from utils.route53 import Route53
 
 route53 = boto3.client('route53')
 
@@ -33,7 +33,7 @@ def jarombek_io_ns_record_exists() -> bool:
     Determine if the 'NS' record exists for 'jarombek.io.' in Route53
     :return: True if it exists, False otherwise
     """
-    a_record = get_record('jarombek.io.', 'jarombek.io.', 'NS')
+    a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'NS')
     return a_record.get('Name') == 'jarombek.io.' and a_record.get('Type') == 'NS'
 
 
@@ -42,7 +42,7 @@ def jarombek_io_a_record_exists() -> bool:
     Determine if the 'A' record exists for 'jarombek.io.' in Route53
     :return: True if it exists, False otherwise
     """
-    a_record = get_record('jarombek.io.', 'jarombek.io.', 'A')
+    a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'A')
     return a_record.get('Name') == 'jarombek.io.' and a_record.get('Type') == 'A'
 
 
