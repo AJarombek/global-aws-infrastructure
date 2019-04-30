@@ -8,7 +8,7 @@ import masterTestFuncs as Test
 from jenkinsefs import jenkinsEFSTestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func, "")
+    lambda: Test.test(Func.jenkins_efs_exists, "Determine if the EFS for Jenkins Exists")
 ]
 
 

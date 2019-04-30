@@ -17,6 +17,10 @@ terraform {
   }
 }
 
+#-----------------------
+# Existing AWS Resources
+#-----------------------
+
 data "aws_vpc" "resources-vpc" {
   tags {
     Name = "resources-vpc"
@@ -29,6 +33,10 @@ data "aws_subnet" "resources-vpc-public-subnet" {
   }
 }
 
+#----------------------------------
+# New AWS Resources for Jenkins EFS
+#----------------------------------
+
 resource "aws_efs_file_system" "jenkins-efs" {
   creation_token = "jenkins-fs"
 
@@ -38,7 +46,7 @@ resource "aws_efs_file_system" "jenkins-efs" {
 }
 
 resource "aws_security_group" "jenkins-efs-security" {
-  name = "jenkins-efs-mount"
+  name = "jenkins-efs-security"
   description = "Allow NFS traffic from instaces within the VPC"
   vpc_id = "${data.aws_vpc.resources-vpc.id}"
 
