@@ -55,6 +55,14 @@ def resources_dns_resolver_exists() -> bool:
     return len(VPC.get_dns_resolvers('resources-dhcp-options')) == 1
 
 
+def resources_sg_valid() -> bool:
+    """
+    Ensure that the security group attached to the resources-vpc is as expected
+    :return: True if its as expected, False otherwise
+    """
+    pass
+
+
 def resources_public_subnet_exists() -> bool:
     """
     Determine if the resources-vpc-public-subnet exists
@@ -112,6 +120,40 @@ def resources_private_subnet_configured() -> bool:
 
 
 """
+Helper methods for the Resources VPC
+"""
+
+
+def validate_resources_sg_rules(ingress: list, egress: list):
+    """
+    Ensure that the resources-vpc security group rules are as expected
+    :param ingress: Ingress rules for the security group
+    :param egress: Egress rules for the security group
+    :return: True if the security group rules exist as expected, False otherwise
+    """
+    ingress_80 = SecurityGroup.validate_sg_rule_cidr(ingress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    ingress_22 = SecurityGroup.validate_sg_rule_cidr(ingress[1], 'tcp', 22, 22, '0.0.0.0/0')
+    ingress_443 = SecurityGroup.validate_sg_rule_cidr(ingress[2], 'tcp', 443, 443, '0.0.0.0/0')
+    ingress_neg1 = SecurityGroup.validate_sg_rule_cidr(ingress[3], 'icmp', -1, -1, '0.0.0.0/0')
+
+    egress_80 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    egress_neg1 = SecurityGroup.validate_sg_rule_cidr(egress[1], '-1', 0, 0, '0.0.0.0/0')
+    egress_443 = SecurityGroup.validate_sg_rule_cidr(egress[2], 'tcp', 443, 443, '0.0.0.0/0')
+
+    return all([
+        len(ingress) == 4,
+        ingress_80,
+        ingress_22,
+        ingress_443,
+        ingress_neg1,
+        len(egress) == 3,
+        egress_80,
+        egress_neg1,
+        egress_443
+    ])
+
+
+"""
 Tests for the Sandbox VPC
 """
 
@@ -154,6 +196,14 @@ def sandbox_dns_resolver_exists() -> bool:
     :return: True if it exists, False otherwise
     """
     return len(VPC.get_dns_resolvers('sandbox-dhcp-options')) == 1
+
+
+def sandbox_sg_valid() -> bool:
+    """
+    Ensure that the security group attached to the sandbox-vpc is as expected
+    :return: True if its as expected, False otherwise
+    """
+    pass
 
 
 def sandbox_fearless_public_subnet_exists() -> bool:
@@ -228,6 +278,40 @@ def sandbox_speaknow_public_subnet_rt_configured() -> bool:
         subnet.get('SubnetId'),
         internet_gateway.get('InternetGatewayId')
     )
+
+
+"""
+Helper methods for the Sandbox VPC
+"""
+
+
+def validate_sandbox_sg_rules(ingress: list, egress: list):
+    """
+    Ensure that the sandbox-vpc security group rules are as expected
+    :param ingress: Ingress rules for the security group
+    :param egress: Egress rules for the security group
+    :return: True if the security group rules exist as expected, False otherwise
+    """
+    ingress_80 = SecurityGroup.validate_sg_rule_cidr(ingress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    ingress_22 = SecurityGroup.validate_sg_rule_cidr(ingress[1], 'tcp', 22, 22, '0.0.0.0/0')
+    ingress_443 = SecurityGroup.validate_sg_rule_cidr(ingress[2], 'tcp', 443, 443, '0.0.0.0/0')
+    ingress_neg1 = SecurityGroup.validate_sg_rule_cidr(ingress[3], 'icmp', -1, -1, '0.0.0.0/0')
+
+    egress_80 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    egress_neg1 = SecurityGroup.validate_sg_rule_cidr(egress[1], '-1', 0, 0, '0.0.0.0/0')
+    egress_443 = SecurityGroup.validate_sg_rule_cidr(egress[2], 'tcp', 443, 443, '0.0.0.0/0')
+
+    return all([
+        len(ingress) == 4,
+        ingress_80,
+        ingress_22,
+        ingress_443,
+        ingress_neg1,
+        len(egress) == 3,
+        egress_80,
+        egress_neg1,
+        egress_443
+    ])
 
 
 print(resources_public_subnet_rt_configured())

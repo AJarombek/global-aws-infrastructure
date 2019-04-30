@@ -129,7 +129,6 @@ locals {
     }
   ]
 
-  sandbox_private_subnet_sg_rules = []
   sandbox_public_subnet_azs = ["us-east-1a", "us-east-1b"]
   sandbox_private_subnet_azs = []
 }
@@ -202,5 +201,5 @@ module "sandbox-vpc" {
   private_subnet_cidrs = "${local.sandbox_private_subnet_cidrs}"
 
   enable_security_groups = true
-  private_subnet_sg_rules = "${local.sandbox_vpc_sg_rules}"
+  sg_rules = "${local.sandbox_vpc_sg_rules}"
 }

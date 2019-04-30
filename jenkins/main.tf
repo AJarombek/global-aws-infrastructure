@@ -40,10 +40,10 @@ data "aws_ami" "jenkins-ami" {
 }
 
 # Security group for the resources VPC
-data "aws_security_group" "public-subnet-security-group" {
+data "aws_security_group" "vpc-security-group" {
   filter {
     name = "group-name"
-    values = ["resources-vpc-public-security"]
+    values = ["resources-vpc-security"]
   }
 }
 
@@ -223,7 +223,7 @@ resource "aws_elb" "jenkins-server-elb" {
 
   security_groups = [
     "${aws_security_group.jenkins-server-elb-security-group.id}",
-    "${data.aws_security_group.public-subnet-security-group.id}"
+    "${data.aws_security_group.vpc-security-group.id}"
   ]
 
   listener {
