@@ -60,7 +60,12 @@ def resources_sg_valid() -> bool:
     Ensure that the security group attached to the resources-vpc is as expected
     :return: True if its as expected, False otherwise
     """
-    pass
+    sg = SecurityGroup.get_security_groups('resources-vpc-security')[0]
+
+    return all([
+        sg.get('GroupName') == 'resources-vpc-security',
+        validate_sandbox_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
+    ])
 
 
 def resources_public_subnet_exists() -> bool:
@@ -203,7 +208,12 @@ def sandbox_sg_valid() -> bool:
     Ensure that the security group attached to the sandbox-vpc is as expected
     :return: True if its as expected, False otherwise
     """
-    pass
+    sg = SecurityGroup.get_security_groups('sandbox-vpc-security')[0]
+
+    return all([
+        sg.get('GroupName') == 'sandbox-vpc-security',
+        validate_sandbox_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
+    ])
 
 
 def sandbox_fearless_public_subnet_exists() -> bool:
@@ -312,6 +322,3 @@ def validate_sandbox_sg_rules(ingress: list, egress: list):
         egress_neg1,
         egress_443
     ])
-
-
-print(resources_public_subnet_rt_configured())
