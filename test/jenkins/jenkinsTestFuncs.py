@@ -9,6 +9,8 @@ from utils.ec2 import EC2
 
 ec2 = boto3.client('ec2')
 sts = boto3.client('sts')
+iam = boto3.client('iam')
+autoscaling = boto3.client('autoscaling')
 
 
 def ami_exists() -> bool:
@@ -43,5 +45,32 @@ def jenkins_server_not_overscaled() -> bool:
     """
     instances = EC2.get_ec2('global-jenkins-server-asg')
     return len(instances) < 2
+
+
+def jenkins_instance_profile_exists() -> bool:
+    """
+    Prove that the instance profile exists for the Jenkins server
+    :return: True if the instance profile exists, False otherwise
+    """
+    return EC2.instance_profile_valid(
+        instance_profile_name='global-jenkis-server-instance-profile',
+        asg_name='global-jenkins-server-asg',
+        iam_role_name='jenkins-role'
+    )
+
+
+def jenkins_launch_config_valid() -> bool:
+    """
+    Ensure that the Launch Configuration for the Jenkins server is valid
+    :return: True if its valid, False otherwise
+    """
+    return EC2.launch_config_valid(
+        launch_config_name='global-jenkins-server-lc',
+        asg_name='global-jenkins-server-asg',
+        expected_instance_type='t2.micro',
+        expected_key_name='jenkins-key',
+        expected_sg_count=1,
+        expected_instance_profile='global-jenkis-server-instance-profile'
+    )
 
 print(jenkins_server_running())

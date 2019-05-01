@@ -83,6 +83,17 @@ data "aws_iam_role" "jenkins-server-role" {
   name = "jenkins-role"
 }
 
+#--------------------------------------
+# Executed Before Resources are Created
+#--------------------------------------
+
+/* Generate a SSH key used to connect to the Jenkins server from my local machine */
+resource "null_resource" "key-gen" {
+  provisioner "local-exec" {
+    command = "bash key-gen.sh jenkins-key"
+  }
+}
+
 #------------------------------
 # New AWS Resources for Jenkins
 #------------------------------
@@ -105,6 +116,7 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
   name = "global-jenkins-server-lc"
   image_id = "${data.aws_ami.jenkins-ami.id}"
   instance_type = "t2.micro"
+  key_name = "jenkins-key"
   security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.jenkins-instance-profile.name}"
