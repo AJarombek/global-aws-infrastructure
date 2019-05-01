@@ -8,7 +8,9 @@ import masterTestFuncs as Test
 from jenkinsefs import jenkinsEFSTestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func.jenkins_efs_exists, "Determine if the EFS for Jenkins Exists")
+    lambda: Test.test(Func.jenkins_efs_exists, "Determine if the EFS for Jenkins Exists"),
+    lambda: Test.test(Func.jenkins_efs_mounted, "Determine if the EFS for Jenkins has a Mount Target"),
+    lambda: Test.test(Func.jenkins_efs_sg_valid, "Determine if the Security Group for EFS is Valid")
 ]
 
 
