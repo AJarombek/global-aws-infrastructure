@@ -6,6 +6,7 @@ Date: 4/27/2019
 
 import boto3
 from utils.ec2 import EC2
+from utils.securityGroup import SecurityGroup
 
 ec2 = boto3.client('ec2')
 sts = boto3.client('sts')
@@ -72,5 +73,59 @@ def jenkins_launch_config_valid() -> bool:
         expected_sg_count=1,
         expected_instance_profile='global-jenkis-server-instance-profile'
     )
+
+
+def jenkins_launch_config_sg_valid():
+    """
+    Ensure that the security group attached to the launch configuration is as expected
+    :return: True if its as expected, False otherwise
+    """
+    lcs = autoscaling.describe_launch_configurations(
+        LaunchConfigurationNames=['global-jenkins-server-lc'],
+        MaxRecords=1
+    )
+
+    launch_config = lcs.get('LaunchConfigurations')[0]
+    sg_id = launch_config.get('SecurityGroups')[0]
+    sg = ec2.describe_security_groups(GroupIds=[sg_id]).get('SecurityGroups')[0]
+
+    ingress = sg.get('IpPermissions')
+    egress = sg.get('IpPermissionsEgress')
+
+    ingress_80 = SecurityGroup.validate_sg_rule_cidr(ingress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    ingress_22 = SecurityGroup.validate_sg_rule_cidr(ingress[1], 'tcp', 22, 22, '0.0.0.0/0')
+
+    egress_80 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    egress_22 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 22, 22, '0.0.0.0/0')
+    egress_443 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 443, 443, '0.0.0.0/0')
+    egress_2049 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 2049, 2049, '0.0.0.0/0')
+
+    return all([
+        sg.get('GroupName') == 'global-jenkins-server-lc-security-group',
+        len(ingress) == 2,
+        ingress_80,
+        ingress_22,
+        len(egress) == 4,
+        egress_80,
+        egress_22,
+        egress_443,
+        egress_2049
+    ])
+
+
+def jenkins_autoscaling_group_valid() -> bool:
+    """
+    Ensure that the AutoScaling Group for the Jenkins server is valid
+    :return: True if its valid, False otherwise
+    """
+    return EC2.autoscaling_group_valid(
+        asg_name='global-jenkins-server-asg',
+        launch_config_name='global-jenkins-server-lc',
+        min_size=1,
+        max_size=1,
+        desired_size=1,
+        instance_count=1
+    )
+
 
 print(jenkins_server_running())

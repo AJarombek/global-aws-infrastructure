@@ -92,3 +92,34 @@ class EC2:
             launch_config.get('SecurityGroups')[0] == security_group.get('GroupId'),
             launch_config.get('IamInstanceProfile') == expected_instance_profile
         ])
+
+    @staticmethod
+    def autoscaling_group_valid(asg_name: str = '', launch_config_name: str = '', min_size: int = 0,
+                                max_size: int = 0, desired_size: int = 0, instance_count: int = 0) -> bool:
+        """
+        Ensure that the AutoScaling Group for a web server is valid
+        :param asg_name: Name of the AutoScaling group for instances on AWS
+        :param launch_config_name: Name of the Launch Configuration on AWS
+        :param min_size: Minimum number of instances in the auto scaling group
+        :param max_size: Maximum number of instances in the auto scaling group
+        :param desired_size: Desired number of instances in the auto scaling group
+        :param instance_count: Expected actual number of instances in the auto scaling group
+        :return: True if its valid, False otherwise
+        """
+
+        asgs = autoscaling.describe_auto_scaling_groups(
+            AutoScalingGroupNames=[asg_name],
+            MaxRecords=1
+        )
+
+        asg = asgs.get('AutoScalingGroups')[0]
+
+        return all([
+            asg.get('LaunchConfigurationName') == launch_config_name,
+            asg.get('MinSize') == min_size,
+            asg.get('MaxSize') == max_size,
+            asg.get('DesiredCapacity') == desired_size,
+            len(asg.get('Instances')) == instance_count,
+            asg.get('Instances')[0].get('LifecycleState') == 'InService',
+            asg.get('Instances')[0].get('HealthStatus') == 'Healthy'
+        ])
