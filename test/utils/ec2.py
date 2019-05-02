@@ -123,3 +123,35 @@ class EC2:
             asg.get('Instances')[0].get('LifecycleState') == 'InService',
             asg.get('Instances')[0].get('HealthStatus') == 'Healthy'
         ])
+
+    @staticmethod
+    def autoscaling_schedule_valid(asg_name: str = '', schedule_name: str = '', recurrence: str = '',
+                                   max_size: int = 0, min_size: int = 0, desired_size: int = 0) -> bool:
+        """
+        Make sure an autoscaling schedule exists as expected
+        :param asg_name: The name of the autoscaling group the schedule is a member of
+        :param schedule_name: The name of the autoscaling schedule
+        :param recurrence: When this schedule recurs
+        :param max_size: maximum number of instances in the asg
+        :param min_size: minimum number of instances in the asg
+        :param desired_size: desired number of instances in the asg
+        :return: True if the schedule exists as expected, False otherwise
+        """
+        response = autoscaling.describe_scheduled_actions(
+            AutoScalingGroupName=asg_name,
+            ScheduledActionNames=[schedule_name],
+            MaxRecords=1
+        )
+
+        schedule = response.get('ScheduledUpdateGroupActions')[0]
+
+        return all([
+            schedule.get('Recurrence') == recurrence,
+            schedule.get('MinSize') == min_size,
+            schedule.get('MaxSize') == max_size,
+            schedule.get('Recurrence') == desired_size
+        ])
+
+    @staticmethod
+    def load_balancer_valid() -> bool:
+        pass
