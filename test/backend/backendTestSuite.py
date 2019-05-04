@@ -8,7 +8,7 @@ import masterTestFuncs as Test
 from backend import backendTestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func, "")
+    lambda: Test.test(Func.s3_backup_bucket_exists, "Test that the S3 Bucket Exists")
 ]
 
 

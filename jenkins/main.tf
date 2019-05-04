@@ -235,7 +235,7 @@ resource "aws_elb" "jenkins-server-elb" {
   subnets = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
 
   security_groups = [
-    "${aws_security_group.jenkins-server-elb-security-group.id}",
+    "${aws_security_group.jenkins-server-lb-security-group.id}",
     "${data.aws_security_group.vpc-security-group.id}"
   ]
 
@@ -317,8 +317,8 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
   }
 }
 
-resource "aws_security_group" "jenkins-server-elb-security-group" {
-  name = "global-jenkins-server-elb-security-group"
+resource "aws_security_group" "jenkins-server-lb-security-group" {
+  name = "global-jenkins-server-lb-security-group"
   vpc_id = "${data.aws_vpc.resources-vpc.id}"
 
   # Outbound requests for health checks
