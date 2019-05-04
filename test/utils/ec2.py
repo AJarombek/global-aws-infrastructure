@@ -153,5 +153,22 @@ class EC2:
         ])
 
     @staticmethod
-    def load_balancer_valid() -> bool:
-        pass
+    def load_balancer_target_groups_valid(asg_name: str = '', load_balancer_target_group_names: list = None) -> bool:
+        """
+        Validate the target groups of the load balancer
+        :param asg_name: The name of the autoscaling group which uses the load balancer
+        :param load_balancer_target_group_names: List of target group names to look for on the load balancer
+        :return: True if the target groups are valid, False otherwise
+        """
+        response = autoscaling.describe_load_balancer_target_groups(AutoScalingGroupName=asg_name)
+        load_balancers = response.get('LoadBalancerTargetGroups')
+
+        if load_balancer_target_group_names is None or len(load_balancer_target_group_names) == 0:
+            return len(load_balancers) == 0
+        else:
+            for index, target_group in enumerate(load_balancer_target_group_names):
+                if not load_balancers[index].get('State') == 'InService' or \
+                        f'targetgroup/{target_group}' not in load_balancers[index].get('LoadBalancerTargetGroupARN'):
+                    return False
+
+        return True

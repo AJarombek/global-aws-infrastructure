@@ -131,6 +131,7 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
 }
 
 resource "aws_autoscaling_group" "jenkins-server-asg" {
+  name = "global-jenkins-server-asg"
   launch_configuration = "${aws_launch_configuration.jenkins-server-lc.id}"
 
   # Needed when using an autoscaling group in a VPC

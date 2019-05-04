@@ -185,12 +185,61 @@ def jenkins_autoscaling_schedules_set() -> bool:
     ])
 
 
-def jenkins_load_balancer_running():
+def jenkins_load_balancer_valid():
     """
     Prove that the application load balancer for the Jenkins server is running
     :return: True if its running, False otherwise
     """
-    return validate_load_balancer(is_prod=False)
+    return EC2.load_balancer_target_groups_valid(
+        asg_name='global-jenkins-server-asg',
+        load_balancer_target_group_names=[]
+    )
 
 
-print(jenkins_server_running())
+def jenkins_sg_valid() -> bool:
+    """
+    Ensure that the security group attached to the Jenkins server load balancer is as expected
+    :return: True if its as expected, False otherwise
+    """
+    sg = SecurityGroup.get_security_groups('global-jenkins-server-lc-security-group')[0]
+    print(sg)
+
+    return all([
+        sg.get('GroupName') == 'global-jenkins-server-lc-security-group',
+        validate_jenkins_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
+    ])
+
+
+"""
+Helper methods for the Jenkins server
+"""
+
+
+def validate_jenkins_sg_rules(ingress: list, egress: list):
+    """
+    Ensure that the sandbox-vpc security group rules are as expected
+    :param ingress: Ingress rules for the security group
+    :param egress: Egress rules for the security group
+    :return: True if the security group rules exist as expected, False otherwise
+    """
+    ingress_8080 = SecurityGroup.validate_sg_rule_cidr(ingress[0], 'tcp', 8080, 8080, '0.0.0.0/0')
+    ingress_22 = SecurityGroup.validate_sg_rule_cidr(ingress[1], 'tcp', 22, 22, '0.0.0.0/0')
+
+    egress_80 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 80, 80, '0.0.0.0/0')
+    egress_22 = SecurityGroup.validate_sg_rule_cidr(egress[1], 'tcp', 22, 22, '0.0.0.0/0')
+    egress_2049 = SecurityGroup.validate_sg_rule_cidr(egress[3], 'tcp', 2049, 2049, '0.0.0.0/0')
+    egress_443 = SecurityGroup.validate_sg_rule_cidr(egress[2], 'tcp', 443, 443, '0.0.0.0/0')
+
+    return all([
+        len(ingress) == 2,
+        ingress_8080,
+        ingress_22,
+        len(egress) == 4,
+        egress_80,
+        egress_22,
+        egress_2049,
+        egress_443
+    ])
+
+
+print(jenkins_sg_valid())
