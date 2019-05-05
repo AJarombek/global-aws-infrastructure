@@ -138,6 +138,44 @@ def jarombek_com_yandhi_public_subnet_rt_configured() -> bool:
     )
 
 
+def jarombek_com_red_private_subnet_exists() -> bool:
+    """
+    Determine if the jarombek-com-red-private-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('jarombek-com-red-private-subnet')) == 1
+
+
+def jarombek_com_red_private_subnet_configured() -> bool:
+    """
+    Determine if the jarombek-com-red-private-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-red-private-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.3.0/24')
+
+
+def jarombek_com_reputation_private_subnet_exists() -> bool:
+    """
+    Determine if the jarombek-com-reputation-private-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('jarombek-com-reputation-private-subnet')) == 1
+
+
+def jarombek_com_reputation_private_subnet_configured() -> bool:
+    """
+    Determine if the jarombek-com-reputation-private-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-reputation-private-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1d', '10.0.4.0/24')
+
+
 """
 Helper methods for the jarombek-com VPC
 """
