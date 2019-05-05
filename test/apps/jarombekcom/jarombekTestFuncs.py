@@ -64,6 +64,80 @@ def jarombek_com_sg_valid() -> bool:
     ])
 
 
+def jarombek_com_yeezus_public_subnet_exists() -> bool:
+    """
+    Determine if the jarombek-com-yeezus-public-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('jarombek-com-yeezus-public-subnet')) == 1
+
+
+def jarombek_com_yeezus_public_subnet_configured() -> bool:
+    """
+    Determine if the jarombek-com-yeezus-public-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-yeezus-public-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.0.1.0/24')
+
+
+def jarombek_com_yeezus_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the jarombek-com-yeezus-public-subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-yeezus-public-subnet')[0]
+    route_table = VPC.get_route_table('jarombek-com-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('jarombek-com-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
+
+
+def jarombek_com_yandhi_public_subnet_exists() -> bool:
+    """
+    Determine if the jarombek-com-yandhi-public-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('jarombek-com-yandhi-public-subnet')) == 1
+
+
+def jarombek_com_yandhi_public_subnet_configured() -> bool:
+    """
+    Determine if the jarombek-com-yandhi-public-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-yandhi-public-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24')
+
+
+def jarombek_com_yandhi_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the jarombek-com-yandhi-public-subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('jarombek-com-vpc')[0]
+    subnet = VPC.get_subnets('jarombek-com-yandhi-public-subnet')[0]
+    route_table = VPC.get_route_table('jarombek-com-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('jarombek-com-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
+
+
 """
 Helper methods for the jarombek-com VPC
 """
