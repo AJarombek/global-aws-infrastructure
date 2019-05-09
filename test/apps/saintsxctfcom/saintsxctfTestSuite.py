@@ -8,7 +8,54 @@ import masterTestFuncs as Test
 from apps.saintsxctfcom import saintsxctfTestFuncs as Func
 
 tests = [
-    lambda: Test.test(Func, "")
+    lambda: Test.test(
+        Func.saintsxctf_com_vpc_exists,
+        "Determine if the saintsxctf.com VPC Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_vpc_configured,
+        "Determine if the saintsxctf.com VPC is Configured Properly"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_internet_gateway_exists,
+        "Determine if the saintsxctf.com Internet Gateway Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_network_acl_exists,
+        "Determine if the saintsxctf.com Network ACL Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_dns_resolver_exists,
+        "Determine if the saintsxctf.com DNS Resolver Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_sg_valid,
+        "Determine if the saintsxctf.com VPC Security Group is Valid"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_lisag_public_subnet_exists,
+        "Determine if the saints-xctf-com-lisag Public Subnet Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_lisag_public_subnet_configured,
+        "Determine if the saints-xctf-com-lisag Public Subnet is Properly Configured"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_lisag_public_subnet_rt_configured,
+        "Determine if the saints-xctf-com-lisag Public Subnet Route Table is Properly Configured"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_megank_public_subnet_exists,
+        "Determine if the saints-xctf-com-megank Public Subnet Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_megank_public_subnet_configured,
+        "Determine if the saints-xctf-com-megank Public Subnet is Properly Configured"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_megank_public_subnet_rt_configured,
+        "Determine if the saints-xctf-com-megank Public Subnet Route Table is Properly Configured"
+    )
 ]
 
 
@@ -18,3 +65,5 @@ def saints_xctf_test_suite() -> bool:
     :return: True if the tests succeed, False otherwise
     """
     return Test.testsuite(tests, "SaintsXCTF VPC Test Suite")
+
+print(saints_xctf_test_suite())

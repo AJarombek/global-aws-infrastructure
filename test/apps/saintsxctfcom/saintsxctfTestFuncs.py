@@ -64,6 +64,80 @@ def saintsxctf_com_sg_valid() -> bool:
     ])
 
 
+def saintsxctf_com_lisag_public_subnet_exists() -> bool:
+    """
+    Determine if the saints-xctf-com-lisag-public-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('saints-xctf-com-lisag-public-subnet')) == 1
+
+
+def saintsxctf_com_lisag_public_subnet_configured() -> bool:
+    """
+    Determine if the saints-xctf-com-lisag-public-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-lisag-public-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.1.0/24')
+
+
+def saintsxctf_com_lisag_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the saints-xctf-com-lisag-public-subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-lisag-public-subnet')[0]
+    route_table = VPC.get_route_table('saints-xctf-com-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('saints-xctf-com-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
+
+
+def saintsxctf_com_megank_public_subnet_exists() -> bool:
+    """
+    Determine if the saints-xctf-com-megank-public-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('saints-xctf-com-megank-public-subnet')) == 1
+
+
+def saintsxctf_com_megank_public_subnet_configured() -> bool:
+    """
+    Determine if the saints-xctf-com-megank-public-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-megank-public-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1d', '10.0.2.0/24')
+
+
+def saintsxctf_com_megank_public_subnet_rt_configured() -> bool:
+    """
+    Determine if the saints-xctf-com-megank-public-subnet routing table is configured and available as expected.
+    :return: True if the routing table is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-megank-public-subnet')[0]
+    route_table = VPC.get_route_table('saints-xctf-com-vpc-public-subnet-rt')[0]
+    internet_gateway = VPC.get_internet_gateways('saints-xctf-com-vpc-internet-gateway')[0]
+
+    return VPC.route_table_configured(
+        route_table,
+        vpc.get('VpcId'),
+        subnet.get('SubnetId'),
+        internet_gateway.get('InternetGatewayId')
+    )
+
+
 """
 Helper methods for the saintsxctf-com VPC
 """
