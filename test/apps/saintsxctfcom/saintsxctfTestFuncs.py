@@ -138,6 +138,44 @@ def saintsxctf_com_megank_public_subnet_rt_configured() -> bool:
     )
 
 
+def saintsxctf_com_cassiah_private_subnet_exists() -> bool:
+    """
+    Determine if the saints-xctf-com-cassiah-private-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('saints-xctf-com-cassiah-private-subnet')) == 1
+
+
+def saintsxctf_com_cassiah_private_subnet_configured() -> bool:
+    """
+    Determine if the saint-sxctf-com-cassiah-private-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-cassiah-private-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1e', '10.0.3.0/24')
+
+
+def saintsxctf_com_carolined_private_subnet_exists() -> bool:
+    """
+    Determine if the saints-xctf-com-carolined-private-subnet exists
+    :return: True if it exists, False otherwise
+    """
+    return len(VPC.get_subnets('saints-xctf-com-carolined-private-subnet')) == 1
+
+
+def saintsxctf_com_carolined_private_subnet_configured() -> bool:
+    """
+    Determine if the saint-sxctf-com-carolined-private-subnet is configured and available as expected.
+    :return: True if the Subnet is configured correctly, False otherwise
+    """
+    vpc = VPC.get_vpcs('saints-xctf-com-vpc')[0]
+    subnet = VPC.get_subnets('saints-xctf-com-carolined-private-subnet')[0]
+
+    return VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.4.0/24')
+
+
 """
 Helper methods for the saintsxctf-com VPC
 """

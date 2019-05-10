@@ -5,6 +5,7 @@ Date: 4/30/2019
 """
 
 import boto3
+import botocore.exceptions as awserror
 
 ec2 = boto3.client('ec2')
 iam = boto3.client('iam')
@@ -46,7 +47,11 @@ class EC2:
 
         # First get the instance profile resource name from the ec2 instance
         instances = EC2.get_ec2(asg_name)
-        instance_profile_arn = instances[0].iam_instance_profile.get('Arn')
+
+        try:
+            instance_profile_arn = instances[0].iam_instance_profile.get('Arn')
+        except IndexError:
+            return False
 
         # Second get the instance profile from IAM
         instance_profile = iam.get_instance_profile(InstanceProfileName=instance_profile_name)
@@ -75,8 +80,11 @@ class EC2:
         :param expected_instance_profile: Expected instance profile attached to the instances
         :return: True if its valid, False otherwise
         """
-        instance = EC2.get_ec2(asg_name)[0]
-        security_group = instance.security_groups[0]
+        try:
+            instance = EC2.get_ec2(asg_name)[0]
+            security_group = instance.security_groups[0]
+        except IndexError:
+            return False
 
         lcs = autoscaling.describe_launch_configurations(
             LaunchConfigurationNames=[launch_config_name],
@@ -112,7 +120,10 @@ class EC2:
             MaxRecords=1
         )
 
-        asg = asgs.get('AutoScalingGroups')[0]
+        try:
+            asg = asgs.get('AutoScalingGroups')[0]
+        except IndexError:
+            return False
 
         return all([
             asg.get('LaunchConfigurationName') == launch_config_name,
@@ -137,11 +148,14 @@ class EC2:
         :param desired_size: desired number of instances in the asg
         :return: True if the schedule exists as expected, False otherwise
         """
-        response = autoscaling.describe_scheduled_actions(
-            AutoScalingGroupName=asg_name,
-            ScheduledActionNames=[schedule_name],
-            MaxRecords=1
-        )
+        try:
+            response = autoscaling.describe_scheduled_actions(
+                AutoScalingGroupName=asg_name,
+                ScheduledActionNames=[schedule_name],
+                MaxRecords=1
+            )
+        except awserror.ClientError:
+            return False
 
         schedule = response.get('ScheduledUpdateGroupActions')[0]
 
@@ -160,7 +174,11 @@ class EC2:
         :param load_balancer_target_group_names: List of target group names to look for on the load balancer
         :return: True if the target groups are valid, False otherwise
         """
-        response = autoscaling.describe_load_balancer_target_groups(AutoScalingGroupName=asg_name)
+        try:
+            response = autoscaling.describe_load_balancer_target_groups(AutoScalingGroupName=asg_name)
+        except awserror.ClientError:
+            return False
+
         load_balancers = response.get('LoadBalancerTargetGroups')
 
         if load_balancer_target_group_names is None or len(load_balancer_target_group_names) == 0:

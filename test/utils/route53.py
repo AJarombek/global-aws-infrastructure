@@ -19,6 +19,7 @@ class Route53:
         :param record_name: the name of the Route53 record to retrieve information about
         :param record_type: the type of the Route53 record to retrieve information about
         :return: A dictionary containing information about the Route53 record
+        :exception: Throws an IndexError if the Hosted Zone does not exist
         """
         hosted_zone_id = Route53.get_hosted_zone_id(zone_name)
         record_sets = route53.list_resource_record_sets(
@@ -35,6 +36,7 @@ class Route53:
         Helper function to get a Hosted Zone ID based off its name
         :param name: The DNS name of the Hosted Zone
         :return: A string representing the Hosted Zone ID
+        :exception: Throws an IndexError if the Hosted Zone does not exist
         """
         hosted_zone = route53.list_hosted_zones_by_name(DNSName=name, MaxItems='1').get('HostedZones')[0]
         return hosted_zone.get('Id')

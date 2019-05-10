@@ -55,6 +55,22 @@ tests = [
     lambda: Test.test(
         Func.saintsxctf_com_megank_public_subnet_rt_configured,
         "Determine if the saints-xctf-com-megank Public Subnet Route Table is Properly Configured"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_cassiah_private_subnet_exists,
+        "Determine if the saints-xctf-com-cassiah Private Subnet Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_cassiah_private_subnet_configured,
+        "Determine if the saints-xctf-com-cassiah Private Subnet is Properly Configured"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_carolined_private_subnet_exists,
+        "Determine if the saints-xctf-com-carolined Private Subnet Exists"
+    ),
+    lambda: Test.test(
+        Func.saintsxctf_com_carolined_private_subnet_configured,
+        "Determine if the saints-xctf-com-carolined Private Subnet is Properly Configured"
     )
 ]
 

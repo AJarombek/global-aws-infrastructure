@@ -37,7 +37,12 @@ def andy_admin_group_membership() -> bool:
     """
     group_dict = iam.get_group(GroupName='admin-group')
     group = group_dict.get('Group')
-    member = group.get('Users')[0]
+
+    try:
+        member = group.get('Users')[0]
+    except TypeError:
+        return False
+
     return member.get('Path') == '/admin/' and member.get('UserName') == 'andy-user'
 
 

@@ -85,7 +85,11 @@ def jenkins_launch_config_sg_valid():
         MaxRecords=1
     )
 
-    launch_config = lcs.get('LaunchConfigurations')[0]
+    try:
+        launch_config = lcs.get('LaunchConfigurations')[0]
+    except IndexError:
+        return False
+
     sg_id = launch_config.get('SecurityGroups')[0]
     sg = ec2.describe_security_groups(GroupIds=[sg_id]).get('SecurityGroups')[0]
 
@@ -201,7 +205,10 @@ def jenkins_load_balancer_sg_valid() -> bool:
     Ensure that the security group attached to the Jenkins server load balancer is as expected
     :return: True if its as expected, False otherwise
     """
-    sg = SecurityGroup.get_security_groups('global-jenkins-server-lb-security-group')[0]
+    try:
+        sg = SecurityGroup.get_security_groups('global-jenkins-server-lb-security-group')[0]
+    except IndexError:
+        return False
 
     ingress = sg.get('IpPermissions')
     egress = sg.get('IpPermissionsEgress')

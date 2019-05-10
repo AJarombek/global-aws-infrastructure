@@ -33,7 +33,11 @@ def jarombek_io_ns_record_exists() -> bool:
     Determine if the 'NS' record exists for 'jarombek.io.' in Route53
     :return: True if it exists, False otherwise
     """
-    a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'NS')
+    try:
+        a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'NS')
+    except IndexError:
+        return False
+
     return a_record.get('Name') == 'jarombek.io.' and a_record.get('Type') == 'NS'
 
 
@@ -42,7 +46,11 @@ def jarombek_io_a_record_exists() -> bool:
     Determine if the 'A' record exists for 'jarombek.io.' in Route53
     :return: True if it exists, False otherwise
     """
-    a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'A')
+    try:
+        a_record = Route53.get_record('jarombek.io.', 'jarombek.io.', 'A')
+    except IndexError:
+        return False
+
     return a_record.get('Name') == 'jarombek.io.' and a_record.get('Type') == 'A'
 
 
@@ -51,5 +59,9 @@ def www_jarombek_io_a_record_exists() -> bool:
     Determine if the 'A' record exists for 'www.jarombek.io.' in Route53
     :return: True if it exists, False otherwise
     """
-    a_record = get_record('jarombek.io.', 'www.jarombek.io.', 'A')
+    try:
+        a_record = Route53.get_record('jarombek.io.', 'www.jarombek.io.', 'A')
+    except IndexError:
+        return False
+
     return a_record.get('Name') == 'www.jarombek.io.' and a_record.get('Type') == 'A'
