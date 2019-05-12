@@ -4,8 +4,8 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-import masterTestFuncs as Test
-from apps.saintsxctfcom import saintsxctfTestFuncs as Func
+from src import masterTestFuncs as Test
+from src.apps.saintsxctfcom import saintsxctfTestFuncs as Func
 
 tests = [
     lambda: Test.test(

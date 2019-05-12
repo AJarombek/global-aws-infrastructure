@@ -4,8 +4,8 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-import masterTestFuncs as Test
-from jenkinsefs import jenkinsEFSTestFuncs as Func
+from src import masterTestFuncs as Test
+from src.jenkinsefs import jenkinsEFSTestFuncs as Func
 
 tests = [
     lambda: Test.test(Func.jenkins_efs_exists, "Determine if the EFS for Jenkins Exists"),

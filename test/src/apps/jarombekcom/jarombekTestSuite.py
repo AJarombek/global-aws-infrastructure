@@ -4,8 +4,8 @@ Author: Andrew Jarombek
 Date: 5/4/2019
 """
 
-import masterTestFuncs as Test
-from apps.jarombekcom import jarombekTestFuncs as Func
+from src import masterTestFuncs as Test
+from src.apps.jarombekcom import jarombekTestFuncs as Func
 
 tests = [
     lambda: Test.test(

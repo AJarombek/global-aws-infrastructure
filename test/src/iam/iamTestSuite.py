@@ -4,8 +4,8 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-import masterTestFuncs as Test
-from iam import iamTestFuncs as Func
+from src import masterTestFuncs as Test
+from src.iam import iamTestFuncs as Func
 
 tests = [
     lambda: Test.test(Func.admin_group_exists, "IAM Admin Group Exists"),
