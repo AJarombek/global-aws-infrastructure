@@ -4,7 +4,7 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-from src import masterTestFuncs as Test
+import masterTestFuncs as Test
 from backend import backendTestFuncs as Func
 
 tests = [

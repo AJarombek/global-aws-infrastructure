@@ -4,17 +4,17 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-from src import masterTestFuncs as Test
-from src.apps.jarombekcom import jarombekTestSuite as JarombekCom
-from src.apps.saintsxctfcom import saintsxctfTestSuite as SaintsXCTFCom
-from src.backend import backendTestSuite as Backend
-from src.iam import iamTestSuite as IAM
-from src.jenkins import jenkinsTestSuite as Jenkins
-from src.jenkinsefs import jenkinsEFSTestSuite as JenkinsEFS
-from src.jenkinsRoute53 import jenkinsRoute53TestSuite as JenkinsRoute53
-from src.root import rootTestSuite as Root
-from src.route53 import route53TestSuite as Route53
-from src.s3 import s3TestSuite as S3
+import masterTestFuncs as Test
+from apps.jarombekcom import jarombekTestSuite as JarombekCom
+from apps.saintsxctfcom import saintsxctfTestSuite as SaintsXCTFCom
+from backend import backendTestSuite as Backend
+from iam import iamTestSuite as IAM
+from jenkins import jenkinsTestSuite as Jenkins
+from jenkinsefs import jenkinsEFSTestSuite as JenkinsEFS
+from jenkinsRoute53 import jenkinsRoute53TestSuite as JenkinsRoute53
+from root import rootTestSuite as Root
+from route53 import route53TestSuite as Route53
+from s3 import s3TestSuite as S3
 
 # List of all the test suites
 tests = [

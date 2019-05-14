@@ -4,8 +4,8 @@ Author: Andrew Jarombek
 Date: 4/27/2019
 """
 
-from src import masterTestFuncs as Test
-from src.jenkins import jenkinsTestFuncs as Func
+import masterTestFuncs as Test
+from jenkins import jenkinsTestFuncs as Func
 
 tests = [
     lambda: Test.test(Func.ami_exists, "Confirm one or more AMIs Exist for the Jenkins Server"),

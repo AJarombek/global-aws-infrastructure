@@ -5,7 +5,7 @@ Date: 4/27/2019
 """
 
 import boto3
-from src.utils.route53 import Route53
+from utils.route53 import Route53
 
 route53 = boto3.client('route53')
 

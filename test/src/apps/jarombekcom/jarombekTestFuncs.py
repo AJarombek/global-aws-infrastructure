@@ -5,8 +5,8 @@ Date: 5/4/2019
 """
 
 import boto3
-from src.utils.vpc import VPC
-from src.utils.securityGroup import SecurityGroup
+from utils.vpc import VPC
+from utils.securityGroup import SecurityGroup
 
 ec2 = boto3.resource('ec2')
 

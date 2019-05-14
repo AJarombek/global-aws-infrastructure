@@ -5,8 +5,8 @@ Date: 4/27/2019
 """
 
 import boto3
-from src.utils.ec2 import EC2
-from src.utils.securityGroup import SecurityGroup
+from utils.ec2 import EC2
+from utils.securityGroup import SecurityGroup
 
 ec2 = boto3.client('ec2')
 sts = boto3.client('sts')
