@@ -34,34 +34,24 @@ variable "desired_capacity_off" {
   default = 0
 }
 
-variable "online_cron_weekday_morning" {
-  description = "The cron syntax for when the Jenkins server should be online weekday mornings"
-  default = "30 11 * * 1-5"
+variable "online_cron_morning" {
+  description = "The cron syntax for when the Jenkins server should go online in the morning"
+  default = "0 11 * * *"
 }
 
-variable "offline_cron_weekday_morning" {
-  description = "The cron syntax for when the Jenkins server should be offline weekday mornings"
-  default = "30 13 * * 1-5"
+variable "offline_cron_morning" {
+  description = "The cron syntax for when the Jenkins server should go offline in the morning"
+  default = "0 12 * * *"
 }
 
-variable "online_cron_weekday_afternoon" {
-  description = "The cron syntax for when the Jenkins server should be online weekday afternoons"
-  default = "0 22 * * 1-5"
+variable "online_cron_evening" {
+  description = "The cron syntax for when the Jenkins server should go online in the evening"
+  default = "0 22 * * *"
 }
 
-variable "offline_cron_weekday_afternoon" {
-  description = "The cron syntax for when the Jenkins server should be offline weekday afternoons"
-  default = "30 3 * * 2-6"
-}
-
-variable "online_cron_weekend" {
-  description = "The cron syntax for when the Jenkins server should be online during the weekend"
-  default = "30 11 * * 0,6"
-}
-
-variable "offline_cron_weekend" {
-  description = "The cron syntax for when the Jenkins server should be offline during the weekend"
-  default = "30 3 * * 0,1"
+variable "offline_cron_evening" {
+  description = "The cron syntax for when the Jenkins server should go offline in the evening"
+  default = "0 23 * * *"
 }
 
 variable "instance_port" {

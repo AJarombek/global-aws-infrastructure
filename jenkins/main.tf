@@ -162,70 +162,48 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
   }
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekday-morning" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-online-morning" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-online-weekday-morning"
+  scheduled_action_name = "jenkins-server-online-morning"
 
   max_size = "${var.max_size_on}"
   min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
 
-  recurrence = "${var.online_cron_weekday_morning}"
+  recurrence = "${var.online_cron_morning}"
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekday-morning" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-morning" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-offline-weekday-morning"
+  scheduled_action_name = "jenkins-server-offline-morning"
 
   max_size = "${var.max_size_off}"
   min_size = "${var.min_size_off}"
   desired_capacity = "${var.desired_capacity_off}"
 
-  recurrence = "${var.offline_cron_weekday_morning}"
+  recurrence = "${var.offline_cron_morning}"
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekday-afternoon" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-online-evening" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-online-weekday-afternoon"
+  scheduled_action_name = "jenkins-server-online-evening"
 
   max_size = "${var.max_size_on}"
   min_size = "${var.min_size_on}"
   desired_capacity = "${var.desired_capacity_on}"
 
-  recurrence = "${var.online_cron_weekday_afternoon}"
+  recurrence = "${var.online_cron_evening}"
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekday-afternoon" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-evening" {
   autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-offline-weekday-afternoon"
+  scheduled_action_name = "jenkins-server-offline-evening"
 
   max_size = "${var.max_size_off}"
   min_size = "${var.min_size_off}"
   desired_capacity = "${var.desired_capacity_off}"
 
-  recurrence = "${var.offline_cron_weekday_afternoon}"
-}
-
-resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekend" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-online-weekend"
-
-  max_size = "${var.max_size_on}"
-  min_size = "${var.min_size_on}"
-  desired_capacity = "${var.desired_capacity_on}"
-
-  recurrence = "${var.online_cron_weekend}"
-}
-
-resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekend" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
-  scheduled_action_name = "jenkins-server-offline-weekend"
-
-  max_size = "${var.max_size_off}"
-  min_size = "${var.min_size_off}"
-  desired_capacity = "${var.desired_capacity_off}"
-
-  recurrence = "${var.offline_cron_weekend}"
+  recurrence = "${var.offline_cron_evening}"
 }
 
 resource "aws_elb" "jenkins-server-elb" {
