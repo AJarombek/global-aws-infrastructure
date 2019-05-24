@@ -9,6 +9,8 @@ provider "aws" {
 }
 
 terraform {
+  required_version = ">= 0.12"
+
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
@@ -29,9 +31,9 @@ locals {
 resource "aws_s3_bucket" "global-jarombek-io" {
   bucket = "global.jarombek.io"
   acl = "public-read"
-  policy = "${file("../iam/policies/global-jarombek-io-policy.json")}"
+  policy = file("../iam/policies/global-jarombek-io-policy.json")
 
-  tags {
+  tags = {
     Name = "global.jarombek.io"
   }
 
@@ -50,9 +52,9 @@ resource "aws_s3_bucket" "global-jarombek-io" {
 resource "aws_s3_bucket" "www-global-jarombek-io" {
   bucket = "www.global.jarombek.io"
   acl = "public-read"
-  policy = "${file("../iam/policies/www-global-jarombek-io-policy.json")}"
+  policy = file("../iam/policies/www-global-jarombek-io-policy.json")
 
-  tags {
+  tags = {
     Name = "www.global.jenkins.io"
   }
 
@@ -63,12 +65,11 @@ resource "aws_s3_bucket" "www-global-jarombek-io" {
 
 resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
   origin {
-    domain_name = "${aws_s3_bucket.global-jarombek-io.bucket_regional_domain_name}"
-    origin_id = "${local.s3_origin_id}"
+    domain_name = aws_s3_bucket.global-jarombek-io.bucket_regional_domain_name
+    origin_id = local.s3_origin_id
 
     s3_origin_config {
-      origin_access_identity =
-        "${aws_cloudfront_origin_access_identity.origin-access-identity.cloudfront_access_identity_path}"
+      origin_access_identity = aws_cloudfront_origin_access_identity.origin-access-identity.cloudfront_access_identity_path
     }
   }
 
@@ -101,7 +102,7 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
       query_string = false
     }
 
-    target_origin_id = "${local.s3_origin_id}"
+    target_origin_id = local.s3_origin_id
 
     # Which protocols to use which accessing items from CloudFront
     viewer_protocol_policy = "https-only"
@@ -124,7 +125,7 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
     cloudfront_default_certificate = true
   }
 
-  tags {
+  tags = {
     Environment = "production"
   }
 }
@@ -138,57 +139,57 @@ resource "aws_cloudfront_origin_access_identity" "origin-access-identity" {
 #-------------------
 
 resource "aws_s3_bucket_object" "index-json" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "index.json"
   source = "global/index.json"
-  etag = "${md5(file("global/index.json"))}"
+  etag = filemd5("global/index.json")
 }
 
 resource "aws_s3_bucket_object" "aws-key-gen" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "aws-key-gen.sh"
   source = "global/aws-key-gen.sh"
-  etag = "${md5(file("global/aws-key-gen.sh"))}"
+  etag = filemd5("global/aws-key-gen.sh")
 }
 
 resource "aws_s3_bucket_object" "fonts-css" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts.css"
   source = "global/fonts.css"
-  etag = "${md5(file("global/fonts.css"))}"
+  etag = filemd5("global/fonts.css")
 }
 
 resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/dyslexie-bold.ttf"
   source = "global/fonts/dyslexie-bold.ttf"
-  etag = "${md5(file("global/fonts/dyslexie-bold.ttf"))}"
+  etag = filemd5("global/fonts/dyslexie-bold.ttf")
 }
 
 resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-ttf" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/FantasqueSansMono-Bold.ttf"
   source = "global/fonts/FantasqueSansMono-Bold.ttf"
-  etag = "${md5(file("global/fonts/FantasqueSansMono-Bold.ttf"))}"
+  etag = filemd5("global/fonts/FantasqueSansMono-Bold.ttf")
 }
 
 resource "aws_s3_bucket_object" "longway-regular-otf" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/Longway-Regular.otf"
   source = "global/fonts/Longway-Regular.otf"
-  etag = "${md5(file("global/fonts/Longway-Regular.otf"))}"
+  etag = filemd5("global/fonts/Longway-Regular.otf")
 }
 
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/SylexiadSansThin.ttf"
   source = "global/fonts/SylexiadSansThin.ttf"
-  etag = "${md5(file("global/fonts/SylexiadSansThin.ttf"))}"
+  etag = filemd5("global/fonts/SylexiadSansThin.ttf")
 }
 
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-ttf" {
-  bucket = "${aws_s3_bucket.global-jarombek-io.id}"
+  bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/SylexiadSansThin-Bold.ttf"
   source = "global/fonts/SylexiadSansThin-Bold.ttf"
-  etag = "${md5(file("global/fonts/SylexiadSansThin-Bold.ttf"))}"
+  etag = filemd5("global/fonts/SylexiadSansThin-Bold.ttf")
 }

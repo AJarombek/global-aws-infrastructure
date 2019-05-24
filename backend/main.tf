@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "s3-terraform-state" {
     prevent_destroy = true
   }
 
-  tags {
+  tags = {
     Name = "Andrew Jarombek Terraform State"
   }
 }

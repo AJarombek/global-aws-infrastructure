@@ -19,14 +19,14 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       type = "ingress"
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # ICMP is used for sending error messages or operational information.  ICMP has no ports,
@@ -35,14 +35,14 @@ locals {
       from_port = -1
       to_port = -1
       protocol = "icmp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       type = "ingress"
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for health checks
@@ -50,7 +50,7 @@ locals {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTP
@@ -58,7 +58,7 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTPS
@@ -66,8 +66,8 @@ locals {
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    }
+      cidr_blocks = local.public_cidr
+    },
   ]
 
   resources_public_subnet_azs = ["us-east-1c"]
@@ -80,28 +80,28 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       type = "ingress"
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       type = "ingress"
       from_port = -1
       to_port = -1
       protocol = "icmp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       type = "ingress"
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for health checks
@@ -109,7 +109,7 @@ locals {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTP
@@ -117,7 +117,7 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTPS
@@ -125,8 +125,8 @@ locals {
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
-    }
+      cidr_blocks = local.public_cidr
+    },
   ]
 
   sandbox_public_subnet_azs = ["us-east-1a", "us-east-1b"]
@@ -138,6 +138,8 @@ provider "aws" {
 }
 
 terraform {
+  required_version = ">= 0.12"
+
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
@@ -166,13 +168,13 @@ module "resources-vpc" {
   private_subnet_custom_names = true
   private_subnet_names = ["resources-vpc-private-subnet"]
 
-  public_subnet_azs = "${local.resources_public_subnet_azs}"
-  private_subnet_azs = "${local.resources_private_subnet_azs}"
-  public_subnet_cidrs = "${local.resources_public_subnet_cidrs}"
-  private_subnet_cidrs = "${local.resources_private_subnet_cidrs}"
+  public_subnet_azs = local.resources_public_subnet_azs
+  private_subnet_azs = local.resources_private_subnet_azs
+  public_subnet_cidrs = local.resources_public_subnet_cidrs
+  private_subnet_cidrs = local.resources_private_subnet_cidrs
 
   enable_security_groups = true
-  sg_rules = "${local.resources_vpc_sg_rules}"
+  sg_rules = local.resources_vpc_sg_rules
 }
 
 module "sandbox-vpc" {
@@ -195,11 +197,11 @@ module "sandbox-vpc" {
   private_subnet_custom_names = true
   private_subnet_names = []
 
-  public_subnet_azs = "${local.sandbox_public_subnet_azs}"
-  private_subnet_azs = "${local.sandbox_private_subnet_azs}"
-  public_subnet_cidrs = "${local.sandbox_public_subnet_cidrs}"
-  private_subnet_cidrs = "${local.sandbox_private_subnet_cidrs}"
+  public_subnet_azs = local.sandbox_public_subnet_azs
+  private_subnet_azs = local.sandbox_private_subnet_azs
+  public_subnet_cidrs = local.sandbox_public_subnet_cidrs
+  private_subnet_cidrs = local.sandbox_private_subnet_cidrs
 
   enable_security_groups = true
-  sg_rules = "${local.sandbox_vpc_sg_rules}"
+  sg_rules = local.sandbox_vpc_sg_rules
 }

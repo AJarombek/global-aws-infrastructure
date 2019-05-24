@@ -141,47 +141,31 @@ def jenkins_autoscaling_schedules_set() -> bool:
     return all([
         EC2.autoscaling_schedule_valid(
             asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-online-weekday-morning',
-            recurrence='30 11 * * 1-5',
+            schedule_name='jenkins-server-online-morning',
+            recurrence='0 11 * * *',
             max_size=1,
             min_size=1,
             desired_size=1
         ),
         EC2.autoscaling_schedule_valid(
             asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-offline-weekday-morning',
-            recurrence='30 13 * * 1-5',
+            schedule_name='jenkins-server-offline-morning',
+            recurrence='0 12 * * *',
             max_size=0,
             min_size=0,
             desired_size=0),
         EC2.autoscaling_schedule_valid(
             asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-online-weekday-afternoon',
-            recurrence='30 22 * * 1-5',
+            schedule_name='jenkins-server-online-evening',
+            recurrence='0 22 * * *',
             max_size=1,
             min_size=1,
             desired_size=1
         ),
         EC2.autoscaling_schedule_valid(
             asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-offline-weekday-afternoon',
-            recurrence='30 3 * * 2-6',
-            max_size=0,
-            min_size=0,
-            desired_size=0
-        ),
-        EC2.autoscaling_schedule_valid(
-            asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-online-weekend',
-            recurrence='30 11 * * 0,6',
-            max_size=1,
-            min_size=1,
-            desired_size=1
-        ),
-        EC2.autoscaling_schedule_valid(
-            asg_name='global-jenkins-server-asg',
-            schedule_name='jenkins-server-offline-weekend',
-            recurrence='30 3 * * 0,1',
+            schedule_name='jenkins-server-offline-evening',
+            recurrence='0 23 * * *',
             max_size=0,
             min_size=0,
             desired_size=0

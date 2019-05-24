@@ -7,12 +7,12 @@
 locals {
   jarombek_com_public_subnet_cidrs = [
     "10.0.1.0/24",
-    "10.0.2.0/24"
+    "10.0.2.0/24",
   ]
 
   jarombek_com_private_subnet_cidrs = [
     "10.0.3.0/24",
-    "10.0.4.0/24"
+    "10.0.4.0/24",
   ]
 
   public_cidr = "0.0.0.0/0"
@@ -24,7 +24,7 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic from the internet
@@ -32,7 +32,7 @@ locals {
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic for SSH
@@ -40,7 +40,7 @@ locals {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic for ping
@@ -48,7 +48,7 @@ locals {
       from_port = -1
       to_port = -1
       protocol = "icmp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic to the internet
@@ -56,7 +56,7 @@ locals {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic to the internet
@@ -64,7 +64,7 @@ locals {
       from_port = 443
       to_port = 443
       protocol = "tcp"
-      cidr_blocks = "${local.public_cidr}"
+      cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for health checks
@@ -72,18 +72,18 @@ locals {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = "${local.public_cidr}"
-    }
+      cidr_blocks = local.public_cidr
+    },
   ]
 
   jarombek_com_public_subnet_azs = [
     "us-east-1a",
-    "us-east-1b"
+    "us-east-1b",
   ]
 
   jarombek_com_private_subnet_azs = [
     "us-east-1c",
-    "us-east-1d"
+    "us-east-1d",
   ]
 }
 
@@ -92,6 +92,8 @@ provider "aws" {
 }
 
 terraform {
+  required_version = ">= 0.12"
+
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
@@ -120,11 +122,11 @@ module "jarombek-com-vpc" {
   private_subnet_custom_names = true
   private_subnet_names = ["jarombek-com-red-private-subnet", "jarombek-com-reputation-private-subnet"]
 
-  public_subnet_azs = "${local.jarombek_com_public_subnet_azs}"
-  private_subnet_azs = "${local.jarombek_com_private_subnet_azs}"
-  public_subnet_cidrs = "${local.jarombek_com_public_subnet_cidrs}"
-  private_subnet_cidrs = "${local.jarombek_com_private_subnet_cidrs}"
+  public_subnet_azs = local.jarombek_com_public_subnet_azs
+  private_subnet_azs = local.jarombek_com_private_subnet_azs
+  public_subnet_cidrs = local.jarombek_com_public_subnet_cidrs
+  private_subnet_cidrs = local.jarombek_com_private_subnet_cidrs
 
   enable_security_groups = true
-  sg_rules = "${local.jarombek_com_vpc_sg_rules}"
+  sg_rules = local.jarombek_com_vpc_sg_rules
 }

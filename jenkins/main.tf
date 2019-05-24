@@ -9,6 +9,8 @@ provider "aws" {
 }
 
 terraform {
+  required_version = ">= 0.12"
+
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
@@ -48,19 +50,19 @@ data "aws_security_group" "vpc-security-group" {
 }
 
 data "aws_vpc" "resources-vpc" {
-  tags {
+  tags = {
     Name = "resources-vpc"
   }
 }
 
 data "aws_subnet" "resources-vpc-public-subnet" {
-  tags {
+  tags = {
     Name = "resources-vpc-public-subnet"
   }
 }
 
 data "aws_efs_file_system" "jenkins-efs" {
-  tags {
+  tags = {
     Name = "jenkins-efs"
   }
 }
@@ -69,13 +71,13 @@ data "aws_region" "current" {}
 
 # Load a bash file that starts up a Jenkins server
 data "template_file" "jenkins-startup" {
-  template = "${file("jenkins-setup.sh")}"
+  template = file("jenkins-setup.sh")
 
-  vars {
-    MOUNT_TARGET = "${data.aws_efs_file_system.jenkins-efs.dns_name}"
+  vars = {
+    MOUNT_TARGET = data.aws_efs_file_system.jenkins-efs.dns_name
     MOUNT_LOCATION = "/var/lib/jenkins"
-    REGION = "${data.aws_region.current.name}"
-    ALLOCATION_ID = "${aws_eip.jenkins-server-eip.id}"
+    REGION = data.aws_region.current.name
+    ALLOCATION_ID = aws_eip.jenkins-server-eip.id
   }
 }
 
@@ -100,13 +102,13 @@ resource "null_resource" "key-gen" {
 
 resource "aws_iam_instance_profile" "jenkins-instance-profile" {
   name = "global-jenkis-server-instance-profile"
-  role = "${data.aws_iam_role.jenkins-server-role.name}"
+  role = data.aws_iam_role.jenkins-server-role.name
 }
 
 resource "aws_eip" "jenkins-server-eip" {
   vpc = true
 
-  tags {
+  tags = {
     Name = "global-jenkins-server-eip"
     Application = "jenkins-jarombek-io"
   }
@@ -114,15 +116,15 @@ resource "aws_eip" "jenkins-server-eip" {
 
 resource "aws_launch_configuration" "jenkins-server-lc" {
   name = "global-jenkins-server-lc"
-  image_id = "${data.aws_ami.jenkins-ami.id}"
+  image_id = data.aws_ami.jenkins-ami.id
   instance_type = "t2.micro"
   key_name = "jenkins-key"
-  security_groups = ["${aws_security_group.jenkins-server-lc-security-group.id}"]
+  security_groups = [aws_security_group.jenkins-server-lc-security-group.id]
   associate_public_ip_address = true
-  iam_instance_profile = "${aws_iam_instance_profile.jenkins-instance-profile.name}"
+  iam_instance_profile = aws_iam_instance_profile.jenkins-instance-profile.name
 
   # Script to run during instance startup
-  user_data = "${data.template_file.jenkins-startup.rendered}"
+  user_data = data.template_file.jenkins-startup.rendered
 
   lifecycle {
     # Create a replacement before destroying
@@ -132,16 +134,16 @@ resource "aws_launch_configuration" "jenkins-server-lc" {
 
 resource "aws_autoscaling_group" "jenkins-server-asg" {
   name = "global-jenkins-server-asg"
-  launch_configuration = "${aws_launch_configuration.jenkins-server-lc.id}"
+  launch_configuration = aws_launch_configuration.jenkins-server-lc.id
 
   # Needed when using an autoscaling group in a VPC
-  vpc_zone_identifier = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
+  vpc_zone_identifier = [data.aws_subnet.resources-vpc-public-subnet.id]
 
-  max_size = "${var.max_size_on}"
-  min_size = "${var.min_size_on}"
-  desired_capacity = "${var.desired_capacity_on}"
+  max_size = var.max_size_on
+  min_size = var.min_size_on
+  desired_capacity = var.desired_capacity_on
 
-  load_balancers = ["${aws_elb.jenkins-server-elb.id}"]
+  load_balancers = [aws_elb.jenkins-server-elb.id]
   health_check_type = "ELB"
   health_check_grace_period = 600
 
@@ -163,62 +165,62 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-online-morning" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
   scheduled_action_name = "jenkins-server-online-morning"
 
-  max_size = "${var.max_size_on}"
-  min_size = "${var.min_size_on}"
-  desired_capacity = "${var.desired_capacity_on}"
+  max_size = var.max_size_on
+  min_size = var.min_size_on
+  desired_capacity = var.desired_capacity_on
 
-  recurrence = "${var.online_cron_morning}"
+  recurrence = var.online_cron_morning
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-morning" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
   scheduled_action_name = "jenkins-server-offline-morning"
 
-  max_size = "${var.max_size_off}"
-  min_size = "${var.min_size_off}"
-  desired_capacity = "${var.desired_capacity_off}"
+  max_size = var.max_size_off
+  min_size = var.min_size_off
+  desired_capacity = var.desired_capacity_off
 
-  recurrence = "${var.offline_cron_morning}"
+  recurrence = var.offline_cron_morning
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-online-evening" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
   scheduled_action_name = "jenkins-server-online-evening"
 
-  max_size = "${var.max_size_on}"
-  min_size = "${var.min_size_on}"
-  desired_capacity = "${var.desired_capacity_on}"
+  max_size = var.max_size_on
+  min_size = var.min_size_on
+  desired_capacity = var.desired_capacity_on
 
-  recurrence = "${var.online_cron_evening}"
+  recurrence = var.online_cron_evening
 }
 
 resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-evening" {
-  autoscaling_group_name = "${aws_autoscaling_group.jenkins-server-asg.name}"
+  autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
   scheduled_action_name = "jenkins-server-offline-evening"
 
-  max_size = "${var.max_size_off}"
-  min_size = "${var.min_size_off}"
-  desired_capacity = "${var.desired_capacity_off}"
+  max_size = var.max_size_off
+  min_size = var.min_size_off
+  desired_capacity = var.desired_capacity_off
 
-  recurrence = "${var.offline_cron_evening}"
+  recurrence = var.offline_cron_evening
 }
 
 resource "aws_elb" "jenkins-server-elb" {
   name = "global-jenkins-server-elb"
 
   # Required for an Elastic Load Balancer in a VPC
-  subnets = ["${data.aws_subnet.resources-vpc-public-subnet.id}"]
+  subnets = [data.aws_subnet.resources-vpc-public-subnet.id]
 
   security_groups = [
-    "${aws_security_group.jenkins-server-lb-security-group.id}",
-    "${data.aws_security_group.vpc-security-group.id}"
+    aws_security_group.jenkins-server-lb-security-group.id,
+    data.aws_security_group.vpc-security-group.id,
   ]
 
   listener {
-    instance_port = "${var.instance_port}"
+    instance_port = var.instance_port
     instance_protocol = "http"
     lb_port = 80
     lb_protocol = "http"
@@ -232,7 +234,7 @@ resource "aws_elb" "jenkins-server-elb" {
     target = "TCP:${var.instance_port}"
   }
 
-  tags {
+  tags = {
     Name = "global-jenkins-server-elb"
     Application = "jenkins-jarombek-io"
   }
@@ -240,12 +242,12 @@ resource "aws_elb" "jenkins-server-elb" {
 
 resource "aws_security_group" "jenkins-server-lc-security-group" {
   name = "global-jenkins-server-lc-security-group"
-  vpc_id = "${data.aws_vpc.resources-vpc.id}"
+  vpc_id = data.aws_vpc.resources-vpc.id
 
   ingress {
-    from_port = "${var.instance_port}"
+    from_port = var.instance_port
     protocol = "tcp"
-    to_port = "${var.instance_port}"
+    to_port = var.instance_port
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -289,7 +291,7 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
     create_before_destroy = true
   }
 
-  tags {
+  tags = {
     Name = "global-jenkins-server-lc-security-group"
     Application = "jenkins-jarombek-io"
   }
@@ -297,7 +299,7 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
 
 resource "aws_security_group" "jenkins-server-lb-security-group" {
   name = "global-jenkins-server-lb-security-group"
-  vpc_id = "${data.aws_vpc.resources-vpc.id}"
+  vpc_id = data.aws_vpc.resources-vpc.id
 
   # Outbound requests for health checks
   egress {
@@ -332,7 +334,7 @@ resource "aws_security_group" "jenkins-server-lb-security-group" {
     create_before_destroy = true
   }
 
-  tags {
+  tags = {
     Name = "global-jenkins-server-elb-security-group"
     Application = "jenkins-jarombek-io"
   }
