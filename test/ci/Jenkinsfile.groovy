@@ -5,8 +5,8 @@
  */
 
 node("master") {
-    stage('global-aws-infrastructure') {
-        build job: 'global-aws-infrastructure', parameters: [
+    stage('global-aws-infrastructure-test') {
+        build job: 'global-aws-infrastructure/global-aws-infrastructure', parameters: [
             [$class: 'StringParameterValue', name: 'branchName', value: 'master']
         ]
     }

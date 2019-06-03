@@ -23,7 +23,4 @@ pipelineJob('global-aws-infrastructure-trigger') {
             }
         }
     }
-    wrappers {
-        colorizeOutput()
-    }
 }
