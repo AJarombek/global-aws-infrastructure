@@ -20,6 +20,26 @@
         - git
         - wget
         - unzip
+        - software-properties-common
+
+    - name: Add Python3.7 Repository
+      apt_repository:
+         repo: ppa:deadsnakes/ppa
+         state: present
+
+    - name: Update APT Packages
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: Install Python 3.7
+      become: yes
+      apt:
+        pkg: "{{item}}"
+        state: installed
+        force: yes
+      with_items:
+        - python3.7
 
     # Downloading Jenkins - https://jenkins.io/doc/book/installing/#debianubuntu
     - name: Download Jenkins

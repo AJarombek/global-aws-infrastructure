@@ -49,4 +49,10 @@ sudo /etc/init.d/jenkins start
 # Initial Admin Password for Jenkins
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
+# Install Python 3.7 dependencies
+curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+python3.7 get-pip.py
+pip3 --version
+pip3 install boto3
+
 echo "END jenkins-setup.sh"
