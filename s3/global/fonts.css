@@ -7,29 +7,53 @@
 @font-face {
     font-family: Sylexiad;
     font-weight: normal;
-    src: url("https://global.jarombek.io/fonts/SylexiadSansThin.ttf") format("truetype");
+    src: url("http://global.jarombek.io/fonts/SylexiadSansThin.ttf") format("truetype"),
+        url("http://global.jarombek.io/fonts/SylexiadSansThin-Bold.otf") format("opentype");
 }
 
 @font-face {
     font-family: Sylexiad-Bold;
     font-weight: bold;
-    src: url("https://global.jarombek.io/fonts/SylexiadSansThin-Bold.ttf") format("truetype");
+    src: url("http://global.jarombek.io/fonts/SylexiadSansThin-Bold.ttf") format("truetype"),
+        url("http://global.jarombek.io/fonts/SylexiadSansThin-Bold.otf") format("opentype");
 }
 
 @font-face {
     font-family: Dyslexie;
     font-weight: bold;
-    src: url("https://global.jarombek.io/fonts/dyslexie-bold.ttf") format("truetype");
+    src: url("http://global.jarombek.io/fonts/dyslexie-bold.ttf") format("truetype");
 }
 
 @font-face {
     font-family: Fantasque-Bold;
     font-weight: bold;
-    src: url("https://global.jarombek.io/fonts/FantasqueSansMono-Bold.ttf") format("truetype");
+    src: url("http://global.jarombek.io/fonts/FantasqueSansMono-Bold.eot?#iefix") format("opentype"),
+        url("http://global.jarombek.io/fonts/FantasqueSansMono-Bold.ttf") format("truetype"),
+        url("http://global.jarombek.io/fonts/FantasqueSansMono-Bold.otf") format("opentype"),
+        url("http://global.jarombek.io/fonts/FantasqueSansMono-Bold.woff") format("woff"),
+        url("http://global.jarombek.io/fonts/FantasqueSansMono-Bold.woff2") format("woff2");
 }
 
 @font-face {
     font-family: Longway;
     font-weight: bold;
-    src: url("https://global.jarombek.io/fonts/Longway-Regular.otf") format("opentype");
+    src: url("http://global.jarombek.io/fonts/Longway-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Roboto-Bold;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Roboto-Regular;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Roboto-Thin;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/Roboto-Thin.ttf") format("truetype");
 }

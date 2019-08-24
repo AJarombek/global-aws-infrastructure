@@ -170,12 +170,44 @@ resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
   content_type = "font/ttf"
 }
 
+resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-eot" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/FantasqueSansMono-Bold.eot"
+  source = "global/fonts/FantasqueSansMono-Bold.eot"
+  etag = filemd5("global/fonts/FantasqueSansMono-Bold.eot")
+  content_type = "font/otf"
+}
+
+resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-otf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/FantasqueSansMono-Bold.otf"
+  source = "global/fonts/FantasqueSansMono-Bold.otf"
+  etag = filemd5("global/fonts/FantasqueSansMono-Bold.otf")
+  content_type = "font/otf"
+}
+
 resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-ttf" {
   bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/FantasqueSansMono-Bold.ttf"
   source = "global/fonts/FantasqueSansMono-Bold.ttf"
   etag = filemd5("global/fonts/FantasqueSansMono-Bold.ttf")
   content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-woff" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/FantasqueSansMono-Bold.woff"
+  source = "global/fonts/FantasqueSansMono-Bold.woff"
+  etag = filemd5("global/fonts/FantasqueSansMono-Bold.woff")
+  content_type = "font/woff"
+}
+
+resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-woff2" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/FantasqueSansMono-Bold.woff2"
+  source = "global/fonts/FantasqueSansMono-Bold.woff2"
+  etag = filemd5("global/fonts/FantasqueSansMono-Bold.woff2")
+  content_type = "font/woff2"
 }
 
 resource "aws_s3_bucket_object" "longway-regular-otf" {
@@ -186,12 +218,52 @@ resource "aws_s3_bucket_object" "longway-regular-otf" {
   content_type = "font/otf"
 }
 
+resource "aws_s3_bucket_object" "roboto-bold-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/Roboto-Bold.ttf"
+  source = "global/fonts/Roboto-Bold.ttf"
+  etag = filemd5("global/fonts/Roboto-Bold.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "roboto-regular-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/Roboto-Regular.ttf"
+  source = "global/fonts/Roboto-Regular.ttf"
+  etag = filemd5("global/fonts/Roboto-Regular.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "roboto-thin-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/Roboto-Thin.ttf"
+  source = "global/fonts/Roboto-Thin.ttf"
+  etag = filemd5("global/fonts/Roboto-Thin.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "sylexiad-sans-thin-otf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/SylexiadSansThin.otf"
+  source = "global/fonts/SylexiadSansThin.otf"
+  etag = filemd5("global/fonts/SylexiadSansThin.otf")
+  content_type = "font/otf"
+}
+
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
   bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/SylexiadSansThin.ttf"
   source = "global/fonts/SylexiadSansThin.ttf"
   etag = filemd5("global/fonts/SylexiadSansThin.ttf")
   content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-otf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/SylexiadSansThin-Bold.otf"
+  source = "global/fonts/SylexiadSansThin-Bold.otf"
+  etag = filemd5("global/fonts/SylexiadSansThin-Bold.otf")
+  content_type = "font/otf"
 }
 
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-ttf" {
