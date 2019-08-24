@@ -143,6 +143,7 @@ resource "aws_s3_bucket_object" "index-json" {
   key = "index.json"
   source = "global/index.json"
   etag = filemd5("global/index.json")
+  content_type = "application/json"
 }
 
 resource "aws_s3_bucket_object" "aws-key-gen" {
@@ -150,6 +151,7 @@ resource "aws_s3_bucket_object" "aws-key-gen" {
   key = "aws-key-gen.sh"
   source = "global/aws-key-gen.sh"
   etag = filemd5("global/aws-key-gen.sh")
+  content_type = "application/octet-stream"
 }
 
 resource "aws_s3_bucket_object" "fonts-css" {
@@ -157,6 +159,7 @@ resource "aws_s3_bucket_object" "fonts-css" {
   key = "fonts.css"
   source = "global/fonts.css"
   etag = filemd5("global/fonts.css")
+  content_type = "text/css"
 }
 
 resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
@@ -164,6 +167,7 @@ resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
   key = "fonts/dyslexie-bold.ttf"
   source = "global/fonts/dyslexie-bold.ttf"
   etag = filemd5("global/fonts/dyslexie-bold.ttf")
+  content_type = "font/ttf"
 }
 
 resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-ttf" {
@@ -171,6 +175,7 @@ resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-ttf" {
   key = "fonts/FantasqueSansMono-Bold.ttf"
   source = "global/fonts/FantasqueSansMono-Bold.ttf"
   etag = filemd5("global/fonts/FantasqueSansMono-Bold.ttf")
+  content_type = "font/ttf"
 }
 
 resource "aws_s3_bucket_object" "longway-regular-otf" {
@@ -178,6 +183,7 @@ resource "aws_s3_bucket_object" "longway-regular-otf" {
   key = "fonts/Longway-Regular.otf"
   source = "global/fonts/Longway-Regular.otf"
   etag = filemd5("global/fonts/Longway-Regular.otf")
+  content_type = "font/otf"
 }
 
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
@@ -185,6 +191,7 @@ resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
   key = "fonts/SylexiadSansThin.ttf"
   source = "global/fonts/SylexiadSansThin.ttf"
   etag = filemd5("global/fonts/SylexiadSansThin.ttf")
+  content_type = "font/ttf"
 }
 
 resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-ttf" {
@@ -192,4 +199,5 @@ resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-ttf" {
   key = "fonts/SylexiadSansThin-Bold.ttf"
   source = "global/fonts/SylexiadSansThin-Bold.ttf"
   etag = filemd5("global/fonts/SylexiadSansThin-Bold.ttf")
+  content_type = "font/ttf"
 }

@@ -103,7 +103,7 @@ terraform {
 }
 
 module "jarombek-com-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.3"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.7"
 
   # Mandatory arguments
   name = "jarombek-com"
@@ -116,10 +116,7 @@ module "jarombek-com-vpc" {
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
-  public_subnet_custom_names = true
   public_subnet_names = ["jarombek-com-yeezus-public-subnet", "jarombek-com-yandhi-public-subnet"]
-
-  private_subnet_custom_names = true
   private_subnet_names = ["jarombek-com-red-private-subnet", "jarombek-com-reputation-private-subnet"]
 
   public_subnet_azs = local.jarombek_com_public_subnet_azs
