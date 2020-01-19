@@ -19,6 +19,12 @@
 }
 
 @font-face {
+    font-family: Allura;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/Allura-Regular.otf") format("opentype");
+}
+
+@font-face {
     font-family: Dyslexie;
     font-weight: bold;
     src: url("http://global.jarombek.io/fonts/dyslexie-bold.ttf") format("truetype");
@@ -56,4 +62,28 @@
     font-family: Roboto-Thin;
     font-weight: bold;
     src: url("http://global.jarombek.io/fonts/Roboto-Thin.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: RobotoSlab-Bold;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/RobotoSlab-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: RobotoSlab-Light;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/RobotoSlab-Light.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: RobotoSlab-Regular;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/RobotoSlab-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: RobotoSlab-Thin;
+    font-weight: bold;
+    src: url("http://global.jarombek.io/fonts/RobotoSlab-Thin.ttf") format("truetype");
 }

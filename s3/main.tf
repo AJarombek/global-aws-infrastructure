@@ -162,6 +162,14 @@ resource "aws_s3_bucket_object" "fonts-css" {
   content_type = "text/css"
 }
 
+resource "aws_s3_bucket_object" "allura-regular-otf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/Allura-Regular.otf"
+  source = "global/fonts/Allura-Regular.otf"
+  etag = filemd5("global/fonts/Allura-Regular.otf")
+  content_type = "font/otf"
+}
+
 resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
   bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/dyslexie-bold.ttf"
@@ -239,6 +247,38 @@ resource "aws_s3_bucket_object" "roboto-thin-ttf" {
   key = "fonts/Roboto-Thin.ttf"
   source = "global/fonts/Roboto-Thin.ttf"
   etag = filemd5("global/fonts/Roboto-Thin.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "robotoslab-bold-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/RobotoSlab-Bold.ttf"
+  source = "global/fonts/RobotoSlab-Bold.ttf"
+  etag = filemd5("global/fonts/RobotoSlab-Bold.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "robotoslab-light-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/RobotoSlab-Light.ttf"
+  source = "global/fonts/RobotoSlab-Light.ttf"
+  etag = filemd5("global/fonts/RobotoSlab-Light.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "robotoslab-regular-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/RobotoSlab-Regular.ttf"
+  source = "global/fonts/RobotoSlab-Regular.ttf"
+  etag = filemd5("global/fonts/RobotoSlab-Regular.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "robotoslab-thin-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/RobotoSlab-Thin.ttf"
+  source = "global/fonts/RobotoSlab-Thin.ttf"
+  etag = filemd5("global/fonts/RobotoSlab-Thin.ttf")
   content_type = "font/ttf"
 }
 
