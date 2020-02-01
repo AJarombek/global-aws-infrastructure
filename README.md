@@ -15,6 +15,7 @@ repositories are referenced in separate directories and README.md files.
 
 | Directory Name    | Description                                                                 |
 |-------------------|-----------------------------------------------------------------------------|
+| `acm`             | HTTPS certificates for the `jarombek.io` applications.                      |
 | `apps`            | Infrastructure for individual applications.                                 |
 | `apps-sandabox`   | Infrastructure for prototype applications in the Sandbox VPC.               |
 | `backend`         | The Terraform backend, consisting of an S3 bucket.                          |

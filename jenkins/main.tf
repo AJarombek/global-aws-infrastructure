@@ -164,48 +164,48 @@ resource "aws_autoscaling_group" "jenkins-server-asg" {
   }
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-online-morning" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekday" {
   autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
-  scheduled_action_name = "jenkins-server-online-morning"
+  scheduled_action_name = "jenkins-server-online-weekday"
 
   max_size = var.max_size_on
   min_size = var.min_size_on
   desired_capacity = var.desired_capacity_on
 
-  recurrence = var.online_cron_morning
+  recurrence = var.online_cron_weekday
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-morning" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekday" {
   autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
-  scheduled_action_name = "jenkins-server-offline-morning"
+  scheduled_action_name = "jenkins-server-offline-weekday"
 
   max_size = var.max_size_off
   min_size = var.min_size_off
   desired_capacity = var.desired_capacity_off
 
-  recurrence = var.offline_cron_morning
+  recurrence = var.offline_cron_weekday
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-online-evening" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-online-weekend" {
   autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
-  scheduled_action_name = "jenkins-server-online-evening"
+  scheduled_action_name = "jenkins-server-online-weekend"
 
   max_size = var.max_size_on
   min_size = var.min_size_on
   desired_capacity = var.desired_capacity_on
 
-  recurrence = var.online_cron_evening
+  recurrence = var.online_cron_weekend
 }
 
-resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-evening" {
+resource "aws_autoscaling_schedule" "jenkins-server-asg-offline-weekend" {
   autoscaling_group_name = aws_autoscaling_group.jenkins-server-asg.name
-  scheduled_action_name = "jenkins-server-offline-evening"
+  scheduled_action_name = "jenkins-server-offline-weekend"
 
   max_size = var.max_size_off
   min_size = var.min_size_off
   desired_capacity = var.desired_capacity_off
 
-  recurrence = var.offline_cron_evening
+  recurrence = var.offline_cron_weekend
 }
 
 resource "aws_elb" "jenkins-server-elb" {
