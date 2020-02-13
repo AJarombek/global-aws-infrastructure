@@ -37,6 +37,10 @@ data "aws_acm_certificate" "jarombek-io-cert" {
   domain = "*.jarombek.io"
 }
 
+data "aws_route53_zone" "jarombek-io" {
+  name = "jarombek.io."
+}
+
 #------------------------
 # S3 Bucket Configuration
 #------------------------
@@ -48,6 +52,7 @@ resource "aws_s3_bucket" "global-jarombek-io" {
 
   tags = {
     Name = "global.jarombek.io"
+    Environment = "production"
   }
 
   website {
@@ -69,6 +74,7 @@ resource "aws_s3_bucket" "www-global-jarombek-io" {
 
   tags = {
     Name = "www.global.jenkins.io"
+    Environment = "production"
   }
 
   website {
@@ -118,7 +124,7 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
     target_origin_id = local.s3_origin_id
 
     # Which protocols to use which accessing items from CloudFront
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "allow-all"
 
     # Determines the amount of time an object exists in the CloudFront cache
     min_ttl = 0
@@ -139,6 +145,7 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
   }
 
   tags = {
+    Name = "global-jarombek-io-cloudfront"
     Environment = "production"
   }
 }
@@ -150,7 +157,7 @@ resource "aws_cloudfront_origin_access_identity" "origin-access-identity" {
 resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
   origin {
     domain_name = aws_s3_bucket.www-global-jarombek-io.bucket_regional_domain_name
-    origin_id = local.s3_origin_id
+    origin_id = local.www_s3_origin_id
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin-access-identity-www.cloudfront_access_identity_path
@@ -189,7 +196,7 @@ resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
     target_origin_id = local.www_s3_origin_id
 
     # Which protocols to use which accessing items from CloudFront
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "allow-all"
 
     # Determines the amount of time an object exists in the CloudFront cache
     min_ttl = 0
@@ -210,12 +217,38 @@ resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
   }
 
   tags = {
+    Name = "www-global-jarombek-io-cloudfront"
     Environment = "production"
   }
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin-access-identity-www" {
   comment = "www.global.jarombek.io origin access identity"
+}
+
+resource "aws_route53_record" "global-jarombek-io-a" {
+  name    = "global.jarombek.io."
+  type    = "A"
+  zone_id = data.aws_route53_zone.jarombek-io.zone_id
+
+  # TTL for all alias records is 60 seconds
+  alias {
+    evaluate_target_health = false
+    name = aws_cloudfront_distribution.global-jarombek-io-distribution.domain_name
+    zone_id = aws_cloudfront_distribution.global-jarombek-io-distribution.hosted_zone_id
+  }
+}
+
+resource "aws_route53_record" "www-global-jarombek-io-a" {
+  name = "www.global.jarombek.io."
+  type = "A"
+  zone_id = data.aws_route53_zone.jarombek-io.zone_id
+
+  alias {
+    evaluate_target_health = false
+    name = aws_cloudfront_distribution.www-global-jarombek-io-distribution.domain_name
+    zone_id = aws_cloudfront_distribution.www-global-jarombek-io-distribution.hosted_zone_id
+  }
 }
 
 #-------------------
