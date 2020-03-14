@@ -281,6 +281,13 @@ resource "aws_security_group" "jenkins-server-lc-security-group" {
   }
 
   egress {
+    from_port = 465
+    protocol = "tcp"
+    to_port = 465
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
     from_port = 2049
     protocol = "tcp"
     to_port = 2049
@@ -327,6 +334,13 @@ resource "aws_security_group" "jenkins-server-lb-security-group" {
     from_port = 443
     protocol = "tcp"
     to_port = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 465
+    protocol = "tcp"
+    to_port = 465
     cidr_blocks = ["0.0.0.0/0"]
   }
 

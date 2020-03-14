@@ -16,13 +16,12 @@
       # You can think of "with_items" as creating a for loop around this task
       with_items:
         - openjdk-8-jdk
-        - python3
         - git
         - wget
         - unzip
         - software-properties-common
 
-    - name: Add Python3.7 Repository
+    - name: Add Python3.8 Repository
       apt_repository:
          repo: ppa:deadsnakes/ppa
          state: present
@@ -32,14 +31,16 @@
       apt:
         update_cache: yes
 
-    - name: Install Python 3.7
+    - name: Install Python 3.8
       become: yes
       apt:
         pkg: "{{item}}"
         state: installed
         force: yes
       with_items:
-        - python3.7
+        - python3.8
+        - python3-pip
+        - python3.8-venv
 
     # Downloading Jenkins - https://jenkins.io/doc/book/installing/#debianubuntu
     - name: Download Jenkins
