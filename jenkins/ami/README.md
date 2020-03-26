@@ -15,6 +15,7 @@ with the help of two provisioners.  The first provisioner is a Bash script and t
 
 ### Resources
 
-[1] [Python3.7 on Ubuntu](https://websiteforstudents.com/installing-the-latest-python-3-7-on-ubuntu-16-04-18-04/)
-
-[2] [Ansible Playbook: Apt Repository](https://docs.ansible.com/ansible/latest/modules/apt_repository_module.html)
+1) [Python3.7 on Ubuntu](https://websiteforstudents.com/installing-the-latest-python-3-7-on-ubuntu-16-04-18-04/)
+2) [Ansible Playbook: Apt Repository](https://docs.ansible.com/ansible/latest/modules/apt_repository_module.html)
+3) [Install Node.js on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-18-04)
+4) [Debugging Ansible](https://packer.io/docs/provisioners/ansible.html#debugging)

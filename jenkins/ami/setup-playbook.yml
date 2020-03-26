@@ -92,6 +92,20 @@
         - pip install awscli
         - aws --version
 
+    # Install Node.js for working with JavaScript applications.
+    - name: Install Node.js
+      become: yes
+      command: "{{item}}"
+      ignore_errors: True
+      with_items:
+        - curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+        - bash nodesource_setup.sh
+        - apt -y install nodejs
+        - npm i yarn -g
+        - nodejs --version
+        - npm --version
+        - yarn --version
+
     # JQ is used to parse JSON from Bash
     - name: Install jq
       become: yes

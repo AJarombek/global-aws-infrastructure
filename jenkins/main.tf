@@ -344,6 +344,13 @@ resource "aws_security_group" "jenkins-server-lb-security-group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  egress {
+    from_port = 9418
+    protocol = "tcp"
+    to_port = 9418
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   lifecycle {
     create_before_destroy = true
   }

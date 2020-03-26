@@ -37,7 +37,7 @@ variable "desired_capacity_off" {
 # Weekdays: 6:30PM - 8:00PM EST
 variable "online_cron_weekday" {
   description = "The cron syntax for when the Jenkins server should go online on a weekday"
-  default = "30 23 * * 1-5"
+  default = "0 23 * * 1-5"
 }
 
 variable "offline_cron_weekday" {

@@ -28,7 +28,8 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./setup-playbook.yml"
+      "playbook_file": "./setup-playbook.yml",
+      "extra_arguments": ["-vvvv"]
     }
   ]
 }
