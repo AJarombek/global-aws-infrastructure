@@ -31,6 +31,14 @@
 }
 
 @font-face {
+    font-family: ElegantIcons;
+    font-weight: bold;
+    src: url("https://global.jarombek.io/fonts/ElegantIcons.eot?#iefix") format("opentype"),
+        url("https://global.jarombek.io/fonts/ElegantIcons.ttf") format("truetype"),
+        url("https://global.jarombek.io/fonts/ElegantIcons.woff") format("woff");
+}
+
+@font-face {
     font-family: Fantasque-Bold;
     font-weight: bold;
     src: url("https://global.jarombek.io/fonts/FantasqueSansMono-Bold.eot?#iefix") format("opentype"),

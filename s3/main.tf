@@ -295,6 +295,30 @@ resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
   content_type = "font/ttf"
 }
 
+resource "aws_s3_bucket_object" "elegant-icons-eot" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/ElegantIcons.eot"
+  source = "global/fonts/ElegantIcons.eot"
+  etag = filemd5("global/fonts/ElegantIcons.eot")
+  content_type = "font/otf"
+}
+
+resource "aws_s3_bucket_object" "elegant-icons-ttf" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/ElegantIcons.ttf"
+  source = "global/fonts/ElegantIcons.ttf"
+  etag = filemd5("global/fonts/ElegantIcons.ttf")
+  content_type = "font/ttf"
+}
+
+resource "aws_s3_bucket_object" "elegant-icons-woff" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  key = "fonts/ElegantIcons.woff"
+  source = "global/fonts/ElegantIcons.woff"
+  etag = filemd5("global/fonts/ElegantIcons.woff")
+  content_type = "font/woff"
+}
+
 resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-eot" {
   bucket = aws_s3_bucket.global-jarombek-io.id
   key = "fonts/FantasqueSansMono-Bold.eot"

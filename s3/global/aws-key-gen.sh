@@ -27,10 +27,10 @@ Key="$(aws ec2 create-key-pair --key-name ${KEY_NAME} --query "KeyMaterial" --ou
 echo ${Key}
 
 # Place the private key in a file called {KEY_NAME}.pem
-echo ${Key} > ~/Documents/${KEY_NAME}.pem
+echo ${Key} > ~/${KEY_NAME}.pem
 
 # Its required to change the private key permissions
-chmod 400 ~/Documents/${KEY_NAME}.pem
+chmod 400 ~/${KEY_NAME}.pem
 
 # Add the key to the SSH agent
-ssh-add ~/Documents/${KEY_NAME}.pem
+ssh-add ~/${KEY_NAME}.pem
