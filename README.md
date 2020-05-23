@@ -25,6 +25,7 @@ repositories are referenced in separate directories and README.md files.
 | `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.               |
 | `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.               |
 | `s3`              | Terraform scripts for global S3 assets.                                     |
+| `secrets-manager` | Terraform scripts for global secrets stored in Secrets Manager.             |
 
 ### Version History
 
