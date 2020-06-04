@@ -19,8 +19,8 @@ terraform {
   }
 }
 
-resource "aws_ecr_repository" "andrew-jarombek-repository" {
-  name = "andrew-jarombek"
+resource "aws_ecr_repository" "docker-jarombek-io-repository" {
+  name = "docker-jarombek-io"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -28,13 +28,13 @@ resource "aws_ecr_repository" "andrew-jarombek-repository" {
   }
 
   tags = {
-    Name = "andrew-jarombek-container-repository"
+    Name = "docker-jarombek-io-container-repository"
     Application = "all"
     Environment = "all"
   }
 }
 
 resource "aws_ecr_lifecycle_policy" "andrew-jarombek-repository-policy" {
-  repository = aws_ecr_repository.andrew-jarombek-repository.name
+  repository = aws_ecr_repository.docker-jarombek-io-repository.name
   policy = file("repo-policy.json")
 }
