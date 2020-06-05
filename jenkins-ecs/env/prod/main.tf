@@ -25,6 +25,11 @@ terraform {
   }
 }
 
+module "acm" {
+  source = "../../modules/acm"
+  prod = local.prod
+}
+
 module "alb" {
   source = "../../modules/alb"
   prod = local.prod
