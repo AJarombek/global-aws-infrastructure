@@ -1,0 +1,50 @@
+jenkins:
+  systemMessage: "Andrew Jarombek's Jenkins Server"
+jobs:
+  - script: >
+      job("single-seed-job") {
+          description("Freestyle Job that builds a single other job")
+          parameters {
+              stringParam("repository", "global-jenkins-jobs", "Repository containing the Job DSL script")
+              stringParam("branch", "master", "Repo branch containing the Job DSL script")
+              stringParam("job_dsl_path", "", "Location of Job DSL script")
+          }
+          concurrentBuild(true)
+          scm {
+              git {
+                  branch("\$branch")
+                  remote {
+                      credentials("ajarombek-github")
+                      github("AJarombek/\$repository", "ssh", "github.com")
+                  }
+              }
+          }
+          steps {
+              dsl {
+                  external("\$job_dsl_path")
+              }
+          }
+      }
+  - script: >
+      job("seed-job") {
+          description("Freestyle Job that builds other jobs")
+          parameters {
+              stringParam("repository", "global-jenkins-jobs", "Repository containing the Job DSL scripts")
+              stringParam("branch", "master", "Repo branch containing the Job DSL scripts")
+          }
+          concurrentBuild(false)
+          scm {
+              git {
+                  branch("\$branch")
+                  remote {
+                      credentials("ajarombek-github")
+                      github("AJarombek/\$repository", "ssh", "github.com")
+                  }
+              }
+          }
+          steps {
+              dsl {
+                  external("**/job_dsl.groovy")
+              }
+          }
+      }
