@@ -2,3 +2,4 @@ configuration-as-code:latest
 git:latest
 github:latest
 job-dsl:latest
+workflow-cps-global-lib:latest

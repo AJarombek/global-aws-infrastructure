@@ -4,15 +4,29 @@ credentials:
   system:
     domainCredentials:
       - credentials:
-        - ajarombekGitHub:
-          scope: SYSTEM
-          id: "ajarombek-github"
-          username: jenkins
-          description: "AJarombek GitHub Key"
-          privateKeySource:
-            directEntry:
-              privateKey: >
-                ${SSH_PRIVATE_KEY}
+        - basicSSHUserPrivateKey:
+            scope: SYSTEM
+            id: "ajarombek-github"
+            username: jenkins
+            description: "AJarombek GitHub Key"
+            privateKeySource:
+              directEntry:
+                privateKey: >
+                  ${SSH_PRIVATE_KEY}
+unclassified:
+  globalLibraries:
+    libraries:
+      - name: "global-jenkins-library"
+        allowVersionOverride:
+          enabled: true
+        defaultVersion: "master"
+        includeInChangesets: true
+        retriever:
+          modernSCM:
+            git:
+              id: "global-jenkins-library"
+              remote: "git@github.com:AJarombek/global-jenkins-library.git"
+              credentialsId: "ajarombek-github"
 jobs:
   - script: >
       job("single-seed-job") {
