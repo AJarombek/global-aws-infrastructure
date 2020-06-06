@@ -3,3 +3,4 @@
 **/.terraform
 *.pem
 **/__pycache__
+jenkins-ecs/docker/jenkins.yaml

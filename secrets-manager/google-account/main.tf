@@ -30,7 +30,7 @@ resource "aws_secretsmanager_secret" "google-account-secret" {
   }
 }
 
-resource "aws_secretsmanager_secret_version" "saints-xctf-rds-secret-version" {
+resource "aws_secretsmanager_secret_version" "google-account-secret-version" {
   secret_id = aws_secretsmanager_secret.google-account-secret.id
   secret_string = jsonencode(var.google_account_secrets)
 }

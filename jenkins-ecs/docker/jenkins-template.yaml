@@ -1,5 +1,18 @@
 jenkins:
   systemMessage: "Andrew Jarombek's Jenkins Server"
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+        - ajarombekGitHub:
+          scope: SYSTEM
+          id: "ajarombek-github"
+          username: jenkins
+          description: "AJarombek GitHub Key"
+          privateKeySource:
+            directEntry:
+              privateKey: >
+                ${SSH_PRIVATE_KEY}
 jobs:
   - script: >
       job("single-seed-job") {

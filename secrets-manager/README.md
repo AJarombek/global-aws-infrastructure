@@ -1,21 +1,12 @@
 ### Overview
 
-Module for global secrets stored in AWS Secrets Manager.
+Modules for global secrets stored in AWS Secrets Manager.  These secrets allow for automated processes 
+(ex: Jenkins, Bazel) to run later on.  Therefore, these secrets must be manually created and pushed using 
+Terraform locally.
 
-```bash
-# Create Infrastructure
-terraform init -upgrade
-terraform validate
-terraform plan
-terraform apply -auto-approve -var 'google_account_secrets={ password = "XXX" }'
+### Directories
 
-# Destroy Infrastructure
-terraform destroy -auto-approve
-```
-
-### Files
-
-| Filename            | Description                                                                                  |
-|---------------------|----------------------------------------------------------------------------------------------|
-| `main.tf`           | Main Terraform file that configures global secrets stored in AWS Secrets Manager.            |
-| `var.tf`            | Input variables for AWS Secrets Manager secrets.                                             |
+| Directory Name    | Description                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| `github`          | GitHub key stored in Secrets Manager.                                       |
+| `google-account`  | Google account credentials stored in Secrets Manager.                       |
