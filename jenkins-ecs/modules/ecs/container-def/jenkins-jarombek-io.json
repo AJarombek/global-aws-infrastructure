@@ -1,0 +1,30 @@
+[
+  {
+    "cpu": 128,
+    "memory": 256,
+    "image": "ajarombek/jenkins-jarombek-io:1.0.0",
+    "name": "jenkins-jarombek-io",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/fargate-tasks",
+        "awslogs-region": "us-east-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "networkMode": "awsvpc",
+    "essential": false,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080,
+        "protocol": "tcp"
+      }
+    ],
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"],
+      "retries": 5,
+      "startPeriod": 60
+    }
+  }
+]

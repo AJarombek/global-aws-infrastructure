@@ -30,6 +30,11 @@ module "acm" {
   prod = local.prod
 }
 
+module "iam" {
+  source = "../../modules/iam"
+  prod = local.prod
+}
+
 module "alb" {
   source = "../../modules/alb"
   prod = local.prod

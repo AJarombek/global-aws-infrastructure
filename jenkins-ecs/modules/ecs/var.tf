@@ -4,9 +4,10 @@
  * Date: 6/4/2020
  */
 
-variable "dependencies" {
+variable "ecs_depends_on" {
   description = "Resources that this module is dependent on"
-  type = list
+  type = any
+  default = null
 }
 
 variable "prod" {
