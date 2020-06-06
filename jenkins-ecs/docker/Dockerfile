@@ -9,36 +9,44 @@ LABEL maintainer="andrew@jarombek.com" \
       description="Dockerfile for building a Jenkins server"
 
 USER root
+WORKDIR /home/root
 
 # Install Python 3.8
 RUN apt-get update \
-    && apt-get install -y software-properties-common \
-    && add-apt-repository -y ppa:deadsnakes/ppa \
-    && apt-get install -y python3.8 \
-    && apt-get install -y python3-pip \
-    && apt-get install -y python3.8-venv
+    && apt-get install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev \
+    && curl -O https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz \
+    && tar -xf Python-3.8.2.tar.xz \
+    && cd Python-3.8.2 \
+    && ./configure --enable-optimizations \
+    && make -j 4 \
+    && make altinstall
+
+# Cleanup after Python 3.8 installation.
+RUN rm -f Python-3.8.2.tar.xz
 
 # Install Terraform
-WORKDIR /home/root
 RUN mkdir bin \
     && apt-get install -y wget \
-    && wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip \
-    && unzip terraform_0.12.24_linux_amd64.zip \
-    && mv terraform ~/bin \
+    && wget https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_amd64.zip \
+    && unzip terraform_0.12.26_linux_amd64.zip \
+    && mv terraform /usr/local/bin/ \
     && terraform --version
 
 # Install AWS CLI
-RUN pip install awscli
+RUN pip3.8 install awscli
 
 # Install Node.js
 RUN apt-get install -y build-essential libssl-dev \
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash \
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
     && nvm install --lts  \
-    && nvm use --lts
+    && nvm use --lts \
+    && npm i yarn -g
 
 # Install JQ
-RUN add-apt-repository -y ppa:eugenesan/ppa \
-    && apt-get install -y jq
+RUN apt-get install -y jq
 
 USER jenkins
-EXPOSE 8080
+EXPOSE 8080 50000

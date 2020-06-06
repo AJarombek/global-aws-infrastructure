@@ -2,7 +2,7 @@
   {
     "cpu": 128,
     "memory": 256,
-    "image": "ajarombek/jenkins-jarombek-io:1.0.0",
+    "image": "${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0",
     "name": "dev-jenkins-jarombek-io",
     "logConfiguration": {
       "logDriver": "awslogs",

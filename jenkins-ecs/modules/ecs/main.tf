@@ -14,6 +14,8 @@ locals {
 # Existing AWS Resources
 #-----------------------
 
+data "aws_caller_identity" "current" {}
+
 data "aws_vpc" "resources-vpc" {
   tags = {
     Name = "resources-vpc"
@@ -28,6 +30,14 @@ data "aws_subnet" "resources-vpc-public-subnet" {
 
 data "aws_iam_role" "ecs-task-role" {
   name = "ecs-task-role"
+}
+
+data "template_file" "container-definition" {
+  template = file("${path.module}/${local.container_def}")
+
+  vars = {
+    ACCOUNT_ID = data.aws_caller_identity.current.account_id
+  }
 }
 
 #---------------------
