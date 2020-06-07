@@ -1,32 +1,46 @@
+# Jenkins Configuration as Code
+# Author: Andrew Jarombek
+# Date: 6/7/2020
+
 jenkins:
   systemMessage: "Andrew Jarombek's Jenkins Server"
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: andy
+          name: andy
+          password: andy
+        - id: guest
+          name: guest
+          password: guest
 credentials:
   system:
     domainCredentials:
       - credentials:
         - basicSSHUserPrivateKey:
-            scope: SYSTEM
+            scope: GLOBAL
             id: "ajarombek-github"
-            username: jenkins
+            username: ajarombek-github
             description: "AJarombek GitHub Key"
             privateKeySource:
               directEntry:
-                privateKey: >
-                  ${SSH_PRIVATE_KEY}
+                privateKey: ${SSH_PRIVATE_KEY}
 unclassified:
   globalLibraries:
     libraries:
       - name: "global-jenkins-library"
-        allowVersionOverride:
-          enabled: true
+        allowVersionOverride: true
         defaultVersion: "master"
+        implicit: false
         includeInChangesets: true
         retriever:
           modernSCM:
-            git:
-              id: "global-jenkins-library"
-              remote: "git@github.com:AJarombek/global-jenkins-library.git"
-              credentialsId: "ajarombek-github"
+            scm:
+              git:
+                id: "global-jenkins-library"
+                remote: "git@github.com:AJarombek/global-jenkins-library.git"
+                credentialsId: "ajarombek-github"
 jobs:
   - script: >
       job("single-seed-job") {
@@ -75,3 +89,52 @@ jobs:
               }
           }
       }
+#  - script: >
+#      folder('devops-jobs') {
+#          displayName('DevOps Jobs')
+#          description('Folder for random DevOps jobs used globally')
+#          primaryView('All')
+#          authorization {
+#              permissions('andy', [
+#                  'hudson.model.Item.Create',
+#                  'hudson.model.Item.Discover'
+#              ])
+#              permission('hudson.model.Item.Discover', 'guest')
+#          }
+#          views {
+#              listView('Terraform') {
+#                  description('Terraform jobs used globally for IaC')
+#                  filterBuildQueue()
+#                  filterExecutors()
+#                  jobs {
+#                      names('terraform-apply', 'terraform-destroy')
+#                  }
+#                  columns() {
+#                      status()
+#                      weather()
+#                      name()
+#                      lastSuccess()
+#                      lastFailure()
+#                      lastDuration()
+#                      buildButton()
+#                  }
+#              }
+#              listView('Packer') {
+#                  description('Packer jobs used globally for building AMIs for AWS')
+#                  filterBuildQueue()
+#                  filterExecutors()
+#                  jobs {
+#                      names('bake-ami')
+#                  }
+#                  columns() {
+#                      status()
+#                      weather()
+#                      name()
+#                      lastSuccess()
+#                      lastFailure()
+#                      lastDuration()
+#                      buildButton()
+#                  }
+#              }
+#          }
+#      }

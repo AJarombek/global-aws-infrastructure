@@ -13,13 +13,23 @@ from boto3_type_annotations.sts import Client as STSClient
 
 
 def main():
+    """
+    Build a Jenkins image with secrets from AWS.
+    """
     private_key = get_github_key()
     account_id = get_account_id()
 
     with open("jenkins-template.yaml", "r+") as file:
         jenkins_config: str = file.read()
 
-    jenkins_config = jenkins_config.replace("${SSH_PRIVATE_KEY}", private_key)
+    # Format the private_key into a single line string.
+    formatted_private_key = "\""
+    for line in private_key.split('\n'):
+        formatted_private_key += f"{line}\\n"
+
+    formatted_private_key += "\""
+
+    jenkins_config = jenkins_config.replace("${SSH_PRIVATE_KEY}", formatted_private_key)
 
     with open("jenkins.yaml", "w") as file:
         file.write(jenkins_config)
@@ -27,7 +37,7 @@ def main():
     subprocess.call(["./prepare-image.sh", account_id])
 
 
-def get_github_key():
+def get_github_key() -> str:
     """
     Get my GitHub accounts private key from AWS Secrets Manager.
     :return: The private key.
@@ -40,7 +50,7 @@ def get_github_key():
     return secret_dict["private_key"]
 
 
-def get_account_id():
+def get_account_id() -> str:
     """
     Get the current users AWS account ID.
     :return: The account ID.
