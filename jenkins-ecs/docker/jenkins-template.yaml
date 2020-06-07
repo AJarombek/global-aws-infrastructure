@@ -7,7 +7,6 @@ jenkins:
     globalMatrix:
       permissions:
         - "Overall/Administer:andy"
-        - "Overall/User:guest"
         - "Credentials/View:guest"
         - "Agent/Build:guest"
         - "Job/Build:guest"
@@ -19,6 +18,7 @@ jenkins:
         - "Run/Replay:guest"
         - "View/Read:guest"
         - "View/Create:guest"
+  numExecutors: 2
   securityRealm:
     local:
       allowsSignup: false
@@ -57,6 +57,30 @@ unclassified:
                 id: "global-jenkins-library"
                 remote: "git@github.com:AJarombek/global-jenkins-library.git"
                 credentialsId: "ajarombek-github"
+  extendedEmailPublisher:
+    smtpServer: smtp.gmail.com
+    smtpPort: 465
+    smtpUsername: andrew@jarombek.com
+    smtpPassword: ${GOOGLE_ACCOUNT_PASSWORD}
+    useSsl: true
+    charset: UTF-8
+    defaultSuffix: "@jarombek.com"
+    defaultContentType: text/html
+    defaultSubject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!"
+    defaultBody: >
+        $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+        Check console output at $BUILD_URL to view the results.
+    debugMode: true
+  mailer:
+    smtpHost: smtp.gmail.com
+    smtpPort: 465
+    useSsl: true
+    charset: UTF-8
+    defaultSuffix: "@jarombek.com"
+    authentication:
+      username: andrew@jarombek.com
+      password: ${GOOGLE_ACCOUNT_PASSWORD}
 jobs:
   - script: >
       job("single-seed-job") {
