@@ -17,15 +17,18 @@ repositories are referenced in separate directories and README.md files.
 |-------------------|-----------------------------------------------------------------------------|
 | `acm`             | HTTPS certificates for the `jarombek.io` applications.                      |
 | `apps`            | Infrastructure for individual applications.                                 |
-| `apps-sandabox`   | Infrastructure for prototype applications in the Sandbox VPC.               |
 | `backend`         | The Terraform backend, consisting of an S3 bucket.                          |
-| `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
+| `ecr`             | Terraform scripts for creating an AWS ECR repository.                       |
 | `iam`             | Terraform scripts for creating IAM users, groups, roles, and policies.      |
-| `route53`         | Terraform scripts for creating DNS records for the account.                 |
 | `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.               |
+| `jenkins-ecs`     | Terraform scripts and Dockerfile for creating an ECS cluster for Jenkins.   |
 | `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.               |
+| `jenkins-route53` | Terraform scripts for creating DNS records for Jenkins.                     |
+| `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
+| `route53`         | Terraform scripts for creating DNS records for the account.                 |
 | `s3`              | Terraform scripts for global S3 assets.                                     |
 | `secrets-manager` | Terraform scripts for global secrets stored in Secrets Manager.             |
+| `test`            | Python infrastructure test suite.                                           |
 
 ### Version History
 

@@ -25,7 +25,7 @@ jenkins:
       users:
         - id: andy
           name: andy
-          password: andy
+          password: ${JENKINS_PASSWORD}
         - id: guest
           name: guest
           password: guest

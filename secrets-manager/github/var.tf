@@ -8,7 +8,7 @@
 variable "github_secret" {
   description = "Secrets for my Google Account to place in AWS Secret Manager.  Never use the default value beyond POC"
   default = {
-    password = "password"
+    private_key = "private_key"
   }
 
   type = map

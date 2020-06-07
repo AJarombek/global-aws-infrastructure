@@ -1,5 +1,5 @@
 /**
- * Infrastructure for global Secrets Manager.
+ * Infrastructure for a Google account secret stored in Secrets Manager.
  * Author: Andrew Jarombek
  * Date: 5/23/2020
  */
@@ -14,7 +14,7 @@ terraform {
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager"
+    key = "global-aws-infrastructure/secrets-manager/google-account"
     region = "us-east-1"
   }
 }

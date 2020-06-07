@@ -10,3 +10,4 @@ Terraform locally.
 |-------------------|-----------------------------------------------------------------------------|
 | `github`          | GitHub key stored in Secrets Manager.                                       |
 | `google-account`  | Google account credentials stored in Secrets Manager.                       |
+| `jenkins`         | Jenkins password stored in Secrets Manager.                                 |
