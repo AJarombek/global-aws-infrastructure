@@ -1,6 +1,15 @@
+ansicolor:latest
+build-timeout:latest
+cloudbees-folder:latest
 configuration-as-code:latest
+credentials-binding:latest
+email-ext:latest
 git:latest
 github:latest
 job-dsl:latest
+matrix-auth:latest
+rebuild:latest
+timestamper:latest
 workflow-cps-global-lib:latest
 workflow-job:latest
+ws-cleanup:latest

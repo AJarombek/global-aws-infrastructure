@@ -22,3 +22,6 @@ docker container run --name jenkins-jarombek-io -p 8080:8080 -p 50000:50000 jenk
 ```
 
 ### Resources
+
+1) [Search Jenkins Plugins](https://plugins.jenkins.io/)
+2) [Jenkins Matrix Based Security](https://wiki.jenkins.io/display/JENKINS/Matrix-based+security)
