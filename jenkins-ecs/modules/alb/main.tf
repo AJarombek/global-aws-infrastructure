@@ -187,17 +187,3 @@ resource "aws_route53_record" "jarombek_cname" {
 
   records = [local.web_domain]
 }
-
-#--------------------
-# Module Dependencies
-#--------------------
-
-resource "null_resource" "dependency-setter" {
-  depends_on = [
-    aws_lb.jenkins-jarombek-io-lb,
-    aws_lb_listener.jenkins-jarombek-io-lb-listener-http,
-    aws_lb_listener.jenkins-jarombek-io-lb-listener-https,
-    aws_lb_listener_certificate.jenkins-jarombek-io-lb-listener-wc-cert,
-    aws_lb_target_group.jenkins-jarombek-io-lb-target-group
-  ]
-}

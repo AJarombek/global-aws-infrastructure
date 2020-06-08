@@ -4,14 +4,30 @@ Docker container for a Jenkins server.
 
 ### Commands
 
-**Start the Jenkins container locally**
+**Push the Jenkins Docker image to ECR**
 
 ```bash
+IMAGE_TAG=1.0.0
+
 python3.8 -m venv env
 source ./env/bin/activate
 python3.8 -m pip install -r requirements.txt
 
-python3.8 push-image.py
+python3.8 push-image.py ${IMAGE_TAG} push
+
+deactivate
+```
+
+**Build and start the Jenkins container locally**
+
+```bash
+IMAGE_TAG=1.0.0
+
+python3.8 -m venv env
+source ./env/bin/activate
+python3.8 -m pip install -r requirements.txt
+
+python3.8 push-image.py ${IMAGE_TAG}
 
 deactivate
 

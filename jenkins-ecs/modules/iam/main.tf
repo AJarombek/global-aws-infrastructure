@@ -5,13 +5,13 @@
  */
 
 locals {
-  env = var.prod ? 'prod' : 'dev'
+  env = var.prod ? "prod" : "dev"
 }
 
 resource "aws_iam_role" "ecs-task-role" {
   name = "ecs-task-role-${local.env}"
   path = "/jenkins-jarombek-io/"
-  assume_role_policy = file("${path.module}/assume-role-policy.json")
+  assume_role_policy = file("${path.module}/ecs-task-role.json")
 }
 
 resource "aws_iam_policy" "ecs-task-policy" {

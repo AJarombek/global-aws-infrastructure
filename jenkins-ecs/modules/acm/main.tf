@@ -4,9 +4,9 @@
  * Date: 6/5/2020
  */
 
-#-------------------------
+#---------------------------------
 # Protects '*.jenkins.jarombek.io'
-#-------------------------
+#---------------------------------
 
 module "jenkins-jarombek-io-acm-certificate" {
   source = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
@@ -31,7 +31,7 @@ module "jenkins-jarombek-io-acm-certificate" {
 
 module "dev-jenkins-jarombek-io-acm-certificate" {
   source = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
-  enabled = !var.prod
+  enabled = true
 
   # Mandatory arguments
   name = "dev-jenkins-jarombek-io-acm-certificate"

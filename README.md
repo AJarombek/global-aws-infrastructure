@@ -20,10 +20,9 @@ repositories are referenced in separate directories and README.md files.
 | `backend`         | The Terraform backend, consisting of an S3 bucket.                          |
 | `ecr`             | Terraform scripts for creating an AWS ECR repository.                       |
 | `iam`             | Terraform scripts for creating IAM users, groups, roles, and policies.      |
-| `jenkins`         | Packer AMI & Terraform scripts for creating a Jenkins server.               |
+| `jenkins`         | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
 | `jenkins-ecs`     | Terraform scripts and Dockerfile for creating an ECS cluster for Jenkins.   |
-| `jenkins-efs`     | Terraform scripts for creating an EFS for the Jenkins server.               |
-| `jenkins-route53` | Terraform scripts for creating DNS records for Jenkins.                     |
+| `jenkins-efs`     | *DEPRECATED* - Terraform scripts for creating an EFS for the Jenkins server.|
 | `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
 | `route53`         | Terraform scripts for creating DNS records for the account.                 |
 | `s3`              | Terraform scripts for global S3 assets.                                     |

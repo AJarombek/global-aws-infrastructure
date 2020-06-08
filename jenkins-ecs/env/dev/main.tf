@@ -25,11 +25,6 @@ terraform {
   }
 }
 
-module "acm" {
-  source = "../../modules/acm"
-  prod = local.prod
-}
-
 module "iam" {
   source = "../../modules/iam"
   prod = local.prod
@@ -76,7 +71,7 @@ module "ecs" {
   alb-security-group = module.alb.alb-security-group
   jenkins-jarombek-io-lb-target-group = module.alb.jenkins-jarombek-io-lb-target-group
 
-  dependencies = [
-    module.alb.depended_on
+  ecs_depends_on = [
+    module.alb.ecs-dependencies
   ]
 }
