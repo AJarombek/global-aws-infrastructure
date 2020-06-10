@@ -1,4 +1,5 @@
 ansicolor:latest
+authorize-project:latest
 build-timeout:latest
 cloudbees-folder:latest
 configuration-as-code:latest
@@ -6,8 +7,10 @@ credentials-binding:latest
 email-ext:latest
 git:latest
 github:latest
+greenballs:latest
 job-dsl:latest
 matrix-auth:latest
+pipeline-model-definition:latest
 rebuild:latest
 timestamper:latest
 workflow-cps-global-lib:latest

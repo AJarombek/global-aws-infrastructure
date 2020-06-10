@@ -1,23 +1,8 @@
 /**
- * AWS Infrastructure for my Elastic Container Registry.
+ * Jenkins Docker image repository in Elastic Container Registry.
  * Author: Andrew Jarombek
  * Date: 6/4/2020
  */
-
-provider "aws" {
-  region = "us-east-1"
-}
-
-terraform {
-  required_version = ">= 0.12"
-
-  backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
-    encrypt = true
-    key = "global-aws-infrastructure/ecr"
-    region = "us-east-1"
-  }
-}
 
 resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
   name = "jenkins-jarombek-io"
@@ -36,5 +21,5 @@ resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
 
 resource "aws_ecr_lifecycle_policy" "jenkins-jarombek-io-repository-policy" {
   repository = aws_ecr_repository.jenkins-jarombek-io-repository.name
-  policy = file("repo-policy.json")
+  policy = file("${path.module}/repo-policy.json")
 }

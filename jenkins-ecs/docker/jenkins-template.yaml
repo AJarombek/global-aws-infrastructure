@@ -130,437 +130,383 @@ jobs:
           }
       }
   - script: >
-      folder('devops-jobs') {
-          displayName('DevOps Jobs')
-          description('Folder for random DevOps jobs used globally')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Terraform') {
-                  description('Terraform jobs used globally for IaC')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('terraform-apply', 'terraform-destroy')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-              listView('Packer') {
-                  description('Packer jobs used globally for building AMIs for AWS')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('bake-ami')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('global-aws') {
+            displayName('global-aws')
+            description('Folder for global AWS infrastructure jobs.')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the Global AWS Infrastructure')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('global-aws-infrastructure-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('kubernetes-prototype') {
-          displayName('kubernetes-prototype')
-          description('Folder for the kubernetes-prototype Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Infrastructure') {
-                  description('Infrastructure jobs for the Kubernetes Prototype')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('kubernetes-prototype-infra', 'kubernetes-prototype-safeguard')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-              listView('Continuous Integration') {
-                  description('Continuous Integration (CI) jobs for the Kubernetes Prototype')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('kubernetes-prototype-ci')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('infrastructure') {
+            displayName('infrastructure')
+            description('Folder for infrastructure automation jobs.')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Terraform') {
+                    description('Terraform jobs used globally for IaC')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('terraform-apply', 'terraform-destroy')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+                listView('Packer') {
+                    description('Packer jobs used globally for building AMIs for AWS')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('bake-ami')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('global-aws-infrastructure') {
-          displayName('global-aws-infrastructure')
-          description('Folder for the global-aws-infrastructure Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the Global AWS Infrastructure')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('global-aws-infrastructure-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('jarombek-com') {
+            displayName('jarombek-com')
+            description('Folder for the jarombek.com application')
+        }
   - script: >
-      folder('graphql-react-prototype') {
-          displayName('graphql-react-prototype')
-          description('Folder for the graphql-react-prototype Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the GraphQL React Prototype Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('graphql-react-prototype-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('jarombek-com/components') {
+            displayName('components')
+            description('Folder for the Jarombek reusable component library')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the Jarombek reusable component library')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('jarombek-react-components-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('jarombek-com') {
-          displayName('jarombek-com')
-          description('Folder for the jarombek-com Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the jarombek.com Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('jarombek-com-ci')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('jarombek-com/infrastructure') {
+            displayName('infrastructure')
+            description('Folder for the jarombek.com AWS infrastructure')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the jarombek.com AWS infrastructure')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('jarombek-com-infrastructure-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('jarombek-com-infrastructure') {
-          displayName('jarombek-com-infrastructure')
-          description('Folder for the jarombek-com-infrastructure Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the jarombek.com AWS Infrastructure')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('jarombek-com-infrastructure-test-dev', 'jarombek-com-infrastructure-test-prod')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('jarombek-com/web') {
+            displayName('web')
+            description('Folder for the jarombek.com web application')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the jarombek.com web application')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('jarombek-com-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('jarombek-react-components') {
-          displayName('jarombek-react-components')
-          description('Folder for the jarombek-react-components Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the Reusable React Component Library')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('jarombek-react-components-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('prototypes') {
+            displayName('prototypes')
+            description('Folder for prototype applications')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for prototypes')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names(
+                            'graphql-react-prototype-test',
+                            'react-16-3-demo-test',
+                            'react-webpack-seed',
+                            'kubernetes-prototype-ci'
+                        )
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+                listView('Continuous Deployment') {
+                    description('Continuous Deployment jobs for prototypes')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names(
+                            'cloudformation-serverless',
+                            'kubernetes-prototype-infra',
+                            'kubernetes-prototype-safeguard'
+                        )
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('react-webpack-seed') {
-          displayName('react-webpack-seed')
-          description('Folder for the react-webpack-seed Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the React.js and Webpack Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('react-webpack-seed')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('saints-xctf') {
+            displayName('saints-xctf')
+            description('Folder for the SaintsXCTF application')
+        }
   - script: >
-      folder('react-16-3-demo') {
-          displayName('react-16-3-demo')
-          description('Folder for the react-16-3-demo Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the React 16.3 Demo Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('react-16-3-demo-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('saints-xctf/api') {
+            displayName('api')
+            description('Folder for the SaintsXCTF API application')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the SaintsXCTF API Application')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('saints-xctf-api-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('saints-xctf-infrastructure') {
-          displayName('saints-xctf-infrastructure')
-          description('Folder for the saints-xctf-infrastructure Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the SaintsXCTF Infrastructure')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('saints-xctf-infrastructure-dev', 'saints-xctf-infrastructure-prod')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-              listView('Continuous Deployment') {
-                  description('Continuous Deployment jobs for the SaintsXCTF Infrastructure')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('saints-xctf-rds-snapshot-lambda')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('saints-xctf/infrastructure') {
+            displayName('infrastructure')
+            description('Folder for the SaintsXCTF Infrastructure')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the SaintsXCTF Infrastructure')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('saints-xctf-infrastructure-dev', 'saints-xctf-infrastructure-prod')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+                listView('Continuous Deployment') {
+                    description('Continuous Deployment jobs for the SaintsXCTF Infrastructure')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names(
+                            'saints-xctf-rds-snapshot-lambda',
+                            'deploy-all',
+                            'deploy-dev',
+                            'destroy-dev',
+                            'deploy-bastion-dev',
+                            'destroy-bastion-dev',
+                            'deploy-database-dev',
+                            'destroy-database-dev',
+                            'deploy-database-snapshot-dev',
+                            'destroy-database-snapshot-dev',
+                            'deploy-saints-xctf-com-dev',
+                            'destroy-saints-xctf-com-dev',
+                            'deploy-saints-xctf-com-asset-dev',
+                            'destroy-saints-xctf-com-asset-dev',
+                            'deploy-saints-xctf-com-auth-dev',
+                            'destroy-saints-xctf-com-auth-dev',
+                            'deploy-saints-xctf-com-fn-dev',
+                            'destroy-saints-xctf-com-fn-dev',
+                            'deploy-saints-xctf-com-uasset-dev',
+                            'destroy-saints-xctf-com-uasset-dev',
+                            'deploy-secrets-manager-dev',
+                            'destroy-secrets-manager-dev',
+                        )
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }
   - script: >
-      folder('saints-xctf-api') {
-          displayName('saints-xctf-api')
-          description('Folder for the saints-xctf-api Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                      'hudson.model.Item.Create',
-                      'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the SaintsXCTF API Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('saints-xctf-api-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
-  - script: >
-      folder('saints-xctf-web') {
-          displayName('saints-xctf-web')
-          description('Folder for the saints-xctf-web Repository')
-          primaryView('All')
-          authorization {
-              permissions('andy', [
-                  'hudson.model.Item.Create',
-                  'hudson.model.Item.Discover'
-              ])
-              permission('hudson.model.Item.Discover', 'guest')
-          }
-          views {
-              listView('Continuous Integration') {
-                  description('Continuous Integration jobs for the SaintsXCTF Web Application')
-                  filterBuildQueue()
-                  filterExecutors()
-                  jobs {
-                      names('saints-xctf-web-test')
-                  }
-                  columns() {
-                      status()
-                      weather()
-                      name()
-                      lastSuccess()
-                      lastFailure()
-                      lastDuration()
-                      buildButton()
-                  }
-              }
-          }
-      }
+        folder('saints-xctf/web') {
+            displayName('web')
+            description('Folder for the SaintsXCTF web application')
+            primaryView('All')
+            authorization {
+                permissions('andy', [
+                    'hudson.model.Item.Create',
+                    'hudson.model.Item.Discover'
+                ])
+                permission('hudson.model.Item.Discover', 'guest')
+            }
+            views {
+                listView('Continuous Integration') {
+                    description('Continuous Integration jobs for the SaintsXCTF Web Application')
+                    filterBuildQueue()
+                    filterExecutors()
+                    jobs {
+                        names('saints-xctf-web-test')
+                    }
+                    columns() {
+                        status()
+                        weather()
+                        name()
+                        lastSuccess()
+                        lastFailure()
+                        lastDuration()
+                        buildButton()
+                    }
+                }
+            }
+        }

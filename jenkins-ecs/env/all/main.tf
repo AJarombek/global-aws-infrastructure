@@ -23,3 +23,7 @@ terraform {
 module "acm" {
   source = "../../modules/acm"
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+}

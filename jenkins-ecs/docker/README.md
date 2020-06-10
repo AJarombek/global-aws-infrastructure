@@ -7,35 +7,28 @@ Docker container for a Jenkins server.
 **Push the Jenkins Docker image to ECR**
 
 ```bash
-IMAGE_TAG=1.0.0
-
-python3.8 -m venv env
-source ./env/bin/activate
-python3.8 -m pip install -r requirements.txt
-
-python3.8 push-image.py ${IMAGE_TAG} push
-
-deactivate
+./push-ecr.sh 1.0.0
 ```
 
 **Build and start the Jenkins container locally**
 
 ```bash
-IMAGE_TAG=1.0.0
-
-python3.8 -m venv env
-source ./env/bin/activate
-python3.8 -m pip install -r requirements.txt
-
-python3.8 push-image.py ${IMAGE_TAG}
-
-deactivate
-
-docker container stop jenkins-jarombek-io
-docker container rm jenkins-jarombek-io
-
-docker container run --name jenkins-jarombek-io -p 8080:8080 -p 50000:50000 jenkins-jarombek-io:latest
+./start-local.sh 1.0.0
 ```
+
+### Files
+
+| Filename                | Description                                                                                  |
+|-------------------------|----------------------------------------------------------------------------------------------|
+| `Dockerfile`            | Dockerfile for the Jenkins server.                                                           |
+| `jenkins-template.yaml` | Jenkins Configuration as Code file.                                                          |
+| `plugins.txt`           | List of plugins and corresponding versions to install.                                       |
+| `prepare-image.sh`      | Prepare an image with appropriate credentials and secrets.                                   |
+| `push-ecr.sh`           | Push an image to an ECR repository on AWS.                                                   |
+| `push-image.py`         | Helper Python script to push an image to ECR.                                                |
+| `push-image.sh`         | Helper Bash script to push an image to ECR.                                                  |
+| `requirements.txt`      | Dependencies of the Python script.                                                           |
+| `start-local.sh`        | Build and start the Jenkins Docker container locally.                                        |
 
 ### Resources
 
