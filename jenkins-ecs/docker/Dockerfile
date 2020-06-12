@@ -36,16 +36,30 @@ RUN mkdir bin \
 RUN pip3.8 install awscli
 
 # Install Node.js
-RUN apt-get install -y build-essential libssl-dev \
-    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash \
-    && export NVM_DIR="$HOME/.nvm" \
-    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
-    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
-    && nvm install --lts  \
-    && nvm use --lts \
-    && npm i yarn -g
+RUN apt-get install -y build-essential libssl-dev
+
+ENV NVM_DIR /usr/local/.nvm
+ENV NODE_VERSION 14.4.0
+
+WORKDIR /usr/local/
+RUN mkdir .nvm && chown jenkins .nvm
+USER jenkins
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+SHELL ["/bin/bash", "-c"]
+RUN source $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION  \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV PATH $NVM_DIR:$PATH
+
+RUN npm i yarn -g
 
 # Install JQ
+USER root
 RUN apt-get install -y jq
 
 # Configure the Jenkins server with plugins and seed jobs.

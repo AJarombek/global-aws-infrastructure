@@ -23,9 +23,15 @@ data "aws_vpc" "resources-vpc" {
   }
 }
 
-data "aws_subnet" "resources-vpc-public-subnet" {
+data "aws_subnet" "resources-dotty-public-subnet" {
   tags = {
-    Name = "resources-vpc-public-subnet"
+    Name = "resources-dotty-public-subnet"
+  }
+}
+
+data "aws_subnet" "resources-grandmas-blanket-public-subnet" {
+  tags = {
+    Name = "resources-grandmas-blanket-public-subnet"
   }
 }
 
@@ -34,7 +40,7 @@ data "aws_iam_role" "ecs-task-role" {
 }
 
 data "template_file" "container-definition" {
-  template = file("${path.module}/${local.container_def}")
+  template = file("${path.module}/container-def/${local.container_def}")
 
   vars = {
     ACCOUNT_ID = data.aws_caller_identity.current.account_id
@@ -56,11 +62,11 @@ resource "aws_ecs_cluster" "jenkins-jarombek-io-ecs-cluster" {
 }
 
 resource "aws_cloudwatch_log_group" "jenkins-jarombek-io-ecs-task-logs" {
-  name = "/ecs/fargate-tasks"
+  name = "/ecs/jenkins-jarombek-io"
   retention_in_days = 7
 
   tags = {
-    Name = "ecs-fargate-tasks"
+    Name = "ecs-jenkins-jarombek-io"
     Application = "jenkins-jarombek-io"
     Environment = local.env_tag
   }
@@ -97,7 +103,10 @@ resource "aws_ecs_service" "jenkins-jarombek-io-service" {
 
   network_configuration {
     security_groups = [aws_security_group.jenkins-jarombek-io-ecs-sg.id]
-    subnets = [data.aws_subnet.resources-vpc-public-subnet.id]
+    subnets = [
+      data.aws_subnet.resources-dotty-public-subnet.id,
+      data.aws_subnet.resources-grandmas-blanket-public-subnet.id
+    ]
     assign_public_ip = true
   }
 

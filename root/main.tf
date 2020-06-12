@@ -6,8 +6,15 @@
 
 locals {
   public_cidr = "0.0.0.0/0"
-  resources_public_subnet_cidrs = ["10.0.1.0/24"]
-  resources_private_subnet_cidrs = ["10.0.2.0/24"]
+  resources_public_subnet_cidrs = [
+    "10.0.1.0/24",
+    "10.0.2.0/24"
+  ]
+
+  resources_private_subnet_cidrs = [
+    "10.0.3.0/24",
+    "10.0.4.0/24"
+  ]
 
   sandbox_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
   sandbox_private_subnet_cidrs = []
@@ -70,8 +77,15 @@ locals {
     },
   ]
 
-  resources_public_subnet_azs = ["us-east-1c"]
-  resources_private_subnet_azs = ["us-east-1c"]
+  resources_public_subnet_azs = [
+    "us-east-1a",
+    "us-east-1b"
+  ]
+
+  resources_private_subnet_azs = [
+    "us-east-1c",
+    "us-east-1d"
+  ]
 
   sandbox_vpc_sg_rules = [
     {
@@ -149,24 +163,21 @@ terraform {
 }
 
 module "resources-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.9"
 
   # Mandatory arguments
   name = "resources"
   tag_name = "resources"
 
   # Optional arguments
-  public_subnet_count = 1
-  private_subnet_count = 1
+  public_subnet_count = 2
+  private_subnet_count = 2
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
-  public_subnet_custom_names = true
-  public_subnet_names = ["resources-vpc-public-subnet"]
-
-  private_subnet_custom_names = true
-  private_subnet_names = ["resources-vpc-private-subnet"]
+  public_subnet_names = ["resources-dotty-public-subnet", "resources-grandmas-blanket-public-subnet"]
+  private_subnet_names = ["resources-lily-private-subnet", "resources-teddy-private-subnet"]
 
   public_subnet_azs = local.resources_public_subnet_azs
   private_subnet_azs = local.resources_private_subnet_azs
@@ -178,7 +189,7 @@ module "resources-vpc" {
 }
 
 module "sandbox-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.9"
 
   # Mandatory arguments
   name = "sandbox"
@@ -191,10 +202,7 @@ module "sandbox-vpc" {
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
-  public_subnet_custom_names = true
   public_subnet_names = ["sandbox-vpc-fearless-public-subnet", "sandbox-vpc-speaknow-public-subnet"]
-
-  private_subnet_custom_names = true
   private_subnet_names = []
 
   public_subnet_azs = local.sandbox_public_subnet_azs

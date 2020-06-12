@@ -17,4 +17,5 @@ deactivate
 docker container stop jenkins-jarombek-io
 docker container rm jenkins-jarombek-io
 
-docker container run --name jenkins-jarombek-io -p 8080:8080 -p 50000:50000 jenkins-jarombek-io:latest
+docker container run --name jenkins-jarombek-io -p 8080:8080 -p 50000:50000 \
+    -v /var/run/docker.sock:/var/run/docker.sock jenkins-jarombek-io:latest
