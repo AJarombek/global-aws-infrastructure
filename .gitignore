@@ -3,5 +3,5 @@
 **/.terraform
 *.pem
 **/__pycache__
-jenkins-ecs/docker/jenkins.yaml
-jenkins-ecs/docker/env
+jenkins-kubernetes/docker/jenkins.yaml
+jenkins-kubernetes/docker/env

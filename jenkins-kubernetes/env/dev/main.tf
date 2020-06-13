@@ -1,12 +1,12 @@
 /**
- * Infrastructure for the jenkins.jarombek.io ECS cluster.
+ * Infrastructure for the dev.jenkins.jarombek.io ECS cluster.
  * Author: Andrew Jarombek
  * Date: 6/4/2020
  */
 
 locals {
-  prod = true
-  env = "prod"
+  prod = false
+  env = "dev"
   public_cidr = "0.0.0.0/0"
 }
 
@@ -17,10 +17,14 @@ provider "aws" {
 terraform {
   required_version = ">= 0.12"
 
+  required_providers {
+    aws = ">= 2.66.0"
+  }
+
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/jenkins-ecs/env/prod"
+    key = "global-aws-infrastructure/jenkins-ecs/env/dev"
     region = "us-east-1"
   }
 }
@@ -64,14 +68,7 @@ module "alb" {
   load-balancer-sg-rules-source = []
 }
 
-module "ecs" {
-  source = "../../modules/ecs"
+module "kubernetes" {
+  source = "../../modules/kubernetes"
   prod = local.prod
-  jenkins-jarombek-io-desired-count = 1
-  alb-security-group = module.alb.alb-security-group
-  jenkins-jarombek-io-lb-target-group = module.alb.jenkins-jarombek-io-lb-target-group
-
-  ecs_depends_on = [
-    module.alb.ecs-dependencies
-  ]
 }

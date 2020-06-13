@@ -6,12 +6,12 @@
 
 locals {
   public_cidr = "0.0.0.0/0"
-  resources_public_subnet_cidrs = [
+  kubernetes_public_subnet_cidrs = [
     "10.0.1.0/24",
     "10.0.2.0/24"
   ]
 
-  resources_private_subnet_cidrs = [
+  kubernetes_private_subnet_cidrs = [
     "10.0.3.0/24",
     "10.0.4.0/24"
   ]
@@ -19,7 +19,7 @@ locals {
   sandbox_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
   sandbox_private_subnet_cidrs = []
 
-  resources_vpc_sg_rules = [
+  kubernetes_vpc_sg_rules = [
     {
       # Inbound traffic from the internet
       type = "ingress"
@@ -77,12 +77,12 @@ locals {
     },
   ]
 
-  resources_public_subnet_azs = [
+  kubernetes_public_subnet_azs = [
     "us-east-1a",
     "us-east-1b"
   ]
 
-  resources_private_subnet_azs = [
+  kubernetes_private_subnet_azs = [
     "us-east-1c",
     "us-east-1d"
   ]
@@ -145,6 +145,23 @@ locals {
 
   sandbox_public_subnet_azs = ["us-east-1a", "us-east-1b"]
   sandbox_private_subnet_azs = []
+
+  kubernetes_public_subnet_tags = [
+    {
+      Application = "kubernetes"
+    },
+    {
+      Application = "kubernetes"
+    }
+  ]
+  kubernetes_private_subnet_tags = [
+    {
+      Application = "kubernetes"
+    },
+    {
+      Application = "kubernetes"
+    }
+  ]
 }
 
 provider "aws" {
@@ -163,7 +180,7 @@ terraform {
 }
 
 module "kubernetes-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.9"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.11"
 
   # Mandatory arguments
   name = "kubernetes"
@@ -179,15 +196,18 @@ module "kubernetes-vpc" {
   public_subnet_names = ["kubernetes-dotty-public-subnet", "kubernetes-grandmas-blanket-public-subnet"]
   private_subnet_names = ["kubernetes-lily-private-subnet", "kubernetes-teddy-private-subnet"]
 
-  public_subnet_azs = local.resources_public_subnet_azs
-  private_subnet_azs = local.resources_private_subnet_azs
-  public_subnet_cidrs = local.resources_public_subnet_cidrs
-  private_subnet_cidrs = local.resources_private_subnet_cidrs
+  public_subnet_azs = local.kubernetes_public_subnet_azs
+  private_subnet_azs = local.kubernetes_private_subnet_azs
+  public_subnet_cidrs = local.kubernetes_public_subnet_cidrs
+  private_subnet_cidrs = local.kubernetes_private_subnet_cidrs
+
+  public_subnet_tags = local.kubernetes_public_subnet_tags
+  private_subnet_tags = local.kubernetes_private_subnet_tags
 
   public_subnet_map_public_ip_on_launch = true
 
   enable_security_groups = true
-  sg_rules = local.resources_vpc_sg_rules
+  sg_rules = local.kubernetes_vpc_sg_rules
 }
 
 module "sandbox-vpc" {
