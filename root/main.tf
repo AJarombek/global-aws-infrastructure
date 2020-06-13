@@ -184,6 +184,8 @@ module "kubernetes-vpc" {
   public_subnet_cidrs = local.resources_public_subnet_cidrs
   private_subnet_cidrs = local.resources_private_subnet_cidrs
 
+  public_subnet_map_public_ip_on_launch = true
+
   enable_security_groups = true
   sg_rules = local.resources_vpc_sg_rules
 }
