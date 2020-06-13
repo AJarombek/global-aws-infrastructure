@@ -22,9 +22,15 @@ data "aws_vpc" "resources-vpc" {
   }
 }
 
-data "aws_subnet" "resources-vpc-public-subnet" {
+data "aws_subnet" "resources-dotty-public-subnet" {
   tags = {
-    Name = "resources-vpc-public-subnet"
+    Name = "resources-dotty-public-subnet"
+  }
+}
+
+data "aws_subnet" "resources-grandmas-blanket-public-subnet" {
+  tags = {
+    Name = "resources-grandmas-blanket-public-subnet"
   }
 }
 
@@ -50,7 +56,8 @@ resource "aws_lb" "jenkins-jarombek-io-lb" {
   name = "jenkins-jarombek-io-${local.env}-alb"
 
   subnets = [
-    data.aws_subnet.resources-vpc-public-subnet.id
+    data.aws_subnet.resources-dotty-public-subnet.id,
+    data.aws_subnet.resources-grandmas-blanket-public-subnet.id
   ]
 
   security_groups = [aws_security_group.jenkins-jarombek-io-lb-security-group.id]
@@ -63,7 +70,7 @@ resource "aws_lb" "jenkins-jarombek-io-lb" {
 }
 
 resource "aws_lb_target_group" "jenkins-jarombek-io-lb-target-group" {
-  name = "jenkins-jarombek-io-${local.env}-lb-target"
+  name = "jenkins-${local.env}-lb-target"
 
   health_check {
     enabled = true

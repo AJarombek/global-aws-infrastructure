@@ -80,7 +80,12 @@ resource "aws_ecs_task_definition" "jenkins-jarombek-io-task" {
   cpu = 256
   memory = 512
 
-  container_definitions = file("${path.module}/container-def/${local.container_def}")
+  container_definitions = data.template_file.container-definition.rendered
+
+  volume {
+    name = "docker"
+    host_path = "/var/run/docker.sock"
+  }
 
   tags = {
     Name = "jenkins-jarombek-io-ecs-${local.env}-task"

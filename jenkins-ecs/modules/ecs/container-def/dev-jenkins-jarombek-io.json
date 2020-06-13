@@ -13,7 +13,13 @@
       }
     },
     "networkMode": "awsvpc",
-    "essential": false,
+    "essential": true,
+    "mountPoints": [
+      {
+        "sourceVolume": "docker",
+        "containerPath": "/var/run/docker.sock"
+      }
+    ],
     "portMappings": [
       {
         "containerPort": 8080,

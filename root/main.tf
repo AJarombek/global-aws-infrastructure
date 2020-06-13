@@ -162,12 +162,12 @@ terraform {
   }
 }
 
-module "resources-vpc" {
+module "kubernetes-vpc" {
   source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.9"
 
   # Mandatory arguments
-  name = "resources"
-  tag_name = "resources"
+  name = "kubernetes"
+  tag_name = "kubernetes"
 
   # Optional arguments
   public_subnet_count = 2
@@ -176,8 +176,8 @@ module "resources-vpc" {
   enable_dns_hostnames = true
   enable_nat_gateway = false
 
-  public_subnet_names = ["resources-dotty-public-subnet", "resources-grandmas-blanket-public-subnet"]
-  private_subnet_names = ["resources-lily-private-subnet", "resources-teddy-private-subnet"]
+  public_subnet_names = ["kubernetes-dotty-public-subnet", "kubernetes-grandmas-blanket-public-subnet"]
+  private_subnet_names = ["kubernetes-lily-private-subnet", "kubernetes-teddy-private-subnet"]
 
   public_subnet_azs = local.resources_public_subnet_azs
   private_subnet_azs = local.resources_private_subnet_azs
