@@ -208,6 +208,7 @@ resource "kubernetes_namespace" "sandox-namespace" {
 
     labels = {
       name = "sandbox"
+      environment = "sandbox"
     }
   }
 }
@@ -218,6 +219,18 @@ resource "kubernetes_namespace" "jenkins-namespace" {
 
     labels = {
       name = "jenkins"
+      environment = "production"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "jenkins-dev-namespace" {
+  metadata {
+    name = "jenkins-dev"
+
+    labels = {
+      name = "jenkins-dev"
+      environment = "development"
     }
   }
 }
@@ -228,6 +241,18 @@ resource "kubernetes_namespace" "jarombek-com-namespace" {
 
     labels = {
       name = "jarombek-com"
+      environment = "production"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "jarombek-com-dev-namespace" {
+  metadata {
+    name = "jarombek-com-dev"
+
+    labels = {
+      name = "jarombek-com-dev"
+      environment = "development"
     }
   }
 }
@@ -238,6 +263,18 @@ resource "kubernetes_namespace" "saints-xctf-namespace" {
 
     labels = {
       name = "saints-xctf"
+      environment = "production"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "saints-xctf-dev-namespace" {
+  metadata {
+    name = "saints-xctf-dev"
+
+    labels = {
+      name = "saints-xctf-dev"
+      environment = "development"
     }
   }
 }

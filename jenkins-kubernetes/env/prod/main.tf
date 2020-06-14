@@ -6,7 +6,7 @@
 
 locals {
   prod = true
-  env = "prod"
+  env = "production"
   public_cidr = "0.0.0.0/0"
 }
 
@@ -27,11 +27,6 @@ terraform {
     key = "global-aws-infrastructure/jenkins-ecs/env/prod"
     region = "us-east-1"
   }
-}
-
-module "iam" {
-  source = "../../modules/iam"
-  prod = local.prod
 }
 
 module "alb" {
@@ -68,14 +63,7 @@ module "alb" {
   load-balancer-sg-rules-source = []
 }
 
-module "ecs" {
-  source = "../../modules/ecs"
+module "kubernetes" {
+  source = "../../modules/kubernetes"
   prod = local.prod
-  jenkins-jarombek-io-desired-count = 1
-  alb-security-group = module.alb.alb-security-group
-  jenkins-jarombek-io-lb-target-group = module.alb.jenkins-jarombek-io-lb-target-group
-
-  ecs_depends_on = [
-    module.alb.ecs-dependencies
-  ]
 }

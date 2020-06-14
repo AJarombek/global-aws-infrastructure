@@ -1,0 +1,22 @@
+# Kubernetes NodePort service for the Jenkins server.
+# Author: Andrew Jarombek
+# Date: 6/14/2020
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: jenkins
+  labels:
+    version: v1.0.0
+    environment: production
+    application: jenkins-server
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30001
+      protocol: TCP
+  selector:
+    application: jenkins-server

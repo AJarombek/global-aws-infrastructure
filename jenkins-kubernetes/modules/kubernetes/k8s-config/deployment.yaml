@@ -1,0 +1,44 @@
+# Kubernetes deployment for the Jenkins server.
+# Author: Andrew Jarombek
+# Date: 6/14/2020
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  namespace: jenkins
+  labels:
+    version: v1.0.0
+    environment: production
+    application: jenkins-server
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      application: jenkins-server
+      environment: production
+  template:
+    metadata:
+      labels:
+        version: v1.0.0
+        environment: production
+        application: jenkins-server
+    spec:
+      containers:
+        - name: jenkins-server
+          image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0
+          readinessProbe:
+            periodSeconds: 1
+            initialDelaySeconds: 5
+            httpGet:
+              path: /
+              port: 8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP

@@ -6,7 +6,7 @@
 
 locals {
   prod = false
-  env = "dev"
+  env = "development"
   public_cidr = "0.0.0.0/0"
 }
 
@@ -27,11 +27,6 @@ terraform {
     key = "global-aws-infrastructure/jenkins-ecs/env/dev"
     region = "us-east-1"
   }
-}
-
-module "iam" {
-  source = "../../modules/iam"
-  prod = local.prod
 }
 
 module "alb" {
