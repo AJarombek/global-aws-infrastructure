@@ -125,7 +125,8 @@ resource "kubernetes_ingress" "ingress" {
     namespace = "jenkins"
 
     annotations = {
-      kubernetes.io/ingress.class = "alb"
+      "kubernetes.io/ingress.class" = "alb"
+      "alb.ingress.kubernetes.io/scheme" = "internet-facing"
     }
 
     labels = {

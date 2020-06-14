@@ -9,6 +9,7 @@ metadata:
   namespace: jenkins
   annotations:
     kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
   labels:
     version: v1.0.0
     environment: production

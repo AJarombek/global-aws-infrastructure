@@ -2,8 +2,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: alb-ingress-controller
-  name: alb-ingress-controller
+    app.kubernetes.io/name: aws-alb-ingress-controller
+  name: aws-alb-ingress-controller
 rules:
   - apiGroups:
       - ""

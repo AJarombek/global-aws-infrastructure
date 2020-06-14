@@ -125,6 +125,8 @@ locals {
 # Existing AWS Resources
 #-----------------------
 
+data "aws_caller_identity" "current" {}
+
 data "aws_eks_cluster" "cluster" {
   name = module.andrew-jarombek-eks-cluster.cluster_id
 }
@@ -149,7 +151,7 @@ provider "kubernetes" {
 #----------------------
 
 module "kubernetes-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.11"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.12"
 
   # Mandatory arguments
   name = "kubernetes"
@@ -198,15 +200,30 @@ module "andrew-jarombek-eks-cluster" {
   ]
 }
 
+resource "aws_iam_role" "alb-ingress-controller-role" {
+  name = "aws-alb-ingress-controller"
+  path = "/kubernetes/"
+  assume_role_policy = file("${path.module}/alb-ingress-controller-role.json")
+}
+
 resource "aws_iam_policy" "alb-ingress-controller-policy" {
-  name = "alb-ingress-controller"
+  name = "aws-alb-ingress-controller"
   path = "/kubernetes/"
   policy = file("${path.module}/alb-ingress-controller-policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "alb-ingress-controller-role-policy" {
+  policy_arn = aws_iam_policy.alb-ingress-controller-policy.arn
+  role = aws_iam_role.alb-ingress-controller-role.name
 }
 
 #-----------------------------
 # Kubernetes Resources for EKS
 #-----------------------------
+
+#-----------
+# Namespaces
+#-----------
 
 resource "kubernetes_namespace" "sandox-namespace" {
   metadata {
@@ -285,23 +302,37 @@ resource "kubernetes_namespace" "saints-xctf-dev-namespace" {
   }
 }
 
-resource "kubernetes_service_account" "service-account" {
+#-----------------------
+# ALB Ingress Controller
+#-----------------------
+
+resource "kubernetes_service_account" "alb-ingress-controller" {
   metadata {
-    name = "alb-ingress-controller"
+    name = "aws-alb-ingress-controller"
     namespace = "kube-system"
 
+    annotations = {
+      "eks.amazonaws.com/role-arn" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/kubernetes/aws-alb-ingress-controller"
+    }
+
     labels = {
-      app.kubernetes.io/name = "alb-ingress-controller"
+      "app.kubernetes.io/name" = "aws-alb-ingress-controller"
     }
   }
+
+  depends_on = [
+    aws_iam_policy.alb-ingress-controller-policy,
+    aws_iam_role.alb-ingress-controller-role,
+    aws_iam_role_policy_attachment.alb-ingress-controller-role-policy
+  ]
 }
 
-resource "kubernetes_cluster_role" "cluster-role" {
+resource "kubernetes_cluster_role" "alb-ingress-controller" {
   metadata {
-    name = "alb-ingress-controller"
+    name = "aws-alb-ingress-controller"
 
     labels = {
-      app.kubernetes.io/name = "alb-ingress-controller"
+      "app.kubernetes.io/name" = "aws-alb-ingress-controller"
     }
   }
 
@@ -318,24 +349,70 @@ resource "kubernetes_cluster_role" "cluster-role" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "cluster-role-binding" {
+resource "kubernetes_cluster_role_binding" "alb-ingress-controller" {
   metadata {
-    name = "alb-ingress-controller"
+    name = "aws-alb-ingress-controller"
 
     labels = {
-      app.kubernetes.io/name = "alb-ingress-controller"
+      "app.kubernetes.io/name" = "aws-alb-ingress-controller"
     }
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind = "ClusterRole"
-    name = "alb-ingress-controller"
+    name = "aws-alb-ingress-controller"
   }
 
   subject {
     kind = "ServiceAccount"
-    name = "alb-ingress-controller"
+    name = "aws-alb-ingress-controller"
     namespace = "kube-system"
   }
+}
+
+resource "kubernetes_deployment" "alb-ingress-controller" {
+  metadata {
+    name = "aws-alb-ingress-controller"
+    namespace = "kube-system"
+
+    labels = {
+      "app.kubernetes.io/name" = "aws-alb-ingress-controller"
+    }
+  }
+
+  spec {
+    selector {
+      match_labels = {
+        "app.kubernetes.io/name" = "aws-alb-ingress-controller"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          "app.kubernetes.io/name" = "aws-alb-ingress-controller"
+        }
+      }
+
+      spec {
+        container {
+          name = "aws-alb-ingress-controller"
+          image = "docker.io/amazon/aws-alb-ingress-controller:v1.1.4"
+          args = [
+            "--ingress-class=alb",
+            "--cluster-name=${local.cluster_name}"
+          ]
+        }
+
+        service_account_name = "aws-alb-ingress-controller"
+      }
+    }
+  }
+
+  depends_on = [
+    aws_iam_policy.alb-ingress-controller-policy,
+    aws_iam_role.alb-ingress-controller-role,
+    aws_iam_role_policy_attachment.alb-ingress-controller-role-policy
+  ]
 }
