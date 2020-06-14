@@ -21,6 +21,10 @@ provider "kubernetes" {
   load_config_file = false
 }
 
+#---------------------
+# Kubernetes Resources
+#---------------------
+
 resource "kubernetes_deployment" "deployment" {
   metadata {
     name = "jenkins-deployment"

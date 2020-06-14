@@ -198,6 +198,12 @@ module "andrew-jarombek-eks-cluster" {
   ]
 }
 
+resource "aws_iam_policy" "alb-ingress-controller-policy" {
+  name = "alb-ingress-controller"
+  path = "/kubernetes/"
+  policy = file("${path.module}/alb-ingress-controller-policy.json")
+}
+
 #-----------------------------
 # Kubernetes Resources for EKS
 #-----------------------------
@@ -276,5 +282,60 @@ resource "kubernetes_namespace" "saints-xctf-dev-namespace" {
       name = "saints-xctf-dev"
       environment = "development"
     }
+  }
+}
+
+resource "kubernetes_service_account" "service-account" {
+  metadata {
+    name = "alb-ingress-controller"
+    namespace = "kube-system"
+
+    labels = {
+      app.kubernetes.io/name = "alb-ingress-controller"
+    }
+  }
+}
+
+resource "kubernetes_cluster_role" "cluster-role" {
+  metadata {
+    name = "alb-ingress-controller"
+
+    labels = {
+      app.kubernetes.io/name = "alb-ingress-controller"
+    }
+  }
+
+  rule {
+    api_groups = ["", "extensions"]
+    resources = ["configmaps", "endpoints", "events", "ingresses", "ingresses/status", "services"]
+    verbs = ["create", "get", "list", "update", "watch", "patch"]
+  }
+
+  rule {
+    api_groups = ["", "extensions"]
+    resources = ["nodes", "pods", "secrets", "services", "namespaces"]
+    verbs = ["get", "list", "watch"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "cluster-role-binding" {
+  metadata {
+    name = "alb-ingress-controller"
+
+    labels = {
+      app.kubernetes.io/name = "alb-ingress-controller"
+    }
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind = "ClusterRole"
+    name = "alb-ingress-controller"
+  }
+
+  subject {
+    kind = "ServiceAccount"
+    name = "alb-ingress-controller"
+    namespace = "kube-system"
   }
 }
