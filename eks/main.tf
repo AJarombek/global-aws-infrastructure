@@ -9,10 +9,14 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.12.26"
 
   required_providers {
     aws = ">= 2.66.0"
+    random = ">= 2.2"
+    null = ">= 2.1"
+    local = ">= 1.4"
+    template = ">= 2.1"
   }
 
   backend "s3" {
@@ -28,217 +32,157 @@ terraform {
 #----------------
 
 locals {
-  eks_node_group_subnets = [
+  public_cidr = "0.0.0.0/0"
+  cluster_name = "andrew-jarombek-eks-cluster"
+
+  kubernetes_public_subnet_cidrs = [
+    "10.0.1.0/24",
+    "10.0.2.0/24"
+  ]
+
+  kubernetes_private_subnet_cidrs = [
+    "10.0.3.0/24",
+    "10.0.4.0/24"
+  ]
+
+  kubernetes_vpc_sg_rules = [
     {
-      Name = "kubernetes-lily-public-subnet"
+      # Inbound traffic from the internet
+      type = "ingress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = local.public_cidr
     },
     {
-      Name = "kubernetes-teddy-public-subnet"
-    }
+      type = "ingress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      type = "ingress"
+      from_port = -1
+      to_port = -1
+      protocol = "icmp"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      type = "ingress"
+      from_port = 22
+      to_port = 22
+      protocol = "tcp"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      # Outbound traffic for health checks
+      type = "egress"
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      # Outbound traffic for HTTP
+      type = "egress"
+      from_port = 80
+      to_port = 80
+      protocol = "tcp"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      # Outbound traffic for HTTPS
+      type = "egress"
+      from_port = 443
+      to_port = 443
+      protocol = "tcp"
+      cidr_blocks = local.public_cidr
+    },
   ]
+
+  kubernetes_public_subnet_azs = [
+    "us-east-1a",
+    "us-east-1b"
+  ]
+
+  kubernetes_private_subnet_azs = [
+    "us-east-1b",
+    "us-east-1c"
+  ]
+
+  subnet_tags = {
+    Application = "kubernetes",
+    "kubernetes.io/cluster/${local.cluster_name}" = "shared",
+    "kubernetes.io/role/elb" = "1"
+  }
+
+  kubernetes_public_subnet_tags = [local.subnet_tags, local.subnet_tags]
+  kubernetes_private_subnet_tags = [local.subnet_tags, local.subnet_tags]
 }
 
 #-----------------------
 # Existing AWS Resources
 #-----------------------
 
-data "aws_availability_zones" "available" {
-  state = "available"
+data "aws_eks_cluster" "cluster" {
+  name = module.andrew-jarombek-eks-cluster.cluster_id
 }
 
-data "aws_vpc" "kubernetes-vpc" {
-  tags = {
-    Name = "kubernetes-vpc"
-  }
-}
-
-data "aws_subnet" "kubernetes-dotty-public-subnet" {
-  tags = {
-    Name = "kubernetes-dotty-public-subnet"
-  }
-}
-
-data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
-  tags = {
-    Name = "kubernetes-grandmas-blanket-public-subnet"
-  }
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.andrew-jarombek-eks-cluster.cluster_id
 }
 
 #----------------------
 # AWS Resources for EKS
 #----------------------
 
-resource "aws_cloudwatch_log_group" "eks-cluster-log-group" {
-  name = "/eks/andrew-jarombek-eks-cluster"
-  retention_in_days = 7
+module "kubernetes-vpc" {
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.11"
 
-  tags = {
-    Name = "andrew-jarombek-eks-cluster-logs"
-    Application = "kubernetes"
-    Environment = "all"
-  }
+  # Mandatory arguments
+  name = "kubernetes"
+  tag_name = "kubernetes"
+
+  # Optional arguments
+  public_subnet_count = 2
+  private_subnet_count = 2
+  enable_dns_support = true
+  enable_dns_hostnames = true
+  enable_nat_gateway = false
+
+  public_subnet_names = ["kubernetes-dotty-public-subnet", "kubernetes-grandmas-blanket-public-subnet"]
+  private_subnet_names = ["kubernetes-lily-private-subnet", "kubernetes-teddy-private-subnet"]
+
+  public_subnet_azs = local.kubernetes_public_subnet_azs
+  private_subnet_azs = local.kubernetes_private_subnet_azs
+  public_subnet_cidrs = local.kubernetes_public_subnet_cidrs
+  private_subnet_cidrs = local.kubernetes_private_subnet_cidrs
+
+  public_subnet_tags = local.kubernetes_public_subnet_tags
+  private_subnet_tags = local.kubernetes_private_subnet_tags
+
+  public_subnet_map_public_ip_on_launch = true
+
+  enable_security_groups = true
+  sg_rules = local.kubernetes_vpc_sg_rules
 }
 
-resource "aws_eks_cluster" "eks-cluster" {
-  name = "andrew-jarombek-eks-cluster"
-  role_arn = aws_iam_role.eks-cluster-role.arn
-  enabled_cluster_log_types = ["api"]
-  version = "1.16"
+module "andrew-jarombek-eks-cluster" {
+  source = "terraform-aws-modules/eks/aws"
+  version = "~> 12.1.0"
 
-  vpc_config {
-    security_group_ids = [
-      aws_security_group.eks-cluster-security.id
-    ]
-    subnet_ids = [
-      data.aws_subnet.kubernetes-dotty-public-subnet.id,
-      data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id
-    ]
-    endpoint_private_access = true
-    endpoint_public_access = true
-  }
+  create_eks = true
+  cluster_name = local.cluster_name
+  cluster_version = "1.16"
+  vpc_id = module.kubernetes-vpc.vpc_id
+  subnets = module.kubernetes-vpc.public_subnet_ids
 
-  depends_on = [
-    aws_cloudwatch_log_group.eks-cluster-log-group,
-    aws_iam_role_policy_attachment.eks-cluster-policy,
-    aws_iam_role_policy_attachment.eks-service-policy
-  ]
-
-  tags = {
-    Name = "andrew-jarombek-eks-cluster"
-    Application = "kubernetes"
-    Environment = "all"
-  }
-}
-
-resource "aws_iam_role" "eks-cluster-role" {
-  name = "eks-cluster-role"
-  path = "/kubernetes/"
-  assume_role_policy = file("${path.module}/eks-cluster-role.json")
-}
-
-resource "aws_iam_role_policy_attachment" "eks-cluster-policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role = aws_iam_role.eks-cluster-role.name
-}
-
-resource "aws_iam_role_policy_attachment" "eks-service-policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role = aws_iam_role.eks-cluster-role.name
-}
-
-resource "aws_security_group" "eks-cluster-security" {
-  name = "andrew-jarombek-eks-cluster-security"
-  vpc_id = data.aws_vpc.kubernetes-vpc.id
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tags = {
-    Name = "andrew-jarombek-eks-cluster-security"
-    Application = "kubernetes"
-    Environment = "all"
-  }
-}
-
-resource "aws_security_group_rule" "eks-cluster-security-egress" {
-  security_group_id = aws_security_group.eks-cluster-security.id
-  type = "egress"
-  from_port = 0
-  to_port = 0
-  protocol = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
-  description = "All outbound traffic is allowed"
-}
-
-resource "aws_security_group_rule" "eks-node-group-security-ingress-self" {
-  security_group_id = aws_security_group.eks-cluster-security.id
-  type = "ingress"
-  from_port = 0
-  to_port = 65535
-  protocol = "-1"
-  source_security_group_id = aws_security_group.eks-cluster-security.id
-  description = "Allow worker nodes in the node group to communicate with one another"
-}
-
-resource "aws_security_group_rule" "eks-cluster-security-ingress" {
-  security_group_id = aws_security_group.eks-cluster-security.id
-  type = "egress"
-  from_port = 443
-  to_port = 443
-  protocol = "tcp"
-  source_security_group_id = aws_security_group.eks-cluster-security.id
-  description = "Allow pods (on worker nodes) to communicate with the cluster API server"
-}
-
-resource "aws_subnet" "eks-node-group-subnets" {
-  count = 2
-
-  availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block = cidrsubnet(data.aws_vpc.kubernetes-vpc.cidr_block, 8, count.index + 3)
-  vpc_id = data.aws_vpc.kubernetes-vpc.id
-
-  tags = merge(
+  worker_groups = [
     {
-      "kubernetes.io/cluster/${aws_eks_cluster.eks-cluster.name}" = "shared"
-    },
-    local.eks_node_group_subnets[count.index]
-  )
-}
-
-
-resource "aws_eks_node_group" "eks-node-group" {
-  cluster_name = aws_eks_cluster.eks-cluster.name
-  node_group_name = "andrew-jarombek-eks-node-group"
-  node_role_arn = aws_iam_role.eks-node-role.arn
-  version = "1.16"
-
-  subnet_ids = [
-    aws_subnet.eks-node-group-subnets[0].id,
-    aws_subnet.eks-node-group-subnets[1].id
+      instance_type = "t2.medium"
+      asg_max_size = 2
+      asg_desired_capacity = 1
+    }
   ]
-
-  scaling_config {
-    desired_size = 1
-    max_size = 2
-    min_size = 1
-  }
-
-  ami_type = "AL2_x86_64"
-  instance_types = ["t3.medium"]
-  disk_size = 20
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eks-worker-node-policy,
-    aws_iam_role_policy_attachment.eks-cni-policy,
-    aws_iam_role_policy_attachment.eks-container-registry-policy
-  ]
-
-  tags = {
-    Name = "andrew-jarombek-eks-node-group"
-    Application = "kubernetes"
-    Environment = "all"
-    "kubernetes.io/cluster/${aws_eks_cluster.eks-cluster.name}" = "owned"
-  }
-}
-
-resource "aws_iam_role" "eks-node-role" {
-  name = "eks-node-role"
-  path = "/kubernetes/"
-  assume_role_policy = file("${path.module}/eks-node-role.json")
-}
-
-resource "aws_iam_role_policy_attachment" "eks-worker-node-policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role = aws_iam_role.eks-node-role.name
-}
-
-resource "aws_iam_role_policy_attachment" "eks-cni-policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role = aws_iam_role.eks-node-role.name
-}
-
-resource "aws_iam_role_policy_attachment" "eks-container-registry-policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role = aws_iam_role.eks-node-role.name
 }
