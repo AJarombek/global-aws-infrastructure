@@ -133,6 +133,17 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.andrew-jarombek-eks-cluster.cluster_id
 }
 
+#----------------------------
+# Kubernetes Provider for EKS
+#----------------------------
+
+provider "kubernetes" {
+  host = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token = data.aws_eks_cluster_auth.cluster.token
+  load_config_file = false
+}
+
 #----------------------
 # AWS Resources for EKS
 #----------------------
@@ -185,4 +196,48 @@ module "andrew-jarombek-eks-cluster" {
       asg_desired_capacity = 1
     }
   ]
+}
+
+#-----------------------------
+# Kubernetes Resources for EKS
+#-----------------------------
+
+resource "kubernetes_namespace" "sandox-namespace" {
+  metadata {
+    name = "sandbox"
+
+    labels = {
+      name = "sandbox"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "jenkins-namespace" {
+  metadata {
+    name = "jenkins"
+
+    labels = {
+      name = "jenkins"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "jarombek-com-namespace" {
+  metadata {
+    name = "jarombek-com"
+
+    labels = {
+      name = "jarombek-com"
+    }
+  }
+}
+
+resource "kubernetes_namespace" "saints-xctf-namespace" {
+  metadata {
+    name = "saints-xctf"
+
+    labels = {
+      name = "saints-xctf"
+    }
+  }
 }

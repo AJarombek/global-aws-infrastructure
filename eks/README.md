@@ -22,8 +22,9 @@ kubectl help --kubeconfig ./kubeconfig_andrew-jarombek-eks-cluster
 kubectl get all --kubeconfig ./kubeconfig_andrew-jarombek-eks-cluster
 
 export KUBECONFIG=~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew-jarombek-eks-cluster
-kubcetl config view
+kubectl config view
 kubectl get all
+kubectl get nodes
 ```
 
 ### Resources
@@ -31,3 +32,5 @@ kubectl get all
 1) [EKS Control Plane Logging](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
 2) [Barebones EKS Cluster](https://www.padok.fr/en/blog/aws-eks-cluster-terraform)
 3) [Local-Exec for Subnet Tags](https://github.com/hashicorp/terraform/issues/17352)
+4) [AWS EKS Terraform Module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/12.1.0)
+5) [Local Kubectl/Auth Setup](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
