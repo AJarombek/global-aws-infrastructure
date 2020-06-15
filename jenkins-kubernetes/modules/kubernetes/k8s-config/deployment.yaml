@@ -34,10 +34,10 @@ spec:
         - name: jenkins-server
           image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0
           readinessProbe:
-            periodSeconds: 1
-            initialDelaySeconds: 5
+            periodSeconds: 5
+            initialDelaySeconds: 20
             httpGet:
-              path: /
+              path: /login
               port: 8080
           ports:
             - containerPort: 8080

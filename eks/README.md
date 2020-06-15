@@ -34,3 +34,5 @@ kubectl get nodes
 3) [Local-Exec for Subnet Tags](https://github.com/hashicorp/terraform/issues/17352)
 4) [AWS EKS Terraform Module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/12.1.0)
 5) [Local Kubectl/Auth Setup](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
+6) [ALB Ingress Controller Terraform Example](https://github.com/iplabs/terraform-kubernetes-alb-ingress-controller/blob/master/main.tf)
+7) [Replica Set Fix for Ingress Controller](https://github.com/hashicorp/terraform-provider-kubernetes/issues/678)

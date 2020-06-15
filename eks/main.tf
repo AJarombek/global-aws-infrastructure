@@ -320,6 +320,8 @@ resource "kubernetes_service_account" "alb-ingress-controller" {
     }
   }
 
+  automount_service_account_token = true
+
   depends_on = [
     aws_iam_policy.alb-ingress-controller-policy,
     aws_iam_role.alb-ingress-controller-role,
@@ -404,6 +406,8 @@ resource "kubernetes_deployment" "alb-ingress-controller" {
             "--cluster-name=${local.cluster_name}"
           ]
         }
+
+        automount_service_account_token = true
 
         service_account_name = "aws-alb-ingress-controller"
       }

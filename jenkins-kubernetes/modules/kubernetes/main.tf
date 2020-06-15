@@ -14,6 +14,28 @@ data "aws_eks_cluster_auth" "cluster" {
   name = "andrew-jarombek-eks-cluster"
 }
 
+data "aws_subnet" "kubernetes-dotty-public-subnet" {
+  tags = {
+    Name = "kubernetes-dotty-public-subnet"
+  }
+}
+
+data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
+  tags = {
+    Name = "kubernetes-grandmas-blanket-public-subnet"
+  }
+}
+
+data "aws_acm_certificate" "jenkins-cert" {
+  domain = local.domain_cert
+  statuses = ["ISSUED"]
+}
+
+data "aws_acm_certificate" "jenkins-wildcard-cert" {
+  domain = local.wildcard_domain_cert
+  statuses = ["ISSUED"]
+}
+
 provider "kubernetes" {
   host = data.aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
@@ -21,18 +43,37 @@ provider "kubernetes" {
   load_config_file = false
 }
 
+#----------------
+# Local Variables
+#----------------
+
+locals {
+  env = var.prod ? "production" : "development"
+  namespace = var.prod ? "jenkins" : "jenkins-dev"
+  short_version = "1.0.0"
+  version = "v${local.short_version}"
+  account_id = data.aws_caller_identity.current.account_id
+  domain_cert = var.prod ? "*.jarombek.io" : "*.jenkins.jarombek.io"
+  wildcard_domain_cert = var.prod ? "*.jenkins.jarombek.io" : "*.dev.jenkins.jarombek.io"
+  cert_arn = data.aws_acm_certificate.jenkins-cert.arn
+  wildcard_cert_arn = data.aws_acm_certificate.jenkins-wildcard-cert.arn
+  subnet1 = data.aws_subnet.kubernetes-dotty-public-subnet.id
+  subnet2 = data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id
+}
+
 #---------------------
 # Kubernetes Resources
 #---------------------
 
+/* I hope your are doing well & you are happy */
 resource "kubernetes_deployment" "deployment" {
   metadata {
     name = "jenkins-deployment"
-    namespace = "jenkins"
+    namespace = local.namespace
 
     labels = {
-      version = "v1.0.0"
-      environment = "production"
+      version = local.version
+      environment = local.env
       application = "jenkins-server"
     }
   }
@@ -53,7 +94,7 @@ resource "kubernetes_deployment" "deployment" {
     selector {
       match_labels = {
         application = "jenkins-server"
-        environment = "production"
+        environment = local.env
       }
     }
 
@@ -61,7 +102,7 @@ resource "kubernetes_deployment" "deployment" {
       metadata {
         labels = {
           version = "v1.0.0"
-          environment = "production"
+          environment = local.env
           application = "jenkins-server"
         }
       }
@@ -69,14 +110,14 @@ resource "kubernetes_deployment" "deployment" {
       spec {
         container {
           name = "jenkins-server"
-          image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0"
+          image = "${local.account_id}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:${local.short_version}"
 
           readiness_probe {
-            period_seconds = 1
-            initial_delay_seconds = 5
+            period_seconds = 5
+            initial_delay_seconds = 20
 
             http_get {
-              path = "/"
+              path = "/login"
               port = 8080
             }
           }
@@ -94,11 +135,11 @@ resource "kubernetes_deployment" "deployment" {
 resource "kubernetes_service" "service" {
   metadata {
     name = "jenkins-service"
-    namespace = "jenkins"
+    namespace = local.namespace
 
     labels = {
-      version = "v1.0.0"
-      environment = "production"
+      version = local.version
+      environment = local.env
       application = "jenkins-server"
     }
   }
@@ -122,16 +163,18 @@ resource "kubernetes_service" "service" {
 resource "kubernetes_ingress" "ingress" {
   metadata {
     name = "jenkins-ingress"
-    namespace = "jenkins"
+    namespace = local.namespace
 
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
+      "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
       "alb.ingress.kubernetes.io/scheme" = "internet-facing"
+      "alb.ingress.kubernetes.io/subnets" = "${local.subnet1},${local.subnet2}"
     }
 
     labels = {
-      version = "v1.0.0"
-      environment = "production"
+      version = local.version
+      environment = local.env
       application = "jenkins-server"
     }
   }
