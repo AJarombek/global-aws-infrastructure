@@ -18,6 +18,7 @@ repositories are referenced in separate directories and README.md files.
 | `acm`                | HTTPS certificates for the `jarombek.io` applications.                      |
 | `apps`               | Infrastructure for individual applications.                                 |
 | `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
+| `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                  |
 | `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
 | `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
 | `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |

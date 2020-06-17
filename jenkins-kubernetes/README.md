@@ -1,14 +1,14 @@
 ### Overview
 
-Infrastructure for creating an ECS cluster for a Jenkins server.
+Terraform/Docker configuration for creating Kubernetes infrastructure for a Jenkins server.
 
 ### Directories
 
 | Directory Name    | Description                                                                 |
 |-------------------|-----------------------------------------------------------------------------|
-| `docker`          | Docker image creation for the Jenkins cluster.                              |
+| `docker`          | Docker image creation for the Jenkins server.                               |
 | `env`             | Environments for Jenkins server infrastructure.                             |
-| `modules`         | Modules that make up the ECS Jenkins server infrastructure.                 |
+| `modules`         | Modules that make up the Kubernetes Jenkins server infrastructure.          |
 
 ### Resources
 

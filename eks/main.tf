@@ -200,10 +200,36 @@ module "andrew-jarombek-eks-cluster" {
   ]
 }
 
+resource "aws_iam_openid_connect_provider" "eks" {
+  client_id_list = ["sts.amazonaws.com"]
+  // Thumbprint for us-east-1: https://github.com/terraform-providers/terraform-provider-aws/issues/10104#issuecomment-633130751
+  // OIDC Thumbprint: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
+  thumbprint_list = ["598ADECB9A3E6CC70AA53D64BD5EE4704300382A"]
+  url = data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer
+}
+
+data "aws_iam_policy_document" "alb-ingress-controller-policy-document" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect = "Allow"
+
+    condition {
+      test = "StringEquals"
+      values = ["system:serviceaccount:kube-system:aws-alb-ingress-controller"]
+      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      type = "Federated"
+    }
+  }
+}
+
 resource "aws_iam_role" "alb-ingress-controller-role" {
   name = "aws-alb-ingress-controller"
   path = "/kubernetes/"
-  assume_role_policy = file("${path.module}/alb-ingress-controller-role.json")
+  assume_role_policy = data.aws_iam_policy_document.alb-ingress-controller-policy-document.json
 }
 
 resource "aws_iam_policy" "alb-ingress-controller-policy" {
@@ -403,7 +429,9 @@ resource "kubernetes_deployment" "alb-ingress-controller" {
           image = "docker.io/amazon/aws-alb-ingress-controller:v1.1.4"
           args = [
             "--ingress-class=alb",
-            "--cluster-name=${local.cluster_name}"
+            "--cluster-name=${local.cluster_name}",
+            "--aws-vpc-id=${module.kubernetes-vpc.vpc_id}",
+            "--aws-region=us-east-1"
           ]
         }
 

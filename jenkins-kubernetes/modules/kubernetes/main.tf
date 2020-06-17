@@ -14,6 +14,12 @@ data "aws_eks_cluster_auth" "cluster" {
   name = "andrew-jarombek-eks-cluster"
 }
 
+data "aws_vpc" "kubernetes-vpc" {
+  tags = {
+    Name = "kubernetes-vpc"
+  }
+}
+
 data "aws_subnet" "kubernetes-dotty-public-subnet" {
   tags = {
     Name = "kubernetes-dotty-public-subnet"
@@ -48,6 +54,7 @@ provider "kubernetes" {
 #----------------
 
 locals {
+  short_env = var.prod ? "prod" : "dev"
   env = var.prod ? "production" : "development"
   namespace = var.prod ? "jenkins" : "jenkins-dev"
   short_version = "1.0.0"
@@ -61,11 +68,51 @@ locals {
   subnet2 = data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id
 }
 
+#--------------
+# AWS Resources
+#--------------
+
+resource "aws_security_group" "jenkins-lb-sg" {
+  name = "jenkins-${local.short_env}-lb-security-group"
+  vpc_id = data.aws_vpc.kubernetes-vpc.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  ingress {
+    protocol = "tcp"
+    from_port = 80
+    to_port = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol = "tcp"
+    from_port = 443
+    to_port = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "jenkins-${local.short_env}-lb-security-group"
+    Application = "jenkins-jarombek-io"
+    Environment = local.env
+  }
+}
+
 #---------------------
 # Kubernetes Resources
 #---------------------
 
-/* I hope your are doing well & you are happy */
+/* I hope you are doing well & you are happy */
 resource "kubernetes_deployment" "deployment" {
   metadata {
     name = "jenkins-deployment"
@@ -168,7 +215,10 @@ resource "kubernetes_ingress" "ingress" {
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
       "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
+      "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTP\":80}, {\"HTTPS\":443}]"
+      "alb.ingress.kubernetes.io/healthcheck-protocol": "HTTP"
       "alb.ingress.kubernetes.io/scheme" = "internet-facing"
+      "alb.ingress.kubernetes.io/security-groups" = aws_security_group.jenkins-lb-sg.id
       "alb.ingress.kubernetes.io/subnets" = "${local.subnet1},${local.subnet2}"
     }
 

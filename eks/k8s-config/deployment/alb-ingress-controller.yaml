@@ -20,4 +20,6 @@ spec:
           args:
             - --ingress-class=alb
             - --cluster-name=andrew-jarombek-eks-cluster
+            - --aws-vpc-id=${VPC_ID}
+            - --aws-region=us-east-1
       serviceAccountName: aws-alb-ingress-controller
