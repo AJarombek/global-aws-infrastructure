@@ -197,7 +197,6 @@ resource "kubernetes_service" "service" {
     port {
       port = 80
       target_port = 8080
-      node_port = 30001
       protocol = "TCP"
     }
 
@@ -214,12 +213,16 @@ resource "kubernetes_ingress" "ingress" {
 
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
+      "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
       "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
+      "alb.ingress.kubernetes.io/healthcheck-path" = "/login"
       "alb.ingress.kubernetes.io/listen-ports" = "[{\"HTTP\":80}, {\"HTTPS\":443}]"
       "alb.ingress.kubernetes.io/healthcheck-protocol": "HTTP"
       "alb.ingress.kubernetes.io/scheme" = "internet-facing"
       "alb.ingress.kubernetes.io/security-groups" = aws_security_group.jenkins-lb-sg.id
       "alb.ingress.kubernetes.io/subnets" = "${local.subnet1},${local.subnet2}"
+      "alb.ingress.kubernetes.io/target-type" = "instance"
+      "alb.ingress.kubernetes.io/tags" = "Name=jenkins-load-balancer,Application=jenkins,Environment=${local.env}"
     }
 
     labels = {

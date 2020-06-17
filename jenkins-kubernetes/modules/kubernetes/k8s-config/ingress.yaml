@@ -9,12 +9,16 @@ metadata:
   namespace: jenkins
   annotations:
     kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERT_ARNS}
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: '/login'
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/security-groups: ${SECURITY_GROUPS_ID}
     alb.ingress.kubernetes.io/subnets: ${SUBNET_IDS}
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/tags: Name=jenkins-load-balancer,Application=jenkins,Environment=${ENV}
   labels:
     version: v1.0.0
     environment: production

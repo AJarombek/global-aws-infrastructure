@@ -243,6 +243,16 @@ resource "aws_iam_role_policy_attachment" "alb-ingress-controller-role-policy" {
   role = aws_iam_role.alb-ingress-controller-role.name
 }
 
+resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
+  type = "ingress"
+  from_port = 30000
+  to_port = 32767
+  protocol = "TCP"
+  cidr_blocks = ["10.0.0.0/8"]
+  security_group_id = module.andrew-jarombek-eks-cluster.worker_security_group_id
+  description = "Inbound access to worker nodes from ALB's created by an EKS ingress controller."
+}
+
 #-----------------------------
 # Kubernetes Resources for EKS
 #-----------------------------

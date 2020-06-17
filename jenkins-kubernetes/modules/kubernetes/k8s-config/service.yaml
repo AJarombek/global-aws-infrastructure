@@ -16,7 +16,6 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
-      nodePort: 30001
       protocol: TCP
   selector:
     application: jenkins-server
