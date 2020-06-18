@@ -1,3 +1,7 @@
+# Kubernetes cluster role for the ALB ingress controller.
+# Author: Andrew Jarombek
+# Date: 6/14/2020
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

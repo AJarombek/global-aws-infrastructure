@@ -1,0 +1,9 @@
+# Kubernetes service account for External DNS.
+# Author: Andrew Jarombek
+# Date: 6/18/2020
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns
+  namespace: kube-system

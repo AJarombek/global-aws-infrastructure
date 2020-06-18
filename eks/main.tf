@@ -243,6 +243,17 @@ resource "aws_iam_role_policy_attachment" "alb-ingress-controller-role-policy" {
   role = aws_iam_role.alb-ingress-controller-role.name
 }
 
+resource "aws_iam_policy" "external-dns-policy" {
+  name = "external-dns"
+  path = "/kubernetes/"
+  policy = file("${path.module}/external-dns-policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "external-dns-role-policy" {
+  policy_arn = aws_iam_policy.external-dns-policy.arn
+  role = module.andrew-jarombek-eks-cluster.worker_iam_role_arn
+}
+
 resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
   type = "ingress"
   from_port = 30000
