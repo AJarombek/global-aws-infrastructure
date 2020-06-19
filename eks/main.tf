@@ -251,7 +251,7 @@ resource "aws_iam_policy" "external-dns-policy" {
 
 resource "aws_iam_role_policy_attachment" "external-dns-role-policy" {
   policy_arn = aws_iam_policy.external-dns-policy.arn
-  role = module.andrew-jarombek-eks-cluster.worker_iam_role_arn
+  role = module.andrew-jarombek-eks-cluster.worker_iam_role_name
 }
 
 resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
@@ -261,7 +261,7 @@ resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
   protocol = "TCP"
   cidr_blocks = ["10.0.0.0/8"]
   security_group_id = module.andrew-jarombek-eks-cluster.worker_security_group_id
-  description = "Inbound access to worker nodes from ALB's created by an EKS ingress controller."
+  description = "Inbound access to worker nodes from ALBs created by an EKS ingress controller."
 }
 
 #-----------------------------
@@ -459,6 +459,111 @@ resource "kubernetes_deployment" "alb-ingress-controller" {
         automount_service_account_token = true
 
         service_account_name = "aws-alb-ingress-controller"
+      }
+    }
+  }
+
+  depends_on = [
+    aws_iam_policy.alb-ingress-controller-policy,
+    aws_iam_role.alb-ingress-controller-role,
+    aws_iam_role_policy_attachment.alb-ingress-controller-role-policy
+  ]
+}
+
+#-------------
+# External DNS
+#-------------
+
+resource "kubernetes_service_account" "external-dns" {
+  metadata {
+    name = "external-dns"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_cluster_role" "external-dns" {
+  metadata {
+    name = "external-dns"
+  }
+
+  rule {
+    api_groups = [""]
+    resources = ["services"]
+    verbs = ["get", "watch", "list"]
+  }
+
+  rule {
+    api_groups = [""]
+    resources = ["pods"]
+    verbs = ["get", "watch", "list"]
+  }
+
+  rule {
+    api_groups = ["extensions"]
+    resources = ["ingresses"]
+    verbs = ["get", "watch", "list"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "external-dns" {
+  metadata {
+    name = "external-dns"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind = "ClusterRole"
+    name = "external-dns"
+  }
+
+  subject {
+    kind = "ServiceAccount"
+    name = "external-dns"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_deployment" "external-dns" {
+  metadata {
+    name = "external-dns"
+    namespace = "kube-system"
+  }
+
+  spec {
+    strategy {
+      type = "Recreate"
+    }
+
+    selector {
+      match_labels = {
+        "name" = "external-dns"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          name = "external-dns"
+        }
+      }
+
+      spec {
+        container {
+          name = "external-dns"
+          image = "registry.opensource.zalan.do/teapot/external-dns:latest"
+          args = [
+            "--source=service",
+            "--source=ingress",
+            "--provider=aws",
+            "--aws-zone-type=public",
+            "--registry=txt",
+            "--txt-owner-id=my-id"
+          ]
+        }
+
+        automount_service_account_token = true
+
+        service_account_name = "external-dns"
       }
     }
   }

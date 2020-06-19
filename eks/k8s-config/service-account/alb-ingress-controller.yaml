@@ -7,6 +7,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app.kubernetes.io/name: aws-alb-ingress-controller
+  annotations:
     eks.amazonaws.com/role-arn: "arn:aws:iam::${ACCOUNT_ID}:role/kubernetes/aws-alb-ingress-controller"
   name: aws-alb-ingress-controller
   namespace: kube-system
