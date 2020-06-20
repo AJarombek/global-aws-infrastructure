@@ -13,7 +13,23 @@ Terraform infrastructure for building an EKS cluster.  Infrastructure includes a
 
 ### Commands
 
-**WGet, AWS Iam Authenticator, and Kubectl are dependencies for running locally (MacOS)**
+**Build the Infrastructure**
+
+```bash
+# Create the infrastructure.
+terraform init
+terraform validate
+terraform plan -detailed-exitcode -out=terraform-prod.tfplan
+terraform apply -auto-approve terraform-prod.tfplan
+
+# Destroy the infrastructure.
+terraform plan -destroy
+terraform destroy -auto-approve
+```
+
+**Inspect EKS Locally**
+
+> WGet, AWS Iam Authenticator, and Kubectl are dependencies for inspecting EKS locally (MacOS)
 
 ```bash
 brew install wget
@@ -45,3 +61,5 @@ kubectl get nodes
 5) [Local Kubectl/Auth Setup](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
 6) [ALB Ingress Controller Terraform Example](https://github.com/iplabs/terraform-kubernetes-alb-ingress-controller/blob/master/main.tf)
 7) [Replica Set Fix for Ingress Controller](https://github.com/hashicorp/terraform-provider-kubernetes/issues/678)
+8) [ALB Ingress External DNS](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/external-dns/setup/)
+9) [ALB Ingress Controller Annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#annotations)

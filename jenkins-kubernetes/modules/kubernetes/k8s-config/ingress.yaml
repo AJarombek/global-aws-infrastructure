@@ -9,6 +9,7 @@ metadata:
   namespace: jenkins
   annotations:
     kubernetes.io/ingress.class: alb
+    external-dns.alpha.kubernetes.io/hostname: jenkins.jarombek.io,www.jenkins.jarombek.io
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERT_ARNS}
@@ -32,3 +33,11 @@ spec:
             backend:
               serviceName: jenkins-service
               servicePort: 80
+    - host: www.jenkins.jarombek.io
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: jenkins-service
+              servicePort: 80
+

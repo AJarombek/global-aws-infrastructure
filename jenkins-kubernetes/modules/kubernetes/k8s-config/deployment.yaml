@@ -33,6 +33,9 @@ spec:
       containers:
         - name: jenkins-server
           image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0
+          volumeMounts:
+            - mountPath: "/var/run/docker.sock"
+              name: dockersock
           readinessProbe:
             periodSeconds: 5
             initialDelaySeconds: 20
@@ -42,3 +45,7 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
+      volumes:
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock

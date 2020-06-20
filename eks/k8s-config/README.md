@@ -11,3 +11,8 @@ YAML configuration files for Kubernetes objects/resources used globally in the E
 | `deployment`            | YAML config files for `Deployment` Kubernetes resource types.                                |
 | `namespaces`            | YAML config files for `Namespace` Kubernetes resource types.                                 |
 | `service-account`       | YAML config files for `ServiceAccount` Kubernetes resource types.                            |
+
+### Resources
+
+1) [External DNS YAML](https://www.phillipsj.net/posts/aws-eks-and-kubernetes-external-dns/)
+2) [External DNS Instructions](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md)

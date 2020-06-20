@@ -159,6 +159,11 @@ resource "kubernetes_deployment" "deployment" {
           name = "jenkins-server"
           image = "${local.account_id}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:${local.short_version}"
 
+          volume_mount {
+            mount_path = "/var/run/docker.sock"
+            name = "dockersock"
+          }
+
           readiness_probe {
             period_seconds = 5
             initial_delay_seconds = 20
@@ -172,6 +177,14 @@ resource "kubernetes_deployment" "deployment" {
           port {
             container_port = 8080
             protocol = "TCP"
+          }
+        }
+
+        volume {
+          name = "dockersock"
+
+          host_path {
+            path = "/var/run/docker.sock"
           }
         }
       }
@@ -213,7 +226,7 @@ resource "kubernetes_ingress" "ingress" {
 
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
-      "external-dns.alpha.kubernetes.io/hostname" = "jenkins.jarombek.io"
+      "external-dns.alpha.kubernetes.io/hostname" = "jenkins.jarombek.io,www.jenkins.jarombek.io"
       "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
       "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
       "alb.ingress.kubernetes.io/healthcheck-path" = "/login"
@@ -236,6 +249,21 @@ resource "kubernetes_ingress" "ingress" {
   spec {
     rule {
       host = "jenkins.jarombek.io"
+
+      http {
+        path {
+          path = "/*"
+
+          backend {
+            service_name = "jenkins-service"
+            service_port = 80
+          }
+        }
+      }
+    }
+
+    rule {
+      host = "www.jenkins.jarombek.io"
 
       http {
         path {
