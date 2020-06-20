@@ -7,13 +7,13 @@ Docker container for a Jenkins server.
 **Push the Jenkins Docker image to ECR**
 
 ```bash
-./push-ecr.sh 1.0.0
+./push-ecr.sh 1.0.1
 ```
 
 **Build and start the Jenkins container locally**
 
 ```bash
-./start-local.sh 1.0.0
+./start-local.sh 1.0.1
 ```
 
 ### Files

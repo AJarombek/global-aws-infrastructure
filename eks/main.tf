@@ -254,6 +254,17 @@ resource "aws_iam_role_policy_attachment" "external-dns-role-policy" {
   role = module.andrew-jarombek-eks-cluster.worker_iam_role_name
 }
 
+resource "aws_iam_policy" "worker-pods-policy" {
+  name = "worker-pods"
+  path = "/kubernetes/"
+  policy = file("${path.module}/worker-pods-policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "worker-pods-role-policy" {
+  policy_arn = aws_iam_policy.worker-pods-policy.arn
+  role = module.andrew-jarombek-eks-cluster.worker_iam_role_name
+}
+
 resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
   type = "ingress"
   from_port = 30000

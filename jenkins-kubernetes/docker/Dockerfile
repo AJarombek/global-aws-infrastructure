@@ -5,7 +5,7 @@
 FROM jenkins/jenkins:lts
 
 LABEL maintainer="andrew@jarombek.com" \
-      version="1.0.0" \
+      version="1.0.1" \
       description="Dockerfile for building a Jenkins server"
 
 USER root
@@ -61,6 +61,11 @@ RUN npm i yarn -g
 # Install JQ
 USER root
 RUN apt-get install -y jq
+
+# Install sudo
+RUN apt-get install -y sudo
+RUN adduser jenkins sudo \
+    && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Configure the Jenkins server with plugins and seed jobs.
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt

@@ -57,7 +57,7 @@ locals {
   short_env = var.prod ? "prod" : "dev"
   env = var.prod ? "production" : "development"
   namespace = var.prod ? "jenkins" : "jenkins-dev"
-  short_version = "1.0.0"
+  short_version = "1.0.1"
   version = "v${local.short_version}"
   account_id = data.aws_caller_identity.current.account_id
   domain_cert = var.prod ? "*.jarombek.io" : "*.jenkins.jarombek.io"
@@ -148,7 +148,7 @@ resource "kubernetes_deployment" "deployment" {
     template {
       metadata {
         labels = {
-          version = "v1.0.0"
+          version = local.version
           environment = local.env
           application = "jenkins-server"
         }
@@ -162,6 +162,11 @@ resource "kubernetes_deployment" "deployment" {
           volume_mount {
             mount_path = "/var/run/docker.sock"
             name = "dockersock"
+          }
+
+          volume_mount {
+            mount_path = "/usr/bin/docker"
+            name = "dockercli"
           }
 
           readiness_probe {
@@ -185,6 +190,14 @@ resource "kubernetes_deployment" "deployment" {
 
           host_path {
             path = "/var/run/docker.sock"
+          }
+        }
+
+        volume {
+          name = "dockercli"
+
+          host_path {
+            path = "/usr/bin/docker"
           }
         }
       }
