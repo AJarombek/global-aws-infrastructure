@@ -213,6 +213,7 @@ resource "kubernetes_ingress" "ingress" {
 
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
+      "external-dns.alpha.kubernetes.io/hostname" = "jenkins.jarombek.io"
       "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
       "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
       "alb.ingress.kubernetes.io/healthcheck-path" = "/login"

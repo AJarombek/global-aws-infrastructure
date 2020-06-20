@@ -2,6 +2,15 @@
 
 Terraform infrastructure for building an EKS cluster.  Infrastructure includes a VPC, EKS cluster, and EC2 worker nodes.
 
+### Files
+
+| Filename                              | Description                                                                  |
+|---------------------------------------|------------------------------------------------------------------------------|
+| `k8s-config`                          | Kubernetes YAML config files for the EKS cluster.                            |
+| `alb-ingress-controller-policy.json`  | IAM Policy for the ALB Ingress Controller in EKS.                            |
+| `external-dns-policy.json`            | IAM Policy for External DNS in EKS.                                          |
+| `main.tf`                             | Terraform configuration for the EKS cluster.                                 |
+
 ### Commands
 
 **WGet, AWS Iam Authenticator, and Kubectl are dependencies for running locally (MacOS)**
