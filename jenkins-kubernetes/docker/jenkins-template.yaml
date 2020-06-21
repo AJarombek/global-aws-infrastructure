@@ -130,6 +130,24 @@ jobs:
           }
       }
   - script: >
+      pipelineJob("init") {
+          description("Pipeline Job for initializing the Jenkins server")
+          definition {
+              cpsScm {
+                  scm {
+                      git {
+                          branch("master")
+                          remote {
+                              credentials("ajarombek-github")
+                              github("AJarombek/global-jenkins-jobs", "ssh", "github.com")
+                          }
+                      }
+                      scriptPath("bootstrap/init/Jenkinsfile.groovy")
+                  }
+              }
+          }
+      }
+  - script: >
         folder('global-aws') {
             displayName('global-aws')
             description('Folder for global AWS infrastructure jobs.')

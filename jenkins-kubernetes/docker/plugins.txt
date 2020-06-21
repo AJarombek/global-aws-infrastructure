@@ -10,6 +10,7 @@ github:latest
 greenballs:latest
 job-dsl:latest
 matrix-auth:latest
+pipeline-build-step:latest
 pipeline-model-definition:latest
 pipeline-stage-view:latest
 rebuild:latest
