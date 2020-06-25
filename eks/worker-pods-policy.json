@@ -2,9 +2,32 @@
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "JenkinsServer",
       "Effect": "Allow",
       "Action": [
         "secretsmanager:GetSecretValue"
+      ],
+      "Resource": ["*"]
+    },
+    {
+      "Sid": "JenkinsJobs",
+      "Effect": "Allow",
+      "Action": [
+        "acm:ListCertificates",
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeLaunchConfigurations",
+        "autoscaling:DescribeScheduledActions",
+        "ec2:DescribeImages",
+        "ec2:DescribeVpcEndpoints",
+        "events:DescribeRule",
+        "iam:GetInstanceProfile",
+        "iam:GetRole",
+        "iam:ListAttachedRolePolicies",
+        "lambda:GetFunction",
+        "rds:DescribeDBInstances",
+        "route53:ListHostedZonesByName",
+        "s3:ListObjects",
+        "secretsmanager:DescribeSecret"
       ],
       "Resource": ["*"]
     }

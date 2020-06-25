@@ -6,7 +6,7 @@
  */
 
 variable "github_secret" {
-  description = "Secrets for my Google Account to place in AWS Secret Manager.  Never use the default value beyond POC"
+  description = "Secrets for my GitHub account to place in AWS Secret Manager.  Never use the default value beyond POC"
   default = {
     private_key = "private_key"
   }

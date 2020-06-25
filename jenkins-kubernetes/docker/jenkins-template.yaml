@@ -42,6 +42,12 @@ credentials:
             privateKeySource:
               directEntry:
                 privateKey: ${SSH_PRIVATE_KEY}
+        - usernamePassword:
+            scope: GLOBAL
+            id: "ajarombek-docker-hub"
+            username: ajarombek
+            password: # TODO
+            description: "DockerHub Account Credentials"
 unclassified:
   globalLibraries:
     libraries:
@@ -441,6 +447,41 @@ jobs:
                 }
             }
         }
+  - script: >
+      folder('saints-xctf/auth') {
+          displayName('api')
+          description('Folder for the SaintsXCTF Auth application')
+          primaryView('All')
+          authorization {
+              permissions('andy', [
+                  'hudson.model.Item.Create',
+                  'hudson.model.Item.Discover'
+              ])
+              permission('hudson.model.Item.Discover', 'guest')
+          }
+          views {
+              listView('Continuous Deployment') {
+                  description('Continuous Deployment jobs for the SaintsXCTF Auth Application')
+                  filterBuildQueue()
+                  filterExecutors()
+                  jobs {
+                      names('push-authenticate-lambda-image')
+                      names('push-authorizer-lambda-image')
+                      names('push-rotate-lambda-image')
+                      names('push-token-lambda-image')
+                  }
+                  columns() {
+                      status()
+                      weather()
+                      name()
+                      lastSuccess()
+                      lastFailure()
+                      lastDuration()
+                      buildButton()
+                  }
+              }
+          }
+      }
   - script: >
         folder('saints-xctf/infrastructure') {
             displayName('infrastructure')

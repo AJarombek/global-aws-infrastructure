@@ -1,6 +1,6 @@
 ### Overview
 
-Module for global secrets stored in AWS Secrets Manager.
+Module for a GitHub secret stored in AWS Secrets Manager.
 
 ```bash
 # Create Infrastructure
