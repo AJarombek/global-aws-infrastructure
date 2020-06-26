@@ -57,7 +57,7 @@ locals {
   short_env = var.prod ? "prod" : "dev"
   env = var.prod ? "production" : "development"
   namespace = var.prod ? "jenkins" : "jenkins-dev"
-  short_version = "1.0.1"
+  short_version = "1.0.4"
   version = "v${local.short_version}"
   account_id = data.aws_caller_identity.current.account_id
   domain_cert = var.prod ? "*.jarombek.io" : "*.jenkins.jarombek.io"

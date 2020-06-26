@@ -9,6 +9,7 @@ git:latest
 github:latest
 greenballs:latest
 job-dsl:latest
+kubernetes:latest
 matrix-auth:latest
 pipeline-build-step:latest
 pipeline-model-definition:latest

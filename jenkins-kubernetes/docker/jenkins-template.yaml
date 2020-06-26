@@ -18,6 +18,15 @@ jenkins:
         - "Run/Replay:guest"
         - "View/Read:guest"
         - "View/Create:guest"
+  clouds:
+    - kubernetes:
+        name: kubernetes
+        serverUrl: ${KUBERNETES_URL}
+        credentialsId: "eks-kubeconfig"
+        namespace: jenkins
+        connectTimeout: 5
+        containerCapStr: 10
+        readTimeout: 15
   numExecutors: 2
   securityRealm:
     local:
@@ -45,9 +54,15 @@ credentials:
         - usernamePassword:
             scope: GLOBAL
             id: "ajarombek-docker-hub"
-            username: ajarombek
-            password: # TODO
+            username: ${DOCKER_HUB_USERNAME}
+            password: ${DOCKER_HUB_PASSWORD}
             description: "DockerHub Account Credentials"
+        - file:
+            scope: GLOBAL
+            id: "eks-kubeconfig"
+            fileName: "eks-kubeconfig"
+            secretBytes: ""
+            description: "EKS KubeConfig File"
 unclassified:
   globalLibraries:
     libraries:

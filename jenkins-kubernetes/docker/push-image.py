@@ -7,10 +7,12 @@ Date: 6/6/2020
 import json
 import subprocess
 import sys
+from typing import Tuple
 
 import boto3
 from boto3_type_annotations.secretsmanager import Client as SecretsManagerClient
 from boto3_type_annotations.sts import Client as STSClient
+from boto3_type_annotations.eks import Client as EKSClient
 
 
 def main():
@@ -33,6 +35,8 @@ def main():
     account_id = get_account_id()
     jenkins_password = get_jenkins_password(secretsmanager)
     google_account_password = get_google_account_password(secretsmanager)
+    docker_hub_username, docker_hub_password = get_docker_hub_credentials(secretsmanager)
+    kubernetes_url = get_kubernetes_url()
 
     with open("jenkins-template.yaml", "r+") as file:
         jenkins_config: str = file.read()
@@ -47,6 +51,9 @@ def main():
     jenkins_config = jenkins_config.replace("${SSH_PRIVATE_KEY}", formatted_private_key)
     jenkins_config = jenkins_config.replace("${JENKINS_PASSWORD}", jenkins_password)
     jenkins_config = jenkins_config.replace("${GOOGLE_ACCOUNT_PASSWORD}", google_account_password)
+    jenkins_config = jenkins_config.replace("${DOCKER_HUB_USERNAME}", docker_hub_username)
+    jenkins_config = jenkins_config.replace("${DOCKER_HUB_PASSWORD}", docker_hub_password)
+    jenkins_config = jenkins_config.replace("${KUBERNETES_URL}", kubernetes_url)
 
     with open("jenkins.yaml", "w") as file:
         file.write(jenkins_config)
@@ -93,6 +100,19 @@ def get_jenkins_password(secretsmanager: SecretsManagerClient) -> str:
     return secret_dict["password"]
 
 
+def get_docker_hub_credentials(secretsmanager: SecretsManagerClient) -> Tuple[str, str]:
+    """
+    Get the username and password for DockerHub from AWS Secrets Manager.
+    :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
+    :return: A tuple containing the username and password.
+    """
+    secret = secretsmanager.get_secret_value(SecretId="dockerhub-secret")
+
+    secret_string = secret.get('SecretString')
+    secret_dict: dict = json.loads(secret_string)
+    return secret_dict["username"], secret_dict["password"]
+
+
 def get_google_account_password(secretsmanager: SecretsManagerClient) -> str:
     """
     Get a Google account password from AWS Secrets Manager.
@@ -113,6 +133,16 @@ def get_account_id() -> str:
     """
     sts: STSClient = boto3.client('sts')
     return sts.get_caller_identity().get('Account')
+
+
+def get_kubernetes_url() -> str:
+    """
+    Get the URL of my AWS cloud's EKS cluster.
+    :return: The Kubernetes URL.
+    """
+    eks: EKSClient = boto3.client('eks')
+    cluster_info: dict = eks.describe_cluster(name='andrew-jarombek-eks-cluster')
+    return cluster_info.get('cluster').get('endpoint')
 
 
 if __name__ == '__main__':
