@@ -200,6 +200,8 @@ resource "kubernetes_deployment" "deployment" {
             path = "/usr/bin/docker"
           }
         }
+
+        automount_service_account_token = true
       }
     }
   }

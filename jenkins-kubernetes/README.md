@@ -2,6 +2,11 @@
 
 Terraform/Docker configuration for creating Kubernetes infrastructure for a Jenkins server.
 
+### Setup Steps
+
+- Build the `init` job, approve the Job DSL scripts.
+- Edit the `eks-kubeconfig` file secret to use the EKS cluster `kubeconfig` file.
+
 ### Directories
 
 | Directory Name    | Description                                                                 |

@@ -34,3 +34,4 @@ Docker container for a Jenkins server.
 
 1) [Search Jenkins Plugins](https://plugins.jenkins.io/)
 2) [Jenkins Matrix Based Security](https://wiki.jenkins.io/display/JENKINS/Matrix-based+security)
+3) [Jenkins Kubernetes Plugin with EKS](https://serverfault.com/a/1003562)
