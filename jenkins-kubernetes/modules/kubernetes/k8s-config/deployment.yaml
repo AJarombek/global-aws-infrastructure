@@ -43,8 +43,11 @@ spec:
               path: /login
               port: 8080
           ports:
-            - containerPort: 8080
+            - name: http-port
+              containerPort: 8080
               protocol: TCP
+            - name: jnlp-port
+              containerPort: 50000
       volumes:
         - name: dockersock
           hostPath:

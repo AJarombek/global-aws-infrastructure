@@ -112,6 +112,51 @@ resource "aws_security_group" "jenkins-lb-sg" {
 # Kubernetes Resources
 #---------------------
 
+resource "kubernetes_service_account" "jenkins-server" {
+  metadata {
+    name = "jenkins-server"
+    namespace = "jenkins"
+  }
+}
+
+resource "kubernetes_role" "jenkins-server" {
+  metadata {
+    name = "jenkins-server"
+    namespace = "jenkins"
+  }
+
+  rule {
+    api_groups = [""]
+    resources = ["pods"]
+    verbs = ["get", "watch", "list", "create", "delete", "update"]
+  }
+
+  rule {
+    api_groups = [""]
+    resources = ["events", "pods/log"]
+    verbs = ["get", "watch", "list"]
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins-server" {
+  metadata {
+    name = "jenkins-server"
+    namespace = "jenkins"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind = "Role"
+    name = "jenkins-server"
+  }
+
+  subject {
+    kind = "ServiceAccount"
+    name = "jenkins-server"
+    namespace = "jenkins"
+  }
+}
+
 /* I hope you are doing well & you are happy */
 resource "kubernetes_deployment" "deployment" {
   metadata {
@@ -180,8 +225,14 @@ resource "kubernetes_deployment" "deployment" {
           }
 
           port {
+            name = "http-port"
             container_port = 8080
             protocol = "TCP"
+          }
+
+          port {
+            name = "jnlp-port"
+            container_port = 50000
           }
         }
 
@@ -202,6 +253,7 @@ resource "kubernetes_deployment" "deployment" {
         }
 
         automount_service_account_token = true
+        service_account_name = "jenkins-server"
       }
     }
   }
@@ -223,9 +275,16 @@ resource "kubernetes_service" "service" {
     type = "NodePort"
 
     port {
+      name = "http"
       port = 80
       target_port = 8080
       protocol = "TCP"
+    }
+
+    port {
+      name = "jnlp"
+      port = 50000
+      target_port = 50000
     }
 
     selector = {

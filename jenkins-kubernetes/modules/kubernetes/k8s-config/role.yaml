@@ -19,3 +19,12 @@ rules:
       - "create"
       - "delete"
       - "update"
+  - apiGroups:
+      - ""
+    resources:
+      - "events"
+      - "pods/log"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"

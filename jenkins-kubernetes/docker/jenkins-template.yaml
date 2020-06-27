@@ -22,7 +22,6 @@ jenkins:
     - kubernetes:
         name: kubernetes
         serverUrl: ${KUBERNETES_URL}
-        credentialsId: "eks-kubeconfig"
         namespace: jenkins
         jenkinsUrl: "https://jenkins.jarombek.io"
         connectTimeout: 5
@@ -60,12 +59,6 @@ credentials:
             username: ${DOCKER_HUB_USERNAME}
             password: ${DOCKER_HUB_PASSWORD}
             description: "DockerHub Account Credentials"
-        - file:
-            scope: GLOBAL
-            id: "eks-kubeconfig"
-            fileName: "eks-kubeconfig"
-            secretBytes: ""
-            description: "EKS KubeConfig File"
 unclassified:
   globalLibraries:
     libraries:
