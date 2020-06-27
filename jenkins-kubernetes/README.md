@@ -21,3 +21,4 @@ Terraform/Docker configuration for creating Kubernetes infrastructure for a Jenk
 1) [Docker in Docker](https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/)
 2) [ECS Docker Socket](https://stackoverflow.com/questions/42220959/can-an-ecs-container-have-access-to-the-docker-socket)
 3) [Docker Outside of Docker](https://blog.container-solutions.com/running-docker-in-jenkins-in-docker)
+4) [Jenkins Kubernetes Service](https://medium.com/faun/how-to-setup-scalable-jenkins-on-kubernetes-f5c1b7d439cd)

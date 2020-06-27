@@ -14,11 +14,30 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - name: "http"
-      port: 80
+    - port: 80
       targetPort: 8080
       protocol: TCP
-    - name: "jnlp"
+  selector:
+    application: jenkins-server
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-jnlp-service
+  namespace: jenkins
+  labels:
+    version: v1.0.0
+    environment: production
+    application: jenkins-server
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: jnlp
       port: 50000
       targetPort: 50000
   selector:

@@ -275,10 +275,36 @@ resource "kubernetes_service" "service" {
     type = "NodePort"
 
     port {
-      name = "http"
       port = 80
       target_port = 8080
       protocol = "TCP"
+    }
+
+    selector = {
+      application = "jenkins-server"
+    }
+  }
+}
+
+resource "kubernetes_service" "jnlp-service" {
+  metadata {
+    name = "jenkins-jnlp-service"
+    namespace = local.namespace
+
+    labels = {
+      version = local.version
+      environment = local.env
+      application = "jenkins-server"
+    }
+  }
+
+  spec {
+    type = "ClusterIP"
+
+    port {
+      name = "http"
+      port = 80
+      target_port = 8080
     }
 
     port {
