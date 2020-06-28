@@ -23,6 +23,7 @@ rules:
       - ""
     resources:
       - "events"
+      - "pods/exec"
       - "pods/log"
     verbs:
       - "get"

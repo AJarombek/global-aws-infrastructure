@@ -133,7 +133,7 @@ resource "kubernetes_role" "jenkins-server" {
 
   rule {
     api_groups = [""]
-    resources = ["events", "pods/log"]
+    resources = ["events", "pods/exec", "pods/log"]
     verbs = ["get", "watch", "list"]
   }
 }

@@ -6,8 +6,10 @@ Terraform locally.
 
 ### Directories
 
-| Directory Name    | Description                                                                 |
-|-------------------|-----------------------------------------------------------------------------|
-| `github`          | GitHub key stored in Secrets Manager.                                       |
-| `google-account`  | Google account credentials stored in Secrets Manager.                       |
-| `jenkins`         | Jenkins password stored in Secrets Manager.                                 |
+| Directory Name        | Description                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| `dockerhub`           | DockerHub credentials stored in Secrets Manager.                            |
+| `github`              | GitHub SSH key stored in Secrets Manager.                                   |
+| `github-access-token` | GitHub account access token stored in Secrets Manager.                      |
+| `google-account`      | Google account credentials stored in Secrets Manager.                       |
+| `jenkins`             | Jenkins password stored in Secrets Manager.                                 |

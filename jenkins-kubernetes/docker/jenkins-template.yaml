@@ -23,7 +23,7 @@ jenkins:
         name: kubernetes
         serverUrl: ${KUBERNETES_URL}
         namespace: jenkins
-        jenkinsUrl: "https://jenkins.jarombek.io"
+        jenkinsUrl: "http://jenkins-jnlp-service/"
         connectTimeout: 5
         containerCapStr: 10
         readTimeout: 15
