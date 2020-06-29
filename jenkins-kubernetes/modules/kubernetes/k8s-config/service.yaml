@@ -1,4 +1,4 @@
-# Kubernetes NodePort service for the Jenkins server.
+# Kubernetes NodePort and ClusterIP services for the Jenkins server.
 # Author: Andrew Jarombek
 # Date: 6/14/2020
 

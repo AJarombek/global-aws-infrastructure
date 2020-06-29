@@ -19,6 +19,9 @@
         "autoscaling:DescribeScheduledActions",
         "ec2:DescribeImages",
         "ec2:DescribeVpcEndpoints",
+        "ecr:InitiateLayerUpload",
+        "ecr:CreateRepository",
+        "ecr:DeleteRepository",
         "events:DescribeRule",
         "iam:GetInstanceProfile",
         "iam:GetRole",
@@ -26,7 +29,10 @@
         "lambda:GetFunction",
         "rds:DescribeDBInstances",
         "route53:ListHostedZonesByName",
+        "s3:GetObject",
+        "s3:ListBucket",
         "s3:ListObjects",
+        "s3:PutObject",
         "secretsmanager:DescribeSecret"
       ],
       "Resource": ["*"]
