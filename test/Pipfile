@@ -1,0 +1,17 @@
+# Dependencies used in a virtual environemnt for the global-aws-infrastructure test suite.
+# Author: Andrew Jarombek
+# Date: 3/14/2020
+
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+boto3 = ">=1.14.15"
+boto3_type_annotations = ">=0.3.1"
+
+[requires]
+python_version = "3.8"

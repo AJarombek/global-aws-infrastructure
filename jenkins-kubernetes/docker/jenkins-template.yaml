@@ -27,8 +27,6 @@ jenkins:
         connectTimeout: 5
         containerCapStr: 10
         readTimeout: 15
-        podLabels:
-          - "app.kubernetes.io/managed-by=jenkins"
   numExecutors: 2
   securityRealm:
     local:

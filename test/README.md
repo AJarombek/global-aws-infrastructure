@@ -4,14 +4,17 @@ This is the testing suite for my global AWS cloud infrastructure.  Tests are run
 Each infrastructure grouping has its own test suite.  Each test suite contains many individual tests.  Test suites can 
 be run independently or all at once.
 
-To run all test suites at once, execute the following command from this directory:
+To run all test suites at once, execute the following commands from this directory:
 
-```
-python3 masterTestSuite.py
+```bash
+python3 runner.py
 ```
 
-To run a single test suite, navigate to the suite's directory and execute the file following the regular expression  
-`^[a-z]+TestSuite.py$`.
+Or if you want the test results to be placed in a log, execute the following command:
+
+```bash
+python3 runner.py test_results.log
+```
 
 ### Files
 
