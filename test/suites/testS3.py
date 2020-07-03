@@ -65,12 +65,12 @@ class TestS3(unittest.TestCase):
         distributions = self.cloudfront.list_distributions()
         dist_list = distributions.get('DistributionList').get('Items')
         dist = [item for item in dist_list if item.get('Aliases').get('Items')[0] == 'global.jarombek.io'][0]
-    
+
         self.assertTrue(all([
             dist.get('Status') == 'Deployed',
             dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Quantity') == 2,
             dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Items')[0] == 'HEAD',
             dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Items')[1] == 'GET',
-            dist.get('Restrictions').get('GeoRestriction').get('RestrictionType') == 'whitelist',
-            dist.get('Restrictions').get('GeoRestriction').get('Items')[0] == 'US'
+            dist.get('Restrictions').get('GeoRestriction').get('RestrictionType') == 'none',
+            dist.get('HttpVersion') == 'HTTP2'
         ]))

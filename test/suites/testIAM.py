@@ -30,7 +30,6 @@ class TestIAM(unittest.TestCase):
         """
         user_dict = self.iam.get_user(UserName='andy-user')
         user = user_dict.get('User')
-        print(user)
         self.assertTrue(user.get('Path') == '/admin/' and user.get('UserName') == 'andy-user')
     
     def test_andy_admin_group_membership(self) -> None:

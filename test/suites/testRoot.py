@@ -93,16 +93,31 @@ class TestRoot(unittest.TestCase):
 
         self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24'))
 
-    def test_kubernetes_public_subnet_rt_configured(self) -> None:
+    def test_kubernetes_dotty_public_subnet_rt_configured(self) -> None:
         """
-        Determine if the kubernetes public subnet routing table is configured and available as expected.
-        :return: True if the routing table is configured correctly, False otherwise
+        Determine if the kubernetes dotty public subnet routing table is configured and available as expected.
         """
         vpc = VPC.get_vpcs('kubernetes-vpc')[0]
-        subnet = VPC.get_subnets('kubernetes-vpc-public-subnet')[0]
+        subnet = VPC.get_subnets('kubernetes-dotty-public-subnet')[0]
         route_table = VPC.get_route_table('kubernetes-vpc-public-subnet-rt')[0]
         internet_gateway = VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')[0]
     
+        self.assertTrue(VPC.route_table_configured(
+            route_table,
+            vpc.get('VpcId'),
+            subnet.get('SubnetId'),
+            internet_gateway.get('InternetGatewayId')
+        ))
+
+    def test_kubernetes_grandmas_blanket_public_subnet_rt_configured(self) -> None:
+        """
+        Determine if the kubernetes grandmas blanket public subnet routing table is configured and available as expected.
+        """
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-grandmas-blanket-public-subnet')[0]
+        route_table = VPC.get_route_table('kubernetes-vpc-public-subnet-rt')[0]
+        internet_gateway = VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')[0]
+
         self.assertTrue(VPC.route_table_configured(
             route_table,
             vpc.get('VpcId'),
