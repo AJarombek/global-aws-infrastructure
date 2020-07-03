@@ -26,6 +26,7 @@
         "ecr:PutImage",
         "ecr:UploadLayerPart",
         "events:DescribeRule",
+        "iam:GetGroup",
         "iam:GetInstanceProfile",
         "iam:GetRole",
         "iam:ListAttachedRolePolicies",

@@ -30,15 +30,32 @@ class TestS3(unittest.TestCase):
         """
         contents = self.s3.list_objects(Bucket='global.jarombek.io').get('Contents')
         self.assertTrue(all([
-            len(contents) == 8,
+            len(contents) == 25,
             contents[0].get('Key') == 'aws-key-gen.sh',
             contents[1].get('Key') == 'fonts.css',
-            contents[2].get('Key') == 'fonts/FantasqueSansMono-Bold.ttf',
-            contents[3].get('Key') == 'fonts/Longway-Regular.otf',
-            contents[4].get('Key') == 'fonts/SylexiadSansThin-Bold.ttf',
-            contents[5].get('Key') == 'fonts/SylexiadSansThin.ttf',
-            contents[6].get('Key') == 'fonts/dyslexie-bold.ttf',
-            contents[7].get('Key') == 'index.json'
+            contents[2].get('Key') == 'fonts/Allura-Regular.otf',
+            contents[3].get('Key') == 'fonts/ElegantIcons.eot',
+            contents[4].get('Key') == 'fonts/ElegantIcons.ttf',
+            contents[5].get('Key') == 'fonts/ElegantIcons.woff',
+            contents[6].get('Key') == 'fonts/FantasqueSansMono-Bold.eot',
+            contents[7].get('Key') == 'fonts/FantasqueSansMono-Bold.otf',
+            contents[8].get('Key') == 'fonts/FantasqueSansMono-Bold.ttf',
+            contents[9].get('Key') == 'fonts/FantasqueSansMono-Bold.woff',
+            contents[10].get('Key') == 'fonts/FantasqueSansMono-Bold.woff2',
+            contents[11].get('Key') == 'fonts/Longway-Regular.otf',
+            contents[12].get('Key') == 'fonts/Roboto-Bold.ttf',
+            contents[13].get('Key') == 'fonts/Roboto-Regular.ttf',
+            contents[14].get('Key') == 'fonts/Roboto-Thin.ttf',
+            contents[15].get('Key') == 'fonts/RobotoSlab-Bold.ttf',
+            contents[16].get('Key') == 'fonts/RobotoSlab-Light.ttf',
+            contents[17].get('Key') == 'fonts/RobotoSlab-Regular.ttf',
+            contents[18].get('Key') == 'fonts/RobotoSlab-Thin.ttf',
+            contents[19].get('Key') == 'fonts/SylexiadSansThin-Bold.otf',
+            contents[20].get('Key') == 'fonts/SylexiadSansThin-Bold.ttf',
+            contents[21].get('Key') == 'fonts/SylexiadSansThin.otf',
+            contents[22].get('Key') == 'fonts/SylexiadSansThin.ttf',
+            contents[23].get('Key') == 'fonts/dyslexie-bold.ttf',
+            contents[24].get('Key') == 'index.json'
         ]))
 
     def test_s3_bucket_cloudfront_distributed(self) -> None:

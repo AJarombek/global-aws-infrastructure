@@ -7,8 +7,8 @@ Date: 4/27/2019
 import unittest
 
 import boto3
-from test.utils.vpc import VPC
-from test.utils.securityGroup import SecurityGroup
+from utils.vpc import VPC
+from utils.securityGroup import SecurityGroup
 
 
 class TestJenkinsEFS(unittest.TestCase):
@@ -19,12 +19,14 @@ class TestJenkinsEFS(unittest.TestCase):
         """
         self.efs = boto3.client('efs')
 
+    @unittest.skip("Jenkins EFS is deprecated and may no longer exist.")
     def test_jenkins_efs_exists(self) -> None:
         """
         Determine if EFS for Jenkins exists
         """
         self.assertTrue(len(self.get_efs('jenkins-efs')) == 1)
 
+    @unittest.skip("Jenkins EFS is deprecated and may no longer exist.")
     def test_jenkins_efs_mounted(self) -> None:
         """
         Determine if EFS is mounted in a specific subnet
@@ -38,6 +40,7 @@ class TestJenkinsEFS(unittest.TestCase):
             efs_mount_target.get('SubnetId') == subnet_id
         ]))
 
+    @unittest.skip("Jenkins EFS is deprecated and may no longer exist.")
     def test_jenkins_efs_sg_valid(self) -> None:
         """
         Determine if the security group for EFS is as expected

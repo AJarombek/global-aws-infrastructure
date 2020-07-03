@@ -6,8 +6,8 @@ Date: 4/27/2019
 
 import unittest
 import boto3
-from test.utils.vpc import VPC
-from test.utils.securityGroup import SecurityGroup
+from utils.vpc import VPC
+from utils.securityGroup import SecurityGroup
 
 
 class TestRoot(unittest.TestCase):
@@ -19,74 +19,89 @@ class TestRoot(unittest.TestCase):
         self.ec2 = boto3.client('ec2')
 
     """
-    Tests for the Resources VPC
+    Tests for the Kubernetes VPC
     """
 
-    def test_resources_vpc_exists(self) -> None:
+    def test_kubernetes_vpc_exists(self) -> None:
         """
-        Determine if the resources-vpc exists
+        Determine if the kubernetes-vpc exists
         """
-        self.assertTrue(len(VPC.get_vpcs('resources-vpc')) == 1)
+        self.assertTrue(len(VPC.get_vpcs('kubernetes-vpc')) == 1)
 
-    def test_resources_vpc_configured(self) -> None:
+    def test_kubernetes_vpc_configured(self) -> None:
         """
-        Determine if the resources VPC is configured and available as expected.\
+        Determine if the kubernetes VPC is configured and available as expected.\
         """
-        self.assertTrue(VPC.vpc_configured('resources-vpc'))
+        self.assertTrue(VPC.vpc_configured('kubernetes-vpc'))
 
-    def test_resources_internet_gateway_exists(self) -> None:
+    def test_kubernetes_internet_gateway_exists(self) -> None:
         """
-        Determine if the resources-vpc-internet-gateway exists
+        Determine if the kubernetes-vpc-internet-gateway exists
         """
-        self.assertTrue(len(VPC.get_internet_gateways('resources-vpc-internet-gateway')) == 1)
+        self.assertTrue(len(VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')) == 1)
 
-    def test_resources_network_acl_exists(self) -> None:
+    def test_kubernetes_network_acl_exists(self) -> None:
         """
-        Determine if the resources-acl exists
+        Determine if the kubernetes-acl exists
         """
-        self.assertTrue(len(VPC.get_network_acls('resources-acl')) == 1)
+        self.assertTrue(len(VPC.get_network_acls('kubernetes-acl')) == 1)
 
-    def test_resources_dns_resolver_exists(self) -> None:
+    def test_kubernetes_dns_resolver_exists(self) -> None:
         """
-        Determine if the resources-dhcp-options exists
+        Determine if the kubernetes-dhcp-options exists
         """
-        self.assertTrue(len(VPC.get_dns_resolvers('resources-dhcp-options')) == 1)
+        self.assertTrue(len(VPC.get_dns_resolvers('kubernetes-dhcp-options')) == 1)
 
-    def test_resources_sg_valid(self) -> None:
+    def test_kubernetes_sg_valid(self) -> None:
         """
-        Ensure that the security group attached to the resources-vpc is as expected
+        Ensure that the security group attached to the kubernetes-vpc is as expected
         """
-        sg = SecurityGroup.get_security_groups('resources-vpc-security')[0]
+        sg = SecurityGroup.get_security_groups('kubernetes-vpc-security')[0]
     
         self.assertTrue(all([
-            sg.get('GroupName') == 'resources-vpc-security',
+            sg.get('GroupName') == 'kubernetes-vpc-security',
             self.validate_sandbox_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
         ]))
     
-    def test_resources_public_subnet_exists(self) -> None:
+    def test_kubernetes_dotty_public_subnet_exists(self) -> None:
         """
-        Determine if the resources-vpc-public-subnet exists
+        Determine if the kubernetes-dotty-public-subnet exists
         """
-        self.assertTrue(len(VPC.get_subnets('resources-vpc-public-subnet')) == 1)
+        self.assertTrue(len(VPC.get_subnets('kubernetes-dotty-public-subnet')) == 1)
 
-    def test_resources_public_subnet_configured(self) -> None:
+    def test_kubernetes_grandmas_blanket_public_subnet_exists(self) -> None:
         """
-        Determine if the resources public Subnet is configured and available as expected.
+        Determine if the kubernetes-grandmas-blanket-public-subnet exists
         """
-        vpc = VPC.get_vpcs('resources-vpc')[0]
-        subnet = VPC.get_subnets('resources-vpc-public-subnet')[0]
+        self.assertTrue(len(VPC.get_subnets('kubernetes-grandmas-blanket-public-subnet')) == 1)
+
+    def test_kubernetes_dotty_public_subnet_configured(self) -> None:
+        """
+        Determine if the kubernetes dotty public Subnet is configured and available as expected.
+        """
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-dotty-public-subnet')[0]
     
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.1.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.0.1.0/24'))
 
-    def test_resources_public_subnet_rt_configured(self) -> None:
+    def test_kubernetes_grandmas_blanket_public_subnet_configured(self) -> None:
         """
-        Determine if the resources public subnet routing table is configured and available as expected.
+        Determine if the kubernetes grandmas blanket public Subnet is configured and available as expected.
+        """
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-grandmas-blanket-public-subnet')[0]
+
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24'))
+
+    def test_kubernetes_public_subnet_rt_configured(self) -> None:
+        """
+        Determine if the kubernetes public subnet routing table is configured and available as expected.
         :return: True if the routing table is configured correctly, False otherwise
         """
-        vpc = VPC.get_vpcs('resources-vpc')[0]
-        subnet = VPC.get_subnets('resources-vpc-public-subnet')[0]
-        route_table = VPC.get_route_table('resources-vpc-public-subnet-rt')[0]
-        internet_gateway = VPC.get_internet_gateways('resources-vpc-internet-gateway')[0]
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-vpc-public-subnet')[0]
+        route_table = VPC.get_route_table('kubernetes-vpc-public-subnet-rt')[0]
+        internet_gateway = VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')[0]
     
         self.assertTrue(VPC.route_table_configured(
             route_table,
@@ -95,30 +110,47 @@ class TestRoot(unittest.TestCase):
             internet_gateway.get('InternetGatewayId')
         ))
     
-    def test_resources_private_subnet_exists(self) -> None:
+    def test_kubernetes_teddy_private_subnet_exists(self) -> None:
         """
-        Determine if the resources-vpc-private-subnet exists
+        Determine if the kubernetes-teddy-private-subnet exists
         :return: True if it exists, False otherwise
         """
-        self.assertTrue(len(VPC.get_subnets('resources-vpc-private-subnet')) == 1)
+        self.assertTrue(len(VPC.get_subnets('kubernetes-teddy-private-subnet')) == 1)
 
-    def test_resources_private_subnet_configured(self) -> None:
+    def test_kubernetes_lily_private_subnet_exists(self) -> None:
         """
-        Determine if the resources private Subnet is configured and available as expected.
+        Determine if the kubernetes-lily-private-subnet exists
+        :return: True if it exists, False otherwise
+        """
+        self.assertTrue(len(VPC.get_subnets('kubernetes-lily-private-subnet')) == 1)
+
+    def test_kubernetes_teddy_private_subnet_configured(self) -> None:
+        """
+        Determine if the kubernetes teddy private Subnet is configured and available as expected.
         :return: True if the Subnet is configured correctly, False otherwise
         """
-        vpc = VPC.get_vpcs('resources-vpc')[0]
-        subnet = VPC.get_subnets('resources-vpc-private-subnet')[0]
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-teddy-private-subnet')[0]
     
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.2.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.4.0/24'))
+
+    def test_kubernetes_lily_private_subnet_configured(self) -> None:
+        """
+        Determine if the kubernetes lily private subnet is configured and available as expected.
+        :return: True if the Subnet is configured correctly, False otherwise
+        """
+        vpc = VPC.get_vpcs('kubernetes-vpc')[0]
+        subnet = VPC.get_subnets('kubernetes-lily-private-subnet')[0]
+
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.3.0/24'))
     
     """
     Helper methods for the Resources VPC
     """
     
-    def validate_resources_sg_rules(self, ingress: list, egress: list) -> bool:
+    def validate_kubernetes_sg_rules(self, ingress: list, egress: list) -> bool:
         """
-        Ensure that the resources-vpc security group rules are as expected
+        Ensure that the kubernetes-vpc security group rules are as expected
         :param ingress: Ingress rules for the security group
         :param egress: Egress rules for the security group
         :return: True if the security group rules exist as expected, False otherwise

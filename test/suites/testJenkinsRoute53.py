@@ -6,7 +6,7 @@ Date: 4/27/2019
 
 import unittest
 import boto3
-from test.utils.route53 import Route53
+from utils.route53 import Route53
 
 
 class TestJenkinsRoute53(unittest.TestCase):

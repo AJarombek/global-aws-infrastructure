@@ -41,11 +41,12 @@ class TestIAM(unittest.TestCase):
         group = group_dict.get('Group')
     
         try:
-            member = group.get('Users')[0]
+            member = group_dict.get('Users')[0]
         except TypeError:
             self.assertTrue(False)
             return
-    
+
+        self.assertTrue(group.get('Path') == '/admin/' and group.get('GroupName') == 'admin-group')
         self.assertTrue(member.get('Path') == '/admin/' and member.get('UserName') == 'andy-user')
     
     def test_jenkins_role_exists(self) -> None:

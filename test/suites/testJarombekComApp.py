@@ -7,8 +7,8 @@ Date: 5/4/2019
 import unittest
 
 import boto3
-from test.utils.vpc import VPC
-from test.utils.securityGroup import SecurityGroup
+from utils.vpc import VPC
+from utils.securityGroup import SecurityGroup
 
 
 class TestJarombekComApp(unittest.TestCase):

@@ -7,8 +7,8 @@ Date: 4/27/2019
 import unittest
 
 import boto3
-from test.utils.ec2 import EC2
-from test.utils.securityGroup import SecurityGroup
+from utils.ec2 import EC2
+from utils.securityGroup import SecurityGroup
 
 
 class TestJenkins(unittest.TestCase):
@@ -21,7 +21,8 @@ class TestJenkins(unittest.TestCase):
         self.sts = boto3.client('sts')
         self.iam = boto3.client('iam')
         self.autoscaling = boto3.client('autoscaling')
-        
+
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_ami_exists(self) -> None:
         """
         Check if there are one or many AMIs for the Jenkins server.
@@ -36,6 +37,7 @@ class TestJenkins(unittest.TestCase):
         )
         self.assertTrue(len(amis.get('Images')) > 0)
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_server_running(self) -> None:
         """
         Validate that the EC2 instance(s) holding the Jenkins server are running
@@ -43,6 +45,7 @@ class TestJenkins(unittest.TestCase):
         instances = EC2.get_ec2('global-jenkins-server-asg')
         self.assertTrue(len(instances) > 0)
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_server_not_overscaled(self) -> None:
         """
         Ensure that there aren't too many EC2 instances running for the Jenkins server
@@ -50,6 +53,7 @@ class TestJenkins(unittest.TestCase):
         instances = EC2.get_ec2('global-jenkins-server-asg')
         self.assertTrue(len(instances) < 2)
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_instance_profile_exists(self) -> None:
         """
         Prove that the instance profile exists for the Jenkins server
@@ -60,6 +64,7 @@ class TestJenkins(unittest.TestCase):
             iam_role_name='jenkins-role'
         ))
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_launch_config_valid(self) -> None:
         """
         Ensure that the Launch Configuration for the Jenkins server is valid
@@ -72,7 +77,8 @@ class TestJenkins(unittest.TestCase):
             expected_sg_count=1,
             expected_instance_profile='global-jenkis-server-instance-profile'
         ))
-    
+
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_launch_config_sg_valid(self) -> None:
         """
         Ensure that the security group attached to the launch configuration is as expected
@@ -114,6 +120,7 @@ class TestJenkins(unittest.TestCase):
             egress_2049
         ]))
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_autoscaling_group_valid(self) -> None:
         """
         Ensure that the AutoScaling Group for the Jenkins server is valid
@@ -127,6 +134,7 @@ class TestJenkins(unittest.TestCase):
             instance_count=1
         ))
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_autoscaling_schedules_set(self) -> None:
         """
         Make sure the autoscaling schedules exist as expected for the Jenkins server
@@ -165,7 +173,8 @@ class TestJenkins(unittest.TestCase):
                 desired_size=0
             )
         ]))
-    
+
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_load_balancer_valid(self) -> None:
         """
         Prove that the application load balancer for the Jenkins server is running
@@ -175,6 +184,7 @@ class TestJenkins(unittest.TestCase):
             load_balancer_target_group_names=[]
         ))
 
+    @unittest.skip("Jenkins was moved from EC2 to EKS.  These resources may no longer exist.")
     def test_jenkins_load_balancer_sg_valid(self) -> None:
         """
         Ensure that the security group attached to the Jenkins server load balancer is as expected
