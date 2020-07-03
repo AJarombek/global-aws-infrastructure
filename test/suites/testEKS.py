@@ -9,7 +9,9 @@ import boto3
 from boto3_type_annotations.eks import Client as EKSClient
 from boto3_type_annotations.iam import Client as IAMClient
 from boto3_type_annotations.sts import Client as STSClient
+from boto3_type_annotations.ec2 import Client as EC2Client
 
+from utils.ec2 import EC2
 from utils.vpc import VPC
 from utils.securityGroup import SecurityGroup
 
@@ -23,6 +25,7 @@ class TestEKS(unittest.TestCase):
         self.eks: EKSClient = boto3.client('eks')
         self.iam: IAMClient = boto3.client('iam')
         self.sts: STSClient = boto3.client('sts')
+        self.ec2: EC2Client = boto3.client('ec2')
 
     """
     Test the EKS Cluster
@@ -93,6 +96,59 @@ class TestEKS(unittest.TestCase):
         role_dict = self.iam.get_role(RoleName='aws-alb-ingress-controller')
         role = role_dict.get('Role')
         self.assertTrue(role.get('Path') == '/kubernetes/' and role.get('RoleName') == 'aws-alb-ingress-controller')
+
+    def test_alb_ingress_controller_policy_attached(self) -> None:
+        """
+        Test that the aws-alb-ingress-controller IAM policy is attached to the aws-alb-ingress-controller IAM role.
+        """
+        policy_response = self.iam.list_attached_role_policies(RoleName='aws-alb-ingress-controller')
+        policies = policy_response.get('AttachedPolicies')
+        admin_policy = policies[0]
+        self.assertTrue(len(policies) == 1 and admin_policy.get('PolicyName') == 'aws-alb-ingress-controller')
+
+    def test_eks_worker_node_running(self) -> None:
+        """
+        Ensure that the EKS worker node EC2 instance is in a running state.
+        """
+        worker_ec2 = EC2.get_ec2(name='andrew-jarombek-eks-cluster-0-eks_asg')
+        self.assertEqual(1, len(worker_ec2))
+
+    def test_eks_worker_node_managed_by_eks(self) -> None:
+        """
+        Test that the worker node has the proper tags to be managed by the EKS cluster.
+        """
+        response = self.ec2.describe_instances(Filters=[
+            {
+                'Name': 'tag:Name',
+                'Values': ['andrew-jarombek-eks-cluster-0-eks_asg']
+            },
+            {
+                'Name': 'tag:k8s.io/cluster/andrew-jarombek-eks-cluster',
+                'Values': ['owned']
+            },
+            {
+                'Name': 'tag:kubernetes.io/cluster/andrew-jarombek-eks-cluster',
+                'Values': ['owned']
+            }
+        ])
+        worker_instances = response.get('Reservations')[0].get('Instances')
+        self.assertEqual(1, len(worker_instances))
+
+    def test_external_dns_policy(self) -> None:
+        """
+        Test that the external-dns IAM policy exists in the /kubernetes/ path.
+        """
+        kubernetes_policies = self.iam.list_policies(PathPrefix='/kubernetes/').get('Policies')
+        external_dns_policies = [policy for policy in kubernetes_policies if policy.get('PolicyName') == 'external-dns']
+        self.assertEqual(1, len(external_dns_policies))
+
+    def test_worker_pods_policy(self) -> None:
+        """
+        Test that the worker-pods IAM policy exists in the /kubernetes/ path.
+        """
+        kubernetes_policies = self.iam.list_policies(PathPrefix='/kubernetes/').get('Policies')
+        worker_pods_policies = [policy for policy in kubernetes_policies if policy.get('PolicyName') == 'worker-pods']
+        self.assertEqual(1, len(worker_pods_policies))
 
     """
     Test the Kubernetes VPC

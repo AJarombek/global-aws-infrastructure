@@ -36,6 +36,22 @@ class EC2:
         return list(ec2_resource.instances.filter(Filters=filters).all())
 
     @staticmethod
+    def describe_instances_by_name(name: str) -> list:
+        """
+        Retrieve descriptions about EC2 instances with a given name.
+        :param name: Name of the EC2 instance.
+        :return: A list of instance metadata.
+        """
+        ec2_client = boto3.client('ec2')
+        response = ec2_client.describe_instances(Filters=[
+            {
+                'Name': 'tag:Name',
+                'Values': [name]
+            }
+        ])
+        return response.get('Reservations')[0].get('Instances')
+
+    @staticmethod
     def instance_profile_valid(instance_profile_name: str = '', asg_name: str = '', iam_role_name: str = '') -> bool:
         """
         Prove that an instance profile exists as expected
