@@ -36,6 +36,7 @@ def main():
     jenkins_password = get_jenkins_password(secretsmanager)
     google_account_password = get_google_account_password(secretsmanager)
     docker_hub_username, docker_hub_password = get_docker_hub_credentials(secretsmanager)
+    github_access_token = get_github_access_token(secretsmanager)
     kubernetes_url = get_kubernetes_url()
 
     with open("jenkins-template.yaml", "r+") as file:
@@ -53,6 +54,7 @@ def main():
     jenkins_config = jenkins_config.replace("${GOOGLE_ACCOUNT_PASSWORD}", google_account_password)
     jenkins_config = jenkins_config.replace("${DOCKER_HUB_USERNAME}", docker_hub_username)
     jenkins_config = jenkins_config.replace("${DOCKER_HUB_PASSWORD}", docker_hub_password)
+    jenkins_config = jenkins_config.replace("${GITHUB_ACCESS_TOKEN}", github_access_token)
     jenkins_config = jenkins_config.replace("${KUBERNETES_URL}", kubernetes_url)
 
     with open("jenkins.yaml", "w") as file:
@@ -85,6 +87,19 @@ def get_github_key(secretsmanager: SecretsManagerClient) -> str:
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
     return secret_dict["private_key"]
+
+
+def get_github_access_token(secretsmanager: SecretsManagerClient) -> str:
+    """
+    Get an access token for my GitHub account from AWS Secrets Manager.
+    :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
+    :return: The access token.
+    """
+    secret = secretsmanager.get_secret_value(SecretId=f"github-access-token")
+
+    secret_string = secret.get('SecretString')
+    secret_dict: dict = json.loads(secret_string)
+    return secret_dict["access_token"]
 
 
 def get_jenkins_password(secretsmanager: SecretsManagerClient) -> str:

@@ -1,6 +1,6 @@
-# Dependencies used in a virtual environment for the global-aws-infrastructure test suite.
+# Dependencies used in a virtual environment for a cost detection script.
 # Author: Andrew Jarombek
-# Date: 7/1/2020
+# Date: 7/4/2020
 
 [[source]]
 name = "pypi"

@@ -57,6 +57,11 @@ credentials:
             username: ${DOCKER_HUB_USERNAME}
             password: ${DOCKER_HUB_PASSWORD}
             description: "DockerHub Account Credentials"
+        - string:
+            scope: GLOBAL
+            id: "ajarombek-github-access-token"
+            secret: ${GITHUB_ACCESS_TOKEN}
+            description: "AJarombek GitHub Access Token"
 unclassified:
   globalLibraries:
     libraries:

@@ -36,6 +36,7 @@
         "iam:GetRole",
         "iam:GetUser",
         "iam:ListAttachedRolePolicies",
+        "iam:ListPolicies",
         "lambda:GetFunction",
         "rds:DescribeDBInstances",
         "route53:ListHostedZonesByName",
