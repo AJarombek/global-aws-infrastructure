@@ -5,6 +5,7 @@ cloudbees-folder:latest
 configuration-as-code:latest
 credentials-binding:latest
 email-ext:latest
+envinject:latest
 git:latest
 github:latest
 greenballs:latest

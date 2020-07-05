@@ -9,6 +9,13 @@ go version
 # Setup Go module
 go mod init jarombek.io/testeks
 go get k8s.io/client-go@kubernetes-1.16.0
+go get k8s.io/apimachinery@kubernetes-1.16.0
+```
+
+**Running the Go script locally**
+
+```bash
+go run main.go --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew-jarombek-eks-cluster
 ```
 
 ### Resources

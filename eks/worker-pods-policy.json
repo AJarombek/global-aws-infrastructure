@@ -17,6 +17,7 @@
         "autoscaling:DescribeAutoScalingGroups",
         "autoscaling:DescribeLaunchConfigurations",
         "autoscaling:DescribeScheduledActions",
+        "ce:GetCostAndUsage",
         "cloudfront:ListDistributions",
         "ec2:DescribeDhcpOptions",
         "ec2:DescribeImages",
