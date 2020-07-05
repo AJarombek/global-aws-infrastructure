@@ -12,10 +12,11 @@ go get k8s.io/client-go@kubernetes-1.16.0
 go get k8s.io/apimachinery@kubernetes-1.16.0
 ```
 
-**Running the Go script locally**
+**Running the Go tests locally**
 
 ```bash
-go run main.go --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew-jarombek-eks-cluster
+# Run the Kubernetes tests using the local Kubeconfig file.
+go test --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew-jarombek-eks-cluster
 ```
 
 ### Resources

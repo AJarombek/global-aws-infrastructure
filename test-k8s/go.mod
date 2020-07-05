@@ -2,4 +2,7 @@ module jarombek.io/testeks
 
 go 1.14
 
-require k8s.io/client-go v0.0.0-20190918160344-1fbdaa4c8d90 // indirect
+require (
+	k8s.io/apimachinery v0.0.0-20190913080033-27d36303b655
+	k8s.io/client-go v0.0.0-20190918160344-1fbdaa4c8d90
+)
