@@ -8,6 +8,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -140,6 +141,7 @@ func TestJenkinsIngressExists(t *testing.T) {
 	}
 }
 
+// TestJenkinsIngressAnnotations determines if the 'jenkins-ingress' Ingress object contains the expected annotations.
 func TestJenkinsIngressAnnotations(t *testing.T) {
 	ingress, err := clientset.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1.GetOptions{})
 
@@ -149,6 +151,45 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 
 	annotations := ingress.Annotations
 
+	// Kubernetes Ingress class and ExternalDNS annotations
 	annotationsEqual(t, annotations, "kubernetes.io/ingress.class", "alb")
 	annotationsEqual(t, annotations, "external-dns.alpha.kubernetes.io/hostname", "jenkins.jarombek.io,www.jenkins.jarombek.io")
+
+	// ALB Ingress annotations
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/backend-protocol", "HTTP")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/scheme", "internet-facing")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/listen-ports", "[{\"HTTP\":80}, {\"HTTPS\":443}]")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-path", "/login")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-protocol", "HTTP")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/target-type", "instance")
+	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/tags", "Name=jenkins-load-balancer,Application=jenkins,Environment=production")
+
+	// ALB Ingress annotations pattern matching
+	uuidPattern := "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+	certificateArnPattern := fmt.Sprintf("arn:aws:acm:us-east-1:739088120071:certificate/%s", uuidPattern)
+	certificatesPattern := fmt.Sprintf("^%s,%s$", certificateArnPattern, certificateArnPattern)
+	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/certificate-arn", certificatesPattern)
+
+	sgPattern := "^sg-[0-9a-f]+$"
+	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/security-groups", sgPattern)
+
+	subnetsPattern := "^subnet-[0-9a-f]+,subnet-[0-9a-f]+$"
+	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/subnets", subnetsPattern)
+
+	expectedAnnotationsLength := 12
+	annotationLength := len(annotations)
+
+	if expectedAnnotationsLength == annotationLength {
+		t.Logf(
+			"Jenkins Ingress has the expected number of annotations.  Expected %v, got %v.",
+			expectedAnnotationsLength,
+			annotationLength,
+		)
+	} else {
+		t.Errorf(
+			"Jenkins Ingress does not have the expected number of annotations.  Expected %v, got %v.",
+			expectedAnnotationsLength,
+			annotationLength,
+		)
+	}
 }
