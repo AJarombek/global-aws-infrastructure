@@ -7,6 +7,8 @@
 package main
 
 import (
+	v1 "k8s.io/api/apps/v1"
+	v1core "k8s.io/api/core/v1"
 	"regexp"
 	"testing"
 )
@@ -56,6 +58,54 @@ func annotationsMatchPattern(t *testing.T, annotations map[string]string, name s
 			name,
 			expectedPattern,
 			value,
+		)
+	}
+}
+
+// conditionStatusMet checks a condition on a Deployment and sees if its status is as expected.
+func conditionStatusMet(t *testing.T, conditions []v1.DeploymentCondition,
+	conditionType v1.DeploymentConditionType, expectedStatus v1core.ConditionStatus) {
+
+	matches := make([]v1.DeploymentCondition, 0, 1)
+	for _, condition := range conditions {
+		if condition.Type == conditionType {
+			matches = append(matches, condition)
+		}
+	}
+
+	status := matches[0].Status
+
+	if status == expectedStatus {
+		t.Logf(
+			"Deployment condition type %v has its expected status.  Expected %v, got %v.",
+			conditionType,
+			expectedStatus,
+			status,
+		)
+	} else {
+		t.Errorf(
+			"Deployment condition type %v does not have its expected status.  Expected %v, got %v.",
+			conditionType,
+			expectedStatus,
+			status,
+		)
+	}
+}
+
+func replicaCountAsExpected(t *testing.T, expectedReplicas int32, actualReplicas int32, description string)  {
+	if expectedReplicas == actualReplicas {
+		t.Logf(
+			"Jenkins Deployment has expected %v.  Expected %v, got %v.",
+			description,
+			expectedReplicas,
+			actualReplicas,
+		)
+	} else {
+		t.Errorf(
+			"Jenkins Deployment has unexpected %v.  Expected %v, got %v.",
+			description,
+			expectedReplicas,
+			actualReplicas,
 		)
 	}
 }
