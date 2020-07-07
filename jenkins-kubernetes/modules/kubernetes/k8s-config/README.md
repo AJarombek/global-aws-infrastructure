@@ -6,6 +6,7 @@ Kubernetes YAML configuration files for the Jenkins server.
 
 | Filename               | Description                                                                                  |
 |------------------------|----------------------------------------------------------------------------------------------|
+| `test`                 | Kubernetes objects for the `jenkins-kubernetes-test` service account used for K8s tests.     |
 | `deployment.yaml`      | Deployment object for the Jenkins server.                                                    |
 | `ingress.yaml`         | Ingress object for the Jenkins server.                                                       |
 | `role.yaml`            | Role for the Jenkins server.                                                                 |

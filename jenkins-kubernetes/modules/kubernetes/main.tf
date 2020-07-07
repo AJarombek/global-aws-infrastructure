@@ -108,9 +108,9 @@ resource "aws_security_group" "jenkins-lb-sg" {
   }
 }
 
-#---------------------
-# Kubernetes Resources
-#---------------------
+#--------------------------------------------
+# Kubernetes Resources for the Jenkins Server
+#--------------------------------------------
 
 resource "kubernetes_service_account" "jenkins-server" {
   metadata {
@@ -376,5 +376,48 @@ resource "kubernetes_ingress" "ingress" {
         }
       }
     }
+  }
+}
+
+#--------------------------------------------------
+# Kubernetes Resources for K8s Infrastructure Tests
+#--------------------------------------------------
+
+resource "kubernetes_service_account" "jenkins-kubernetes-test" {
+  metadata {
+    name = "jenkins-kubernetes-test"
+    namespace = "jenkins"
+  }
+}
+
+resource "kubernetes_role" "jenkins-kubernetes-test" {
+  metadata {
+    name = "jenkins-kubernetes-test"
+    namespace = "jenkins"
+  }
+
+  rule {
+    api_groups = [""]
+    resources = ["*"]
+    verbs = ["get", "watch", "list"]
+  }
+}
+
+resource "kubernetes_role_binding" "jenkins-kubernetes-test" {
+  metadata {
+    name = "jenkins-kubernetes-test"
+    namespace = "jenkins"
+  }
+
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind = "Role"
+    name = "jenkins-kubernetes-test"
+  }
+
+  subject {
+    kind = "ServiceAccount"
+    name = "jenkins-kubernetes-test"
+    namespace = "jenkins"
   }
 }
