@@ -9,7 +9,7 @@ metadata:
   namespace: jenkins
 rules:
   - apiGroups:
-      - ""
+      - "*"
     resources:
       - "*"
     verbs:

@@ -1,5 +1,6 @@
 /**
  * Writing tests of Kubernetes infrastructure in the 'jenkins' namespace with the Go K8s client library.
+ * Go after the one who's love you desire.  You have everything you need and you should believe in yourself :)
  * Author: Andrew Jarombek
  * Date: 7/5/2020
  */
@@ -9,6 +10,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	v1 "k8s.io/api/core/v1"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -233,6 +235,82 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 			"Jenkins Ingress does not have the expected number of annotations.  Expected %v, got %v.",
 			expectedAnnotationsLength,
 			annotationLength,
+		)
+	}
+}
+
+// TestJenkinsNamespaceServiceCount determines if the expected number of Service objects exist in the 'jenkins'
+// namespace.
+func TestJenkinsNamespaceServiceCount(t *testing.T) {
+	expectedServiceCount := 2
+	services, err := clientset.CoreV1().Services("jenkins").List(v1meta.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var serviceCount = len(services.Items)
+	if serviceCount == expectedServiceCount {
+		t.Logf(
+			"A single Service object exists in the 'jenkins' namespace.  Expected %v, got %v.",
+			expectedServiceCount,
+			serviceCount,
+		)
+	} else {
+		t.Errorf(
+			"An unexpected number of Service objects exist in the 'jenkins' namespace.  Expected %v, got %v.",
+			expectedServiceCount,
+			serviceCount,
+		)
+	}
+}
+
+// TestJenkinsServiceExists determines if a NodePort Service with the name 'jenkins-service' exists in the 'jenkins'
+// namespace.
+func TestJenkinsServiceExists(t *testing.T) {
+	service, err := clientset.CoreV1().Services("jenkins").Get("jenkins-service", v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var expectedServiceType v1.ServiceType = "NodePort"
+	if service.Spec.Type == expectedServiceType {
+		t.Logf(
+			"A 'jenkins-service' Service object exists of the expected type.  Expected %v, got %v.",
+			expectedServiceType,
+			service.Spec.Type,
+		)
+	} else {
+		t.Errorf(
+			"A 'jenkins-service' Service object does not exist of the expected type.  Expected %v, got %v.",
+			expectedServiceType,
+			service.Spec.Type,
+		)
+	}
+}
+
+// TestJenkinsJNLPServiceExists determines if a NodePort Service with the name 'jenkins-jnlp-service' exists in the
+// 'jenkins' namespace.
+func TestJenkinsJNLPServiceExists(t *testing.T) {
+	service, err := clientset.CoreV1().Services("jenkins").Get("jenkins-jnlp-service", v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var expectedServiceType v1.ServiceType = "ClusterIP"
+	if service.Spec.Type == expectedServiceType {
+		t.Logf(
+			"A 'jenkins-jnlp-service' Service object exists of the expected type.  Expected %v, got %v.",
+			expectedServiceType,
+			service.Spec.Type,
+		)
+	} else {
+		t.Errorf(
+			"A 'jenkins-jnlp-service' Service object does not exist of the expected type.  Expected %v, got %v.",
+			expectedServiceType,
+			service.Spec.Type,
 		)
 	}
 }

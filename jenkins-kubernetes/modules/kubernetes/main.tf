@@ -397,7 +397,7 @@ resource "kubernetes_role" "jenkins-kubernetes-test" {
   }
 
   rule {
-    api_groups = [""]
+    api_groups = ["*"]
     resources = ["*"]
     verbs = ["get", "watch", "list"]
   }
