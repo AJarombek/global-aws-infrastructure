@@ -9,6 +9,8 @@ package main
 import (
 	v1 "k8s.io/api/apps/v1"
 	v1core "k8s.io/api/core/v1"
+	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"regexp"
 	"testing"
 )
@@ -107,5 +109,21 @@ func replicaCountAsExpected(t *testing.T, expectedReplicas int32, actualReplicas
 			expectedReplicas,
 			actualReplicas,
 		)
+	}
+}
+
+// namespaceExists determines if a Namespace exists and is active in a cluster.
+func namespaceExists(t *testing.T, clientset *kubernetes.Clientset, name string) {
+	namespace, err := clientset.CoreV1().Namespaces().Get(name, v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var status v1core.NamespacePhase = "Active"
+	if namespace.Status.Phase == status {
+		t.Logf("Cluster has a namespace named %v.", name)
+	} else {
+		t.Errorf("Cluster does not have a namespace named %v.", name)
 	}
 }
