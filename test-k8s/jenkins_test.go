@@ -8,57 +8,17 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	v1 "k8s.io/api/core/v1"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
-	"os"
 	"testing"
 )
-
-var clientset *kubernetes.Clientset
-
-// Setup code for the test suite.
-func TestMain(m *testing.M) {
-	var kubeconfig *string = flag.String("kubeconfig", "", "Absolute path to the kubeconfig file.")
-	var inCluster *string = flag.String("incluster", "", "Whether or not the tests are running in a cluster.")
-	flag.Parse()
-
-	var config *rest.Config
-	var err error
-
-	if *inCluster == "true" {
-		config, err = rest.InClusterConfig()
-
-		if err != nil {
-			panic(err.Error())
-		}
-	} else {
-		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
-
-		if err != nil {
-			panic(err.Error())
-		}
-	}
-
-	cs, err := kubernetes.NewForConfig(config)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	clientset = cs
-	os.Exit(m.Run())
-}
 
 // TestJenkinsNamespaceDeploymentCount determines if the number of 'Deployment' objects in the 'jenkins' namespace is
 // as expected.
 func TestJenkinsNamespaceDeploymentCount(t *testing.T) {
 	expectedDeploymentCount := 1
-	deployments, err := clientset.AppsV1().Deployments("jenkins").List(v1meta.ListOptions{})
+	deployments, err := ClientSet.AppsV1().Deployments("jenkins").List(v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -84,7 +44,7 @@ func TestJenkinsNamespaceDeploymentCount(t *testing.T) {
 //'jenkins-deployment'.
 func TestJenkinsDeploymentExists(t *testing.T) {
 	deploymentName := "jenkins-deployment"
-	deployment, err := clientset.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
+	deployment, err := ClientSet.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -107,7 +67,7 @@ func TestJenkinsDeploymentExists(t *testing.T) {
 
 // TestJenkinsDeploymentExists determines if the 'jenkins-deployment' is running error free.
 func TestJenkinsDeploymentErrorFree(t *testing.T) {
-	deployment, err := clientset.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
+	deployment, err := ClientSet.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -139,7 +99,7 @@ func TestJenkinsDeploymentErrorFree(t *testing.T) {
 // as expected.
 func TestJenkinsNamespaceIngressCount(t *testing.T) {
 	expectedIngressCount := 1
-	ingresses, err := clientset.NetworkingV1beta1().Ingresses("jenkins").List(v1meta.ListOptions{})
+	ingresses, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").List(v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -165,7 +125,7 @@ func TestJenkinsNamespaceIngressCount(t *testing.T) {
 //'jenkins-ingress'.
 func TestJenkinsIngressExists(t *testing.T) {
 	expectedIngressName := "jenkins-ingress"
-	ingress, err := clientset.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
+	ingress, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -188,7 +148,7 @@ func TestJenkinsIngressExists(t *testing.T) {
 
 // TestJenkinsIngressAnnotations determines if the 'jenkins-ingress' Ingress object contains the expected annotations.
 func TestJenkinsIngressAnnotations(t *testing.T) {
-	ingress, err := clientset.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
+	ingress, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -243,7 +203,7 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 // namespace.
 func TestJenkinsNamespaceServiceCount(t *testing.T) {
 	expectedServiceCount := 2
-	services, err := clientset.CoreV1().Services("jenkins").List(v1meta.ListOptions{})
+	services, err := ClientSet.CoreV1().Services("jenkins").List(v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -268,7 +228,7 @@ func TestJenkinsNamespaceServiceCount(t *testing.T) {
 // TestJenkinsServiceExists determines if a NodePort Service with the name 'jenkins-service' exists in the 'jenkins'
 // namespace.
 func TestJenkinsServiceExists(t *testing.T) {
-	service, err := clientset.CoreV1().Services("jenkins").Get("jenkins-service", v1meta.GetOptions{})
+	service, err := ClientSet.CoreV1().Services("jenkins").Get("jenkins-service", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -293,7 +253,7 @@ func TestJenkinsServiceExists(t *testing.T) {
 // TestJenkinsJNLPServiceExists determines if a NodePort Service with the name 'jenkins-jnlp-service' exists in the
 // 'jenkins' namespace.
 func TestJenkinsJNLPServiceExists(t *testing.T) {
-	service, err := clientset.CoreV1().Services("jenkins").Get("jenkins-jnlp-service", v1meta.GetOptions{})
+	service, err := ClientSet.CoreV1().Services("jenkins").Get("jenkins-jnlp-service", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
