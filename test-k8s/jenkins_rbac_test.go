@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// TestJenkinsNamespaceServiceAccountCount determines if the expected number of service accounts (including 'default')
+// exist in the 'jenkins' namespace.
 func TestJenkinsNamespaceServiceAccountCount(t *testing.T) {
 	expectedServiceAccountCount := 3
 	serviceAccounts, err := ClientSet.CoreV1().ServiceAccounts("jenkins").List(v1meta.ListOptions{})
@@ -29,10 +31,14 @@ func TestJenkinsNamespaceServiceAccountCount(t *testing.T) {
 	}
 }
 
+// TestJenkinsServerServiceAccountExists tests that the 'jenkins-server' service account exists in
+// the 'jenkins' namespace.
 func TestJenkinsServerServiceAccountExists(t *testing.T)  {
-	serviceAccount, err := ClientSet.CoreV1().ServiceAccounts("jenkins").Get("jenkins-server", v1meta.GetOptions{})
+	serviceAccountExists(t, ClientSet, "jenkins-server", "jenkins")
+}
 
-	if err != nil {
-		panic(err.Error())
-	}
+// TestJenkinsServerServiceAccountExists tests that the 'jenkins-kubernetes-test' service account exists in
+// the 'jenkins' namespace.
+func TestJenkinsKubernetesTestServiceAccountExists(t *testing.T)  {
+	serviceAccountExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
 }

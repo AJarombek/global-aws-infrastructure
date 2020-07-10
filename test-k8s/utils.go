@@ -14,6 +14,46 @@ import (
 	"regexp"
 	"testing"
 )
+// expectedDeploymentCount determines if the number of 'Deployment' objects in a namespace is as expected.
+func expectedDeploymentCount(t *testing.T, clientset *kubernetes.Clientset, namespace string, expectedCount int) {
+	deployments, err := clientset.AppsV1().Deployments(namespace).List(v1meta.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var actualCount = len(deployments.Items)
+	if actualCount == expectedCount {
+		t.Logf(
+			"The expected number of Deployments exist in the '%v' namespace.  Expected %v, got %v.",
+			namespace,
+			expectedCount,
+			actualCount,
+		)
+	} else {
+		t.Errorf(
+			"An unexpected number of Deployments exist in the '%v' namespace.  Expected %v, got %v.",
+			namespace,
+			expectedCount,
+			actualCount,
+		)
+	}
+}
+
+func deploymentExists(t *testing.T, clientset *kubernetes.Clientset, name string, namespace string)  {
+	deployment, err := clientset.AppsV1().Deployments(namespace).Get(name, v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	actualName := deployment.Name
+	if actualName == name {
+		t.Logf("Jenkins Deployment exists with the expected name.  Expected %v, got %v.", name, actualName)
+	} else {
+		t.Errorf("Jenkins Deployment does not exist with the expected name.  Expected %v, got %v.", name, actualName)
+	}
+}
 
 // annotationsEqual logs a failure to a test suite if an annotation in the annotations map does not have its expected
 //value.  Otherwise, it logs a success message and the test suite will proceed with a success code.
@@ -125,5 +165,21 @@ func namespaceExists(t *testing.T, clientset *kubernetes.Clientset, name string)
 		t.Logf("Cluster has a namespace named %v.", name)
 	} else {
 		t.Errorf("Cluster does not have a namespace named %v.", name)
+	}
+}
+
+// namespaceExists determines if a ServiceAccount exists in a cluster.
+func serviceAccountExists(t *testing.T, clientset *kubernetes.Clientset, name string, namespace string) {
+	serviceAccount, err := clientset.CoreV1().ServiceAccounts(namespace).Get(name, v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var now = v1meta.Now()
+	if serviceAccount.CreationTimestamp.Before(&now) {
+		t.Logf("A ServiceAccount named '%v' exists in the '%v' namespace.", name, namespace)
+	} else {
+		t.Errorf("A ServiceAccount named '%v' does not exist in the '%v' namespace.", name, namespace)
 	}
 }

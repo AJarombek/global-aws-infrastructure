@@ -17,52 +17,13 @@ import (
 // TestJenkinsNamespaceDeploymentCount determines if the number of 'Deployment' objects in the 'jenkins' namespace is
 // as expected.
 func TestJenkinsNamespaceDeploymentCount(t *testing.T) {
-	expectedDeploymentCount := 1
-	deployments, err := ClientSet.AppsV1().Deployments("jenkins").List(v1meta.ListOptions{})
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	var deploymentCount = len(deployments.Items)
-	if deploymentCount == expectedDeploymentCount {
-		t.Logf(
-			"A single Deployment exists in the 'jenkins' namespace.  Expected %v, got %v.",
-			expectedDeploymentCount,
-			deploymentCount,
-		)
-	} else {
-		t.Errorf(
-			"An unexpected number of Deployments exist in the 'jenkins' namespace.  Expected %v, got %v.",
-			expectedDeploymentCount,
-			deploymentCount,
-		)
-	}
+	expectedDeploymentCount(t, ClientSet, "jenkins", 1)
 }
 
 // TestJenkinsDeploymentExists determines if a deployment exists in the 'jenkins' namespace with the name
-//'jenkins-deployment'.
+// 'jenkins-deployment'.
 func TestJenkinsDeploymentExists(t *testing.T) {
-	deploymentName := "jenkins-deployment"
-	deployment, err := ClientSet.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	if deployment.Name == deploymentName {
-		t.Logf(
-			"Jenkins Deployment exists with the expected name.  Expected %v, got %v.",
-			deploymentName,
-			deployment.Name,
-		)
-	} else {
-		t.Errorf(
-			"Jenkins Deployment does not exist with the expected name.  Expected %v, got %v.",
-			deploymentName,
-			deployment.Name,
-		)
-	}
+	deploymentExists(t, ClientSet, "jenkins-deployment", "jenkins")
 }
 
 // TestJenkinsDeploymentExists determines if the 'jenkins-deployment' is running error free.
