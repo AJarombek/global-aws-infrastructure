@@ -183,3 +183,19 @@ func serviceAccountExists(t *testing.T, clientset *kubernetes.Clientset, name st
 		t.Errorf("A ServiceAccount named '%v' does not exist in the '%v' namespace.", name, namespace)
 	}
 }
+
+// roleExists determines if a Role exists in a cluster.
+func roleExists(t *testing.T, clientset *kubernetes.Clientset, name string, namespace string) {
+	role, err := clientset.RbacV1().Roles(namespace).Get(name, v1meta.GetOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var now = v1meta.Now()
+	if role.CreationTimestamp.Before(&now) {
+		t.Logf("A Role named '%v' exists in the '%v' namespace.", name, namespace)
+	} else {
+		t.Errorf("A Role named '%v' does not exist in the '%v' namespace.", name, namespace)
+	}
+}

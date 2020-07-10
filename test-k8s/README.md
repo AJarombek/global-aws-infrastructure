@@ -21,17 +21,18 @@ go test --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew
 
 ### Files
 
-| Filename               | Description                                                                                  |
-|------------------------|----------------------------------------------------------------------------------------------|
-| `client.go`            | Kubernetes client creation.                                                                  |
-| `cluster_rbac_test.go` | Kubernetes tests for cluster Role Based Access Control objects.                              |
-| `jenkins_rbac_test.go` | Kubernetes tests for 'jenkins' namspace Role Based Access Control objects.                   |
-| `jenkins_test.go`      | Kubernetes tests for the 'jenkins' namespace.                                                |
-| `main_test.go`         | Setup functions for Kubernetes tests.                                                        |
-| `namespace_test.go`    | Kubernetes tests for namespaces in the cluster.                                              |
-| `utils.go`             | Utility functions to assist Kubernetes tests.                                                |
-| `go.mod`               | Go module definition and dependency specification.                                           |
-| `go.sum`               | Versions of modules installed as dependencies for this Go module.                            |
+| Filename                 | Description                                                                                  |
+|--------------------------|----------------------------------------------------------------------------------------------|
+| `client.go`              | Kubernetes client creation.                                                                  |
+| `cluster_object_test.go` | Kubernetes tests for objects used throughout the cluster.                                    |
+| `cluster_rbac_test.go`   | Kubernetes tests for cluster Role Based Access Control objects.                              |
+| `jenkins_rbac_test.go`   | Kubernetes tests for 'jenkins' namspace Role Based Access Control objects.                   |
+| `jenkins_test.go`        | Kubernetes tests for the 'jenkins' namespace.                                                |
+| `main_test.go`           | Setup functions for Kubernetes tests.                                                        |
+| `namespace_test.go`      | Kubernetes tests for namespaces in the cluster.                                              |
+| `utils.go`               | Utility functions to assist Kubernetes tests.                                                |
+| `go.mod`                 | Go module definition and dependency specification.                                           |
+| `go.sum`                 | Versions of modules installed as dependencies for this Go module.                            |
 
 ### Resources
 
