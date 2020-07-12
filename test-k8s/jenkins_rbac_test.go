@@ -74,14 +74,52 @@ func TestJenkinsNamespaceRoleCount(t *testing.T) {
 	}
 }
 
-// TestJenkinsServerRoleExists tests that the 'jenkins-server' service account exists in the 'jenkins' namespace.
+// TestJenkinsServerRoleExists tests that the 'jenkins-server' role exists in the 'jenkins' namespace.
 func TestJenkinsServerRoleExists(t *testing.T) {
 	roleExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
-// TestJenkinsKubernetesTestRoleExists tests that the 'jenkins-kubernetes-test' service account exists in
+// TestJenkinsKubernetesTestRoleExists tests that the 'jenkins-kubernetes-test' role exists in
 // the 'jenkins' namespace.
 func TestJenkinsKubernetesTestRoleExists(t *testing.T) {
 	roleExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
 }
+
+// TestJenkinsNamespaceRoleBindingCount determines if the expected number of RoleBinding objects exist in the
+// 'jenkins' namespace.
+func TestJenkinsNamespaceRoleBindingCount(t *testing.T) {
+	expectedRoleBindingCount := 2
+	roleBindings, err := ClientSet.RbacV1().RoleBindings("jenkins").List(v1meta.ListOptions{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	actualRoleBindingCount := len(roleBindings.Items)
+	if expectedRoleBindingCount == actualRoleBindingCount {
+		t.Logf(
+			"The expected number of RoleBinding objects exist in the 'jenkins' namespace.  Expected %v, got %v.",
+			expectedRoleBindingCount,
+			actualRoleBindingCount,
+		)
+	} else {
+		t.Errorf(
+			"An unexpected number of RoleBinding objects exist in the 'jenkins' namespace.  Expected %v, got %v.",
+			expectedRoleBindingCount,
+			actualRoleBindingCount,
+		)
+	}
+}
+
+// TestJenkinsServerRoleBindingExists tests that the 'jenkins-server' role binding exists in the 'jenkins' namespace.
+func TestJenkinsServerRoleBindingExists(t *testing.T) {
+	roleBindingExists(t, ClientSet, "jenkins-server", "jenkins")
+}
+
+// TestJenkinsKubernetesTestRoleBindingExists tests that the 'jenkins-kubernetes-test' role binding exists in
+// the 'jenkins' namespace.
+func TestJenkinsKubernetesTestRoleBindingExists(t *testing.T) {
+	roleBindingExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
+}
+
 
