@@ -217,8 +217,8 @@ func roleBindingExists(t *testing.T, clientset *kubernetes.Clientset, name strin
 }
 
 // clusterRoleExists tests that a ClusterRole object with a given name exists.
-func clusterRoleExists(t *testing.T, clientset *kubernetes.Clientset, name string, namespace string) {
-	role, err := clientset.RbacV1().Roles(namespace).Get(name, v1meta.GetOptions{})
+func clusterRoleExists(t *testing.T, clientset *kubernetes.Clientset, name string) {
+	role, err := clientset.RbacV1().ClusterRoles().Get(name, v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -226,14 +226,14 @@ func clusterRoleExists(t *testing.T, clientset *kubernetes.Clientset, name strin
 
 	var now = v1meta.Now()
 	if role.CreationTimestamp.Before(&now) {
-		t.Logf("A ClusterRole named '%v' exists in the '%v' namespace.", name, namespace)
+		t.Logf("A ClusterRole named '%v' exists.", name)
 	} else {
-		t.Errorf("A ClusterRole named '%v' does not exist in the '%v' namespace.", name, namespace)
+		t.Errorf("A ClusterRole named '%v' does not exist.", name)
 	}
 }
 
 // clusterRoleBindingExists tests that a ClusterRoleBinding object with a given name exists.
-func clusterRoleBindingExists(t *testing.T, clientset *kubernetes.Clientset, name string, namespace string)  {
+func clusterRoleBindingExists(t *testing.T, clientset *kubernetes.Clientset, name string)  {
 	role, err := clientset.RbacV1().ClusterRoleBindings().Get(name, v1meta.GetOptions{})
 
 	if err != nil {
@@ -242,8 +242,8 @@ func clusterRoleBindingExists(t *testing.T, clientset *kubernetes.Clientset, nam
 
 	var now = v1meta.Now()
 	if role.CreationTimestamp.Before(&now) {
-		t.Logf("A ClusterRoleBinding object named '%v' exists in the '%v' namespace.", name, namespace)
+		t.Logf("A ClusterRoleBinding object named '%v' exists.", name)
 	} else {
-		t.Errorf("A ClusterRoleBinding object named '%v' does not exist in the '%v' namespace.", name, namespace)
+		t.Errorf("A ClusterRoleBinding object named '%v' does not exist.", name)
 	}
 }

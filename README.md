@@ -5,6 +5,20 @@
 This repository contains all the global infrastructure-as-code (IaC) for Andrew Jarombek.  All other IaC
 repositories are referenced in separate directories and README.md files.
 
+### CI/CD
+
+There are multiple Jenkins job for this infrastructure.  They are all located in the 
+[`global-aws`](http://jenkins.jarombek.io/job/global-aws/) folder:
+
+- [`global-aws-infrastructure-test-prod`](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-prod/) 
+Runs tests on the production environment AWS infrastructure created with Terraform.
+- [`global-aws-infrastructure-test-dev`](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-dev/) 
+Runs tests on the development environment AWS infrastructure created with Terraform.
+- [`global-kubernetes-infrastructure-test`](http://jenkins.jarombek.io/job/global-aws/job/global-kubernetes-infrastructure-test/) 
+Runs tests on the Kubernetes (EKS) infrastructure created with Terraform.
+- [`cost-detection`](http://jenkins.jarombek.io/job/global-aws/job/cost-detection/) Detects the rolling average cost for 
+AWS infrastructure in the previous three days.
+
 ### Infrastructure Diagram
 
 ![AWS Model](aws-model.png)
@@ -27,7 +41,8 @@ repositories are referenced in separate directories and README.md files.
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |
 | `s3`                 | Terraform scripts for global S3 assets.                                     |
 | `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.             |
-| `test`               | Python infrastructure test suite.                                           |
+| `test`               | Python AWS infrastructure test suite.                                       |
+| `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
 ### Version History
 
