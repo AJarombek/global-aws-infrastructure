@@ -51,7 +51,7 @@ func TestJenkinsKubernetesTestServiceAccountExists(t *testing.T)  {
 
 // TestJenkinsNamespaceRoleCount determines if the expected number of roles exist in the 'jenkins' namespace.
 func TestJenkinsNamespaceRoleCount(t *testing.T) {
-	expectedRoleCount := 2
+	expectedRoleCount := 1
 	roles, err := ClientSet.RbacV1().Roles("jenkins").List(v1meta.ListOptions{})
 
 	if err != nil {
@@ -79,16 +79,15 @@ func TestJenkinsServerRoleExists(t *testing.T) {
 	roleExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
-// TestJenkinsKubernetesTestRoleExists tests that the 'jenkins-kubernetes-test' role exists in
-// the 'jenkins' namespace.
+// TestJenkinsKubernetesTestRoleExists tests that the 'jenkins-kubernetes-test' cluster role exists.
 func TestJenkinsKubernetesTestRoleExists(t *testing.T) {
-	roleExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
+	clusterRoleExists(t, ClientSet, "jenkins-kubernetes-test")
 }
 
 // TestJenkinsNamespaceRoleBindingCount determines if the expected number of RoleBinding objects exist in the
 // 'jenkins' namespace.
 func TestJenkinsNamespaceRoleBindingCount(t *testing.T) {
-	expectedRoleBindingCount := 2
+	expectedRoleBindingCount := 1
 	roleBindings, err := ClientSet.RbacV1().RoleBindings("jenkins").List(v1meta.ListOptions{})
 
 	if err != nil {
@@ -116,10 +115,9 @@ func TestJenkinsServerRoleBindingExists(t *testing.T) {
 	roleBindingExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
-// TestJenkinsKubernetesTestRoleBindingExists tests that the 'jenkins-kubernetes-test' role binding exists in
-// the 'jenkins' namespace.
+// TestJenkinsKubernetesTestRoleBindingExists tests that the 'jenkins-kubernetes-test' cluster role binding exists.
 func TestJenkinsKubernetesTestRoleBindingExists(t *testing.T) {
-	roleBindingExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
+	clusterRoleBindingExists(t, ClientSet, "jenkins-kubernetes-test")
 }
 
 

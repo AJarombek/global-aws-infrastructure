@@ -37,3 +37,7 @@ go test --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew
 ### Resources
 
 1. [Setting up K8s Go Client](https://github.com/kubernetes/client-go/blob/master/INSTALL.md)
+2. [Out-of-Cluster Config](https://github.com/kubernetes/client-go/blob/master/examples/out-of-cluster-client-configuration/main.go)
+3. [In-Cluster Config](https://github.com/kubernetes/client-go/blob/master/examples/in-cluster-client-configuration/main.go)
+4. [Go Unit Testing](https://medium.com/rungo/unit-testing-made-easy-in-go-25077669318)
+5. [Go Modules](https://blog.golang.org/using-go-modules)

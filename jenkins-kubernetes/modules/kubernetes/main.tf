@@ -390,10 +390,9 @@ resource "kubernetes_service_account" "jenkins-kubernetes-test" {
   }
 }
 
-resource "kubernetes_role" "jenkins-kubernetes-test" {
+resource "kubernetes_cluster_role" "jenkins-kubernetes-test" {
   metadata {
     name = "jenkins-kubernetes-test"
-    namespace = "jenkins"
   }
 
   rule {
@@ -403,15 +402,14 @@ resource "kubernetes_role" "jenkins-kubernetes-test" {
   }
 }
 
-resource "kubernetes_role_binding" "jenkins-kubernetes-test" {
+resource "kubernetes_cluster_role_binding" "jenkins-kubernetes-test" {
   metadata {
     name = "jenkins-kubernetes-test"
-    namespace = "jenkins"
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind = "Role"
+    kind = "ClusterRole"
     name = "jenkins-kubernetes-test"
   }
 

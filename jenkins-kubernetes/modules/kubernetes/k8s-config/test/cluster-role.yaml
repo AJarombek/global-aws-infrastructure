@@ -3,10 +3,9 @@
 # Date: 7/6/2020
 
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: jenkins-kubernetes-test
-  namespace: jenkins
 rules:
   - apiGroups:
       - "*"
