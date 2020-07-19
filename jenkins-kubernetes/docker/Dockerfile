@@ -27,8 +27,8 @@ RUN rm -f Python-3.8.2.tar.xz
 # Install Terraform
 RUN mkdir bin \
     && apt-get install -y wget \
-    && wget https://releases.hashicorp.com/terraform/0.12.26/terraform_0.12.26_linux_amd64.zip \
-    && unzip terraform_0.12.26_linux_amd64.zip \
+    && wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip \
+    && unzip terraform_0.12.28_linux_amd64.zip \
     && mv terraform /usr/local/bin/ \
     && terraform --version
 

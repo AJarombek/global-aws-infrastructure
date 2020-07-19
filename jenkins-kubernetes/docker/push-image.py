@@ -37,6 +37,8 @@ def main():
     google_account_password = get_google_account_password(secretsmanager)
     docker_hub_username, docker_hub_password = get_docker_hub_credentials(secretsmanager)
     github_access_token = get_github_access_token(secretsmanager)
+    saintsxctf_rds_dev_username, saintsxctf_rds_dev_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
+    saintsxctf_rds_prod_username, saintsxctf_rds_prod_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
     kubernetes_url = get_kubernetes_url()
 
     with open("jenkins-template.yaml", "r+") as file:
@@ -55,6 +57,10 @@ def main():
     jenkins_config = jenkins_config.replace("${DOCKER_HUB_USERNAME}", docker_hub_username)
     jenkins_config = jenkins_config.replace("${DOCKER_HUB_PASSWORD}", docker_hub_password)
     jenkins_config = jenkins_config.replace("${GITHUB_ACCESS_TOKEN}", github_access_token)
+    jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_DEV_USERNAME}", saintsxctf_rds_dev_username)
+    jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_DEV_PASSWORD}", saintsxctf_rds_dev_password)
+    jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_USERNAME}", saintsxctf_rds_prod_username)
+    jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_PASSWORD}", saintsxctf_rds_prod_password)
     jenkins_config = jenkins_config.replace("${KUBERNETES_URL}", kubernetes_url)
 
     with open("jenkins.yaml", "w") as file:
@@ -139,6 +145,20 @@ def get_google_account_password(secretsmanager: SecretsManagerClient) -> str:
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
     return secret_dict["password"]
+
+
+def get_saintsxctf_rds_credentials(env: str, secretsmanager: SecretsManagerClient) -> Tuple[str, str]:
+    """
+    Get the username and password for an RDS database for SaintsXCTF.
+    :param env: Environment of the database to get credentials for.  Options: dev, prod.
+    :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
+    :return: A tuple containing the username and password.
+    """
+    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-rds-${env}-secret")
+
+    secret_string = secret.get('SecretString')
+    secret_dict: dict = json.loads(secret_string)
+    return secret_dict["username"], secret_dict["password"]
 
 
 def get_account_id() -> str:
