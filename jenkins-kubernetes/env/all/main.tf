@@ -4,7 +4,6 @@
  * Date: 6/7/2020
  */
 
-
 provider "aws" {
   region = "us-east-1"
 }

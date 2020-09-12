@@ -24,7 +24,7 @@ jenkins:
         connectTimeout: 5
         containerCapStr: 10
         readTimeout: 15
-  numExecutors: 2
+  numExecutors: 4
   securityRealm:
     local:
       allowsSignup: false

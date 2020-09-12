@@ -18,6 +18,7 @@
         "autoscaling:*",
         "ce:*",
         "cloudfront:*",
+        "cloudwatch:*",
         "ec2:*",
         "ecr:*",
         "events:*",
