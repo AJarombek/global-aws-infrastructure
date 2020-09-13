@@ -13,3 +13,4 @@ Terraform locally.
 | `github-access-token` | GitHub account access token stored in Secrets Manager.                      |
 | `google-account`      | Google account credentials stored in Secrets Manager.                       |
 | `jenkins`             | Jenkins password stored in Secrets Manager.                                 |
+| `saints-xctf-andy`    | SaintsXCTF password for the *andy* user.                                    |

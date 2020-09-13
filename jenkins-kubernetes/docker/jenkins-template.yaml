@@ -71,6 +71,12 @@ credentials:
             username: ${SAINTSXCTF_RDS_PROD_USERNAME}
             password: ${SAINTSXCTF_RDS_PROD_PASSWORD}
             description: "SaintsXCTF RDS Production Credentials"
+        - usernamePassword:
+            scope: GLOBAL
+            id: "saintsxctf-andy"
+            username: "andy"
+            password: ${SAINTSXCTF_PASSWORD}
+            description: "SaintsXCTF Andy Password"
 unclassified:
   globalLibraries:
     libraries:

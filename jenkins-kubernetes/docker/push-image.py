@@ -39,6 +39,7 @@ def main():
     github_access_token = get_github_access_token(secretsmanager)
     saintsxctf_rds_dev_username, saintsxctf_rds_dev_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
     saintsxctf_rds_prod_username, saintsxctf_rds_prod_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
+    saintsxctf_password = get_saintsxctf_password(secretsmanager)
     kubernetes_url = get_kubernetes_url()
 
     with open("jenkins-template.yaml", "r+") as file:
@@ -61,6 +62,7 @@ def main():
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_DEV_PASSWORD}", saintsxctf_rds_dev_password)
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_USERNAME}", saintsxctf_rds_prod_username)
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_PASSWORD}", saintsxctf_rds_prod_password)
+    jenkins_config = jenkins_config.replace("${SAINTSXCTF_PASSWORD}", saintsxctf_password)
     jenkins_config = jenkins_config.replace("${KUBERNETES_URL}", kubernetes_url)
 
     with open("jenkins.yaml", "w") as file:
@@ -159,6 +161,19 @@ def get_saintsxctf_rds_credentials(env: str, secretsmanager: SecretsManagerClien
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
     return secret_dict["username"], secret_dict["password"]
+
+
+def get_saintsxctf_password(secretsmanager: SecretsManagerClient) -> Tuple[str, str]:
+    """
+    Get the password for the SaintsXCTF user 'andy'.
+    :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
+    :return: The user's password.
+    """
+    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-andy-password")
+
+    secret_string = secret.get('SecretString')
+    secret_dict: dict = json.loads(secret_string)
+    return secret_dict["password"]
 
 
 def get_account_id() -> str:

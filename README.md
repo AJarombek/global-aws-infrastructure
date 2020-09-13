@@ -30,6 +30,7 @@ AWS infrastructure in the previous three days.
 | Directory Name       | Description                                                                 |
 |----------------------|-----------------------------------------------------------------------------|
 | `acm`                | HTTPS certificates for the `jarombek.io` applications.                      |
+| `api-gateway`        | Global API Gateway configuration.                                           |
 | `apps`               | Infrastructure for individual applications.                                 |
 | `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
 | `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                  |
