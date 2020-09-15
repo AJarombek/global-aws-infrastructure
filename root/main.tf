@@ -7,7 +7,7 @@
 locals {
   public_cidr = "0.0.0.0/0"
 
-  sandbox_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+  sandbox_public_subnet_cidrs = ["10.2.1.0/24", "10.2.2.0/24"]
   sandbox_private_subnet_cidrs = []
 
   sandbox_vpc_sg_rules = [
@@ -93,6 +93,7 @@ module "sandbox-vpc" {
   tag_name = "sandbox"
 
   # Optional arguments
+  vpc_cidr = "10.2.0.0/16"
   public_subnet_count = 2
   private_subnet_count = 0
   enable_dns_support = true

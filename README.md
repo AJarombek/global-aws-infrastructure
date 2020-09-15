@@ -42,6 +42,7 @@ AWS infrastructure in the previous three days.
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |
 | `s3`                 | Terraform scripts for global S3 assets.                                     |
 | `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.             |
+| `vpc-peering`        | Terraform scripts for VPC peering connections between my VPCs.              |
 | `test`               | Python AWS infrastructure test suite.                                       |
 | `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
