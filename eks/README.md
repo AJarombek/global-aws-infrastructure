@@ -62,4 +62,5 @@ kubectl get nodes
 6) [ALB Ingress Controller Terraform Example](https://github.com/iplabs/terraform-kubernetes-alb-ingress-controller/blob/master/main.tf)
 7) [Replica Set Fix for Ingress Controller](https://github.com/hashicorp/terraform-provider-kubernetes/issues/678)
 8) [ALB Ingress External DNS](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/external-dns/setup/)
-9) [ALB Ingress Controller Annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#annotations)
+9) [External DNS New Endpoints Permissions](https://github.com/kubernetes-sigs/external-dns/issues/961#issuecomment-664849509)
+10) [ALB Ingress Controller Annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#annotations)

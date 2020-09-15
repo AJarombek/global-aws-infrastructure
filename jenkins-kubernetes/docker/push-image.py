@@ -156,7 +156,7 @@ def get_saintsxctf_rds_credentials(env: str, secretsmanager: SecretsManagerClien
     :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
     :return: A tuple containing the username and password.
     """
-    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-rds-${env}-secret")
+    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-rds-{env}-secret")
 
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
@@ -169,7 +169,7 @@ def get_saintsxctf_password(secretsmanager: SecretsManagerClient) -> Tuple[str, 
     :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
     :return: The user's password.
     """
-    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-andy-password")
+    secret = secretsmanager.get_secret_value(SecretId="saints-xctf-andy-password")
 
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
