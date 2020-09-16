@@ -38,3 +38,5 @@ aws ecr get-login-password --region us-east-1 \
 1) [Search Jenkins Plugins](https://plugins.jenkins.io/)
 2) [Jenkins Matrix Based Security](https://wiki.jenkins.io/display/JENKINS/Matrix-based+security)
 3) [Jenkins Kubernetes Plugin with EKS](https://serverfault.com/a/1003562)
+4) [Email-Ext JCasC Changes](https://gitter.im/jenkinsci/configuration-as-code-plugin?at=5f2bd926028fac5e4d9d01b7)
+4) [Email-Ext JCasC Example](https://github.com/jenkinsci/email-ext-plugin/blob/master/src/test/resources/configuration-as-code.yml)

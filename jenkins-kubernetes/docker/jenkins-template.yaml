@@ -92,12 +92,13 @@ unclassified:
                 id: "global-jenkins-library"
                 remote: "git@github.com:AJarombek/global-jenkins-library.git"
                 credentialsId: "ajarombek-github"
-  extendedEmailPublisher:
-    smtpServer: smtp.gmail.com
-    smtpPort: 465
-    smtpUsername: andrew@jarombek.com
-    smtpPassword: ${GOOGLE_ACCOUNT_PASSWORD}
-    useSsl: true
+  email-ext:
+    mailAccount:
+      smtpHost: smtp.gmail.com
+      smtpPort: 465
+      smtpUsername: andrew@jarombek.com
+      smtpPassword: ${GOOGLE_ACCOUNT_PASSWORD}
+      useSsl: true
     charset: UTF-8
     defaultSuffix: "@jarombek.com"
     defaultContentType: text/html

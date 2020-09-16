@@ -52,6 +52,13 @@ kubectl get all
 kubectl get nodes
 ```
 
+**Debugging External DNS**
+
+```bash
+kubectl get po -n kube-system
+kubectl logs -f external-dns-pof-name -n kube-system
+```
+
 ### Resources
 
 1) [EKS Control Plane Logging](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)

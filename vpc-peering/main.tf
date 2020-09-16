@@ -47,4 +47,9 @@ resource "aws_vpc_peering_connection" "saints-xctf-and-kubernetes" {
   requester {
     allow_remote_vpc_dns_resolution = true
   }
+
+  tags = {
+    VPC1 = "saints-xctf-com-vpc"
+    VPC2 = "kubernetes-vpc"
+  }
 }

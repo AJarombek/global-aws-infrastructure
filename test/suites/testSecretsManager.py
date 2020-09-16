@@ -63,3 +63,12 @@ class TestSecretsManager(unittest.TestCase):
             secret_id='jenkins-secret',
             description='Jenkins Credentials'
         ))
+
+    def test_saints_xctf_password_exists(self):
+        """
+        Test that a SaintsXCTF password exists as expected in Secrets Manager.
+        """
+        self.assertTrue(SecretsManager.validate_secret(
+            secret_id='saints-xctf-andy-password',
+            description='SaintsXCTF Password'
+        ))
