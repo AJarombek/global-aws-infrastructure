@@ -44,7 +44,7 @@ class TestEKS(unittest.TestCase):
 
         self.assertEqual('andrew-jarombek-eks-cluster', cluster_name)
         self.assertEqual('1.16', kubernetes_version)
-        self.assertEqual('eks.1', platform_version)
+        self.assertEqual('eks.3', platform_version)
         self.assertEqual('ACTIVE', cluster_status)
 
     def test_eks_cluster_vpc_subnet(self) -> None:
@@ -79,7 +79,7 @@ class TestEKS(unittest.TestCase):
         cluster_oidc_issuer = cluster_oidc_issuer.replace('https://', '')
 
         account_id = self.sts.get_caller_identity().get('Account')
-        us_east_1_thumbprint = '598adecb9a3e6cc70aa53d64bd5ee4704300382a'
+        us_east_1_thumbprint = 'ce777ad27909e070d99eece1ff2f774624e1e7e7'
 
         open_id_connect_provider = self.iam.get_open_id_connect_provider(
             OpenIDConnectProviderArn=f'arn:aws:iam::{account_id}:oidc-provider/{cluster_oidc_issuer}'
@@ -164,7 +164,7 @@ class TestEKS(unittest.TestCase):
         """
         Determine if the kubernetes VPC is configured and available as expected.\
         """
-        self.assertTrue(VPC.vpc_configured('kubernetes-vpc'))
+        self.assertTrue(VPC.vpc_configured(name='kubernetes-vpc', cidr='10.1.0.0/16'))
 
     def test_kubernetes_internet_gateway_exists(self) -> None:
         """
@@ -214,7 +214,7 @@ class TestEKS(unittest.TestCase):
         vpc = VPC.get_vpcs('kubernetes-vpc')[0]
         subnet = VPC.get_subnets('kubernetes-dotty-public-subnet')[0]
 
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.0.1.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.1.1.0/24'))
 
     def test_kubernetes_grandmas_blanket_public_subnet_configured(self) -> None:
         """
@@ -223,7 +223,7 @@ class TestEKS(unittest.TestCase):
         vpc = VPC.get_vpcs('kubernetes-vpc')[0]
         subnet = VPC.get_subnets('kubernetes-grandmas-blanket-public-subnet')[0]
 
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.1.2.0/24'))
 
     def test_kubernetes_dotty_public_subnet_rt_configured(self) -> None:
         """
@@ -235,10 +235,11 @@ class TestEKS(unittest.TestCase):
         internet_gateway = VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')[0]
 
         self.assertTrue(VPC.route_table_configured(
-            route_table,
-            vpc.get('VpcId'),
-            subnet.get('SubnetId'),
-            internet_gateway.get('InternetGatewayId')
+            route_table=route_table,
+            vpc_id=vpc.get('VpcId'),
+            subnet_id=subnet.get('SubnetId'),
+            igw_id=internet_gateway.get('InternetGatewayId'),
+            cidr='10.1.0.0/16'
         ))
 
     def test_kubernetes_grandmas_blanket_public_subnet_rt_configured(self) -> None:
@@ -251,10 +252,11 @@ class TestEKS(unittest.TestCase):
         internet_gateway = VPC.get_internet_gateways('kubernetes-vpc-internet-gateway')[0]
 
         self.assertTrue(VPC.route_table_configured(
-            route_table,
-            vpc.get('VpcId'),
-            subnet.get('SubnetId'),
-            internet_gateway.get('InternetGatewayId')
+            route_table=route_table,
+            vpc_id=vpc.get('VpcId'),
+            subnet_id=subnet.get('SubnetId'),
+            igw_id=internet_gateway.get('InternetGatewayId'),
+            cidr='10.1.0.0/16'
         ))
 
     def test_kubernetes_teddy_private_subnet_exists(self) -> None:
@@ -279,7 +281,7 @@ class TestEKS(unittest.TestCase):
         vpc = VPC.get_vpcs('kubernetes-vpc')[0]
         subnet = VPC.get_subnets('kubernetes-teddy-private-subnet')[0]
 
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.0.4.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1c', '10.1.4.0/24'))
 
     def test_kubernetes_lily_private_subnet_configured(self) -> None:
         """
@@ -289,7 +291,7 @@ class TestEKS(unittest.TestCase):
         vpc = VPC.get_vpcs('kubernetes-vpc')[0]
         subnet = VPC.get_subnets('kubernetes-lily-private-subnet')[0]
 
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.3.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.1.3.0/24'))
 
     """
     Helper methods for the Resources VPC

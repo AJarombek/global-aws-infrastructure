@@ -12,6 +12,7 @@ greenballs:latest
 job-dsl:latest
 kubernetes:latest
 matrix-auth:latest
+parameterized-scheduler:latest
 pipeline-build-step:latest
 pipeline-model-definition:latest
 pipeline-stage-view:latest

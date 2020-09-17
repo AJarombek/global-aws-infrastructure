@@ -531,7 +531,7 @@ resource "kubernetes_cluster_role" "external-dns" {
 
 resource "kubernetes_cluster_role_binding" "external-dns" {
   metadata {
-    name = "external-dns-viewer"
+    name = "external-dns"
   }
 
   role_ref {

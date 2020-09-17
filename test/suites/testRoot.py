@@ -32,7 +32,7 @@ class TestRoot(unittest.TestCase):
         """
         Determine if the sandbox VPC is configured and available as expected.
         """
-        self.assertTrue(VPC.vpc_configured('sandbox-vpc'))
+        self.assertTrue(VPC.vpc_configured(name='sandbox-vpc', cidr='10.2.0.0/16'))
 
     def test_sandbox_internet_gateway_exists(self) -> None:
         """
@@ -76,7 +76,7 @@ class TestRoot(unittest.TestCase):
         vpc = VPC.get_vpcs('sandbox-vpc')[0]
         subnet = VPC.get_subnets('sandbox-vpc-fearless-public-subnet')[0]
     
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.0.1.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1a', '10.2.1.0/24'))
     
     def test_sandbox_fearless_public_subnet_rt_configured(self) -> None:
         """
@@ -88,10 +88,11 @@ class TestRoot(unittest.TestCase):
         internet_gateway = VPC.get_internet_gateways('sandbox-vpc-internet-gateway')[0]
     
         self.assertTrue(VPC.route_table_configured(
-            route_table,
-            vpc.get('VpcId'),
-            subnet.get('SubnetId'),
-            internet_gateway.get('InternetGatewayId')
+            route_table=route_table,
+            vpc_id=vpc.get('VpcId'),
+            subnet_id=subnet.get('SubnetId'),
+            igw_id=internet_gateway.get('InternetGatewayId'),
+            cidr='10.2.0.0/16'
         ))
 
     def test_sandbox_speaknow_public_subnet_exists(self) -> None:
@@ -107,7 +108,7 @@ class TestRoot(unittest.TestCase):
         vpc = VPC.get_vpcs('sandbox-vpc')[0]
         subnet = VPC.get_subnets('sandbox-vpc-speaknow-public-subnet')[0]
     
-        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.0.2.0/24'))
+        self.assertTrue(VPC.subnet_configured(vpc, subnet, 'us-east-1b', '10.2.2.0/24'))
 
     def test_sandbox_speaknow_public_subnet_rt_configured(self) -> None:
         """
@@ -119,10 +120,11 @@ class TestRoot(unittest.TestCase):
         internet_gateway = VPC.get_internet_gateways('sandbox-vpc-internet-gateway')[0]
     
         self.assertTrue(VPC.route_table_configured(
-            route_table,
-            vpc.get('VpcId'),
-            subnet.get('SubnetId'),
-            internet_gateway.get('InternetGatewayId')
+            route_table=route_table,
+            vpc_id=vpc.get('VpcId'),
+            subnet_id=subnet.get('SubnetId'),
+            igw_id=internet_gateway.get('InternetGatewayId'),
+            cidr='10.2.0.0/16'
         ))
 
     """

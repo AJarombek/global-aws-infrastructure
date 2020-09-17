@@ -27,17 +27,18 @@ class VPC:
         return vpcs.get('Vpcs')
 
     @staticmethod
-    def vpc_configured(name: str) -> bool:
+    def vpc_configured(name: str, cidr: str = '10.0.0.0/16') -> bool:
         """
         Determine if a VPC is configured and available as expected.
         :param name: Name of the VPC in AWS
+        :param cidr: CIDR block of private IP addresses assigned to the VPC
         :return: True if the VPC is configured correctly, False otherwise
         """
         vpc = VPC.get_vpcs(name)[0]
 
         return all([
             vpc.get('State') == 'available',
-            vpc.get('CidrBlockAssociationSet')[0].get('CidrBlock') == '10.0.0.0/16',
+            vpc.get('CidrBlockAssociationSet')[0].get('CidrBlock') == cidr,
             vpc.get('CidrBlockAssociationSet')[0].get('CidrBlockState').get('State') == 'associated',
             vpc.get('IsDefault') is False
         ])
@@ -135,19 +136,26 @@ class VPC:
         return rts.get('RouteTables')
 
     @staticmethod
-    def route_table_configured(route_table: dict, vpc_id: str, subnet_id: str, igw_id: str) -> bool:
+    def route_table_configured(
+        route_table: dict,
+        vpc_id: str,
+        subnet_id: str,
+        igw_id: str,
+        cidr: str = '10.0.0.0/16'
+    ) -> bool:
         """
         Determine if a route table is configured as expected
         :param route_table: Dictionary containing information about a routing table
         :param vpc_id: Identifier for a VPC the routing table should exist in
         :param subnet_id: Identifier for a Subnet the routing table should be associated with
         :param igw_id: Identifier for an Internet Gateway used by the routing table to route traffic to the internet
+        :param cidr: CIDR block of private IP addresses assigned to the VPC
         :return: True if the route table is configured as expected, False otherwise
         """
         return all([
             route_table.get('VpcId') == vpc_id,
             len([True for item in route_table.get('Associations') if item.get('SubnetId') == subnet_id]) == 1,
-            route_table.get('Routes')[0].get('DestinationCidrBlock') == '10.0.0.0/16',
+            route_table.get('Routes')[0].get('DestinationCidrBlock') == cidr,
             route_table.get('Routes')[0].get('GatewayId') == 'local',
             route_table.get('Routes')[0].get('State') == 'active',
             route_table.get('Routes')[1].get('DestinationCidrBlock') == '0.0.0.0/0',
