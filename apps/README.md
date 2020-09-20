@@ -8,4 +8,4 @@ and repository for its core infrastructure.  Each application's infrastructure r
 | Directory Name    | Description                                                                        |
 |-------------------|------------------------------------------------------------------------------------|
 | `jarombek-com`    | Infrastructure for my personal website jarombek.com.                               |
-| `saintsxctf-com`  | Infrastructure for my cross country + track & field teams website saintsxctf.com.  |
+| `vpc`             | VPC which holds my production application infrastructure.                          |

@@ -135,6 +135,24 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.andrew-jarombek-eks-cluster.cluster_id
 }
 
+data "aws_vpc" "application-vpc" {
+  tags = {
+    Name = "application-vpc"
+  }
+}
+
+data "aws_subnet" "kubernetes-dotty-public-subnet" {
+  tags = {
+    Name = "kubernetes-dotty-public-subnet"
+  }
+}
+
+data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
+  tags = {
+    Name = "kubernetes-grandmas-blanket-public-subnet"
+  }
+}
+
 #----------------------------
 # Kubernetes Provider for EKS
 #----------------------------
@@ -150,38 +168,6 @@ provider "kubernetes" {
 # AWS Resources for EKS
 #----------------------
 
-module "kubernetes-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.12"
-
-  # Mandatory arguments
-  name = "kubernetes"
-  tag_name = "kubernetes"
-
-  # Optional arguments
-  vpc_cidr = "10.1.0.0/16"
-  public_subnet_count = 2
-  private_subnet_count = 2
-  enable_dns_support = true
-  enable_dns_hostnames = true
-  enable_nat_gateway = false
-
-  public_subnet_names = ["kubernetes-dotty-public-subnet", "kubernetes-grandmas-blanket-public-subnet"]
-  private_subnet_names = ["kubernetes-lily-private-subnet", "kubernetes-teddy-private-subnet"]
-
-  public_subnet_azs = local.kubernetes_public_subnet_azs
-  private_subnet_azs = local.kubernetes_private_subnet_azs
-  public_subnet_cidrs = local.kubernetes_public_subnet_cidrs
-  private_subnet_cidrs = local.kubernetes_private_subnet_cidrs
-
-  public_subnet_tags = local.kubernetes_public_subnet_tags
-  private_subnet_tags = local.kubernetes_private_subnet_tags
-
-  public_subnet_map_public_ip_on_launch = true
-
-  enable_security_groups = true
-  sg_rules = local.kubernetes_vpc_sg_rules
-}
-
 module "andrew-jarombek-eks-cluster" {
   source = "terraform-aws-modules/eks/aws"
   version = "~> 12.1.0"
@@ -189,8 +175,11 @@ module "andrew-jarombek-eks-cluster" {
   create_eks = true
   cluster_name = local.cluster_name
   cluster_version = "1.16"
-  vpc_id = module.kubernetes-vpc.vpc_id
-  subnets = module.kubernetes-vpc.public_subnet_ids
+  vpc_id = data.aws_vpc.application-vpc.id
+  subnets = [
+    data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id,
+    data.aws_subnet.kubernetes-dotty-public-subnet.id
+  ]
 
   worker_groups = [
     {
@@ -463,7 +452,7 @@ resource "kubernetes_deployment" "alb-ingress-controller" {
           args = [
             "--ingress-class=alb",
             "--cluster-name=${local.cluster_name}",
-            "--aws-vpc-id=${module.kubernetes-vpc.vpc_id}",
+            "--aws-vpc-id=${data.aws_vpc.application-vpc.id}",
             "--aws-region=us-east-1"
           ]
         }

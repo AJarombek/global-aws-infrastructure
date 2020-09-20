@@ -14,9 +14,9 @@ data "aws_eks_cluster_auth" "cluster" {
   name = "andrew-jarombek-eks-cluster"
 }
 
-data "aws_vpc" "kubernetes-vpc" {
+data "aws_vpc" "application-vpc" {
   tags = {
-    Name = "kubernetes-vpc"
+    Name = "application-vpc"
   }
 }
 
@@ -74,7 +74,7 @@ locals {
 
 resource "aws_security_group" "jenkins-lb-sg" {
   name = "jenkins-${local.short_env}-lb-security-group"
-  vpc_id = data.aws_vpc.kubernetes-vpc.id
+  vpc_id = data.aws_vpc.application-vpc.id
 
   lifecycle {
     create_before_destroy = true

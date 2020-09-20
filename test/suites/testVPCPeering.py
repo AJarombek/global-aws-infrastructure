@@ -18,6 +18,7 @@ class TestVPCPeering(unittest.TestCase):
         """
         self.ec2: EC2Client = boto3.client('ec2')
 
+    @unittest.skip("VPC peering is currently disabled.")
     def test_saints_xctf_kubernetes_connection(self):
         """
         Test that a VPC peering connection exists between the SaintsXCTF VPC and the Kubernetes VPC.
