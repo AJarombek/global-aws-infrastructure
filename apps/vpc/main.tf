@@ -120,7 +120,7 @@ terraform {
 }
 
 module "application-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.12"
+  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.13"
 
   # Mandatory arguments
   name = "application"

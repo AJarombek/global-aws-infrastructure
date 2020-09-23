@@ -21,6 +21,7 @@
         "cloudwatch:*",
         "ec2:*",
         "ecr:*",
+        "ecs:*",
         "elasticloadbalancing:*",
         "events:*",
         "iam:*",

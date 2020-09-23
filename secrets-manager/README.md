@@ -8,6 +8,7 @@ Terraform locally.
 
 | Directory Name        | Description                                                                 |
 |-----------------------|-----------------------------------------------------------------------------|
+| `aws-access`          | AWS access secrets stored in Secrets Manager.                               |
 | `dockerhub`           | DockerHub credentials stored in Secrets Manager.                            |
 | `github`              | GitHub SSH key stored in Secrets Manager.                                   |
 | `github-access-token` | GitHub account access token stored in Secrets Manager.                      |

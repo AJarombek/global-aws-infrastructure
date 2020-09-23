@@ -77,6 +77,16 @@ credentials:
             username: "andy"
             password: ${SAINTSXCTF_PASSWORD}
             description: "SaintsXCTF Andy Password"
+        - string:
+            scope: GLOBAL
+            id: "aws-access-key-id"
+            secret: ${AWS_ACCESS_KEY_ID}
+            description: "AWS Access Key ID Used with the CLI and SDK"
+        - string:
+            scope: GLOBAL
+            id: "aws-secret-access-key"
+            secret: ${AWS_SECRET_ACCESS_KEY}
+            description: "AWS Secret Access Key Used with the CLI and SDK"
 unclassified:
   globalLibraries:
     libraries:
