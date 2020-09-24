@@ -19,6 +19,15 @@ class TestSecretsManager(unittest.TestCase):
         """
         self.secrets_manager: SecretsManagerClient = boto3.client('secretsmanager')
 
+    def test_aws_access_secrets_exists(self):
+        """
+        Test that the AWS CLI & SDK access secrets exist as expected in Secrets Manager.
+        """
+        self.assertTrue(SecretsManager.validate_secret(
+            secret_id='aws-access-secrets',
+            description='AWS access secrets for using the AWS CLI and SDKs'
+        ))
+
     def test_dockerhub_secret_exists(self):
         """
         Test that the DockerHub credentials exist as expected in Secrets Manager.

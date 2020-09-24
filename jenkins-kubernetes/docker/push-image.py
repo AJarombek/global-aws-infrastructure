@@ -40,6 +40,7 @@ def main():
     saintsxctf_rds_dev_username, saintsxctf_rds_dev_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
     saintsxctf_rds_prod_username, saintsxctf_rds_prod_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
     saintsxctf_password = get_saintsxctf_password(secretsmanager)
+    aws_access_key_id, aws_secret_access_key = get_aws_access_secrets(secretsmanager)
     kubernetes_url = get_kubernetes_url()
 
     with open("jenkins-template.yaml", "r+") as file:
@@ -63,6 +64,8 @@ def main():
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_USERNAME}", saintsxctf_rds_prod_username)
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_RDS_PROD_PASSWORD}", saintsxctf_rds_prod_password)
     jenkins_config = jenkins_config.replace("${SAINTSXCTF_PASSWORD}", saintsxctf_password)
+    jenkins_config = jenkins_config.replace("${AWS_ACCESS_KEY_ID}", aws_access_key_id)
+    jenkins_config = jenkins_config.replace("${AWS_SECRET_ACCESS_KEY}", aws_secret_access_key)
     jenkins_config = jenkins_config.replace("${KUBERNETES_URL}", kubernetes_url)
 
     with open("jenkins.yaml", "w") as file:
@@ -82,6 +85,19 @@ def main():
             return 1
 
     return 0
+
+
+def get_aws_access_secrets(secretsmanager: SecretsManagerClient) -> Tuple[str, str]:
+    """
+    Get secrets for AWS CLI and SDK access from AWS Secrets Manager.
+    :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
+    :return: The AWS secrets.
+    """
+    secret = secretsmanager.get_secret_value(SecretId=f"aws-access-secrets")
+
+    secret_string = secret.get('SecretString')
+    secret_dict: dict = json.loads(secret_string)
+    return secret_dict["aws_access_key_id"], secret_dict["aws_secret_access_key"]
 
 
 def get_github_key(secretsmanager: SecretsManagerClient) -> str:
@@ -163,7 +179,7 @@ def get_saintsxctf_rds_credentials(env: str, secretsmanager: SecretsManagerClien
     return secret_dict["username"], secret_dict["password"]
 
 
-def get_saintsxctf_password(secretsmanager: SecretsManagerClient) -> Tuple[str, str]:
+def get_saintsxctf_password(secretsmanager: SecretsManagerClient) -> str:
     """
     Get the password for the SaintsXCTF user 'andy'.
     :param secretsmanager: Boto3 Secrets Manager client used to get secrets.
