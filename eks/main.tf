@@ -17,6 +17,7 @@ terraform {
     null = ">= 2.1"
     local = ">= 1.4"
     template = ">= 2.1"
+    external = ">= 1.2"
   }
 
   backend "s3" {
@@ -126,6 +127,7 @@ locals {
 #-----------------------
 
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 data "aws_eks_cluster" "cluster" {
   name = module.andrew-jarombek-eks-cluster.cluster_id
@@ -151,6 +153,10 @@ data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
   tags = {
     Name = "kubernetes-grandmas-blanket-public-subnet"
   }
+}
+
+data "external" "oidc-thumbprint" {
+  program = ["${path.module}/thumbprint.sh", data.aws_region.current.name]
 }
 
 #----------------------------
@@ -194,7 +200,7 @@ resource "aws_iam_openid_connect_provider" "eks" {
   client_id_list = ["sts.amazonaws.com"]
   // Thumbprint for us-east-1: https://github.com/terraform-providers/terraform-provider-aws/issues/10104#issuecomment-633130751
   // OIDC Thumbprint: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
-  thumbprint_list = ["CE777AD27909E070D99EECE1FF2F774624E1E7E7"]
+  thumbprint_list = [data.external.oidc-thumbprint.result.thumbprint]
   url = data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer
 }
 

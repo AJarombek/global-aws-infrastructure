@@ -10,6 +10,8 @@ Terraform infrastructure for building an EKS cluster.  Infrastructure includes a
 | `alb-ingress-controller-policy.json`  | IAM Policy for the ALB Ingress Controller in EKS.                            |
 | `external-dns-policy.json`            | IAM Policy for External DNS in EKS.                                          |
 | `main.tf`                             | Terraform configuration for the EKS cluster.                                 |
+| `thumbprint.sh`                       | Script which gets the OIDC thumbprint needed for the ALB Ingress Controller. |
+| `worker-pods-policy.json`             | IAM policy for the worker nodes in the cluster.                              |
 
 ### Commands
 
