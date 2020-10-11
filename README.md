@@ -33,6 +33,7 @@ AWS infrastructure in the previous three days.
 | `api-gateway`        | Global API Gateway configuration.                                           |
 | `apps`               | Infrastructure for individual applications.                                 |
 | `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
+| `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
 | `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                  |
 | `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
 | `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
