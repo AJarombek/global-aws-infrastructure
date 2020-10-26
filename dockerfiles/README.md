@@ -29,5 +29,6 @@ aws --version
 
 | Filename                              | Description                                                                  |
 |---------------------------------------|------------------------------------------------------------------------------|
+| `mysql:5.7.sh`                        | Bash commands for working with the official MySQL 5.7 Docker image.          |
 | `mysql-aws.dockerfile`                | Dockerfile for an image that contains the AWS CLI and MySQL client.          |
 | `pipenv-flask.dockerfile`             | Dockerfile for an image that installs `pipenv` and exposes a port for flask. |

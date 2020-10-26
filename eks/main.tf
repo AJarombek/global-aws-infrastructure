@@ -155,8 +155,8 @@ data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
   }
 }
 
-data "external" "oidc-thumbprint" {
-  program = ["${path.module}/thumbprint.sh", data.aws_region.current.name]
+data "tls_certificate" "cluster" {
+  url = data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer
 }
 
 #----------------------------
@@ -200,7 +200,8 @@ resource "aws_iam_openid_connect_provider" "eks" {
   client_id_list = ["sts.amazonaws.com"]
   // Thumbprint for us-east-1: https://github.com/terraform-providers/terraform-provider-aws/issues/10104#issuecomment-633130751
   // OIDC Thumbprint: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
-  thumbprint_list = [data.external.oidc-thumbprint.result.thumbprint]
+  // https://marcincuber.medium.com/amazon-eks-with-oidc-provider-iam-roles-for-kubernetes-services-accounts-59015d15cb0c
+  thumbprint_list = [data.tls_certificate.cluster.certificates.0.sha1_fingerprint]
   url = data.aws_eks_cluster.cluster.identity.0.oidc.0.issuer
 }
 

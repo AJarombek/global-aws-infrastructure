@@ -29,6 +29,13 @@ terraform plan -destroy
 terraform destroy -auto-approve
 ```
 
+**Force Resource to Update**
+
+```bash
+terraform taint aws_iam_openid_connect_provider.eks
+terraform apply -auto-approve 
+```
+
 **Inspect EKS Locally**
 
 > WGet, AWS Iam Authenticator, and Kubectl are dependencies for inspecting EKS locally (MacOS)
@@ -58,7 +65,7 @@ kubectl get nodes
 
 ```bash
 kubectl get po -n kube-system
-kubectl logs -f external-dns-pof-name -n kube-system
+kubectl logs -f external-dns-pod-name -n kube-system
 ```
 
 ### Resources
@@ -73,3 +80,4 @@ kubectl logs -f external-dns-pof-name -n kube-system
 8) [ALB Ingress External DNS](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/external-dns/setup/)
 9) [External DNS New Endpoints Permissions](https://github.com/kubernetes-sigs/external-dns/issues/961#issuecomment-664849509)
 10) [ALB Ingress Controller Annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#annotations)
+11) [TLS Certificate Thumbprint List](https://marcincuber.medium.com/amazon-eks-with-oidc-provider-iam-roles-for-kubernetes-services-accounts-59015d15cb0c)
