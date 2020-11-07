@@ -68,6 +68,15 @@ kubectl get po -n kube-system
 kubectl logs -f external-dns-pod-name -n kube-system
 ```
 
+**Debugging Kube DNS**
+
+```bash
+kubectl get service kube-dns -n kube-system
+kubectl -n kube-system get endpoints kube-dns
+kubectl -n kube-system describe endpoints kube-dns
+kubectl logs -n kube-system --selector 'k8s-app=kube-proxy'
+```
+
 ### Resources
 
 1) [EKS Control Plane Logging](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)

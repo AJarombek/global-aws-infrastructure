@@ -6,3 +6,4 @@
 jenkins-kubernetes/docker/jenkins.yaml
 jenkins-kubernetes/docker/env
 eks/kubeconfig_andrew-jarombek-eks-cluster
+.DS_Store

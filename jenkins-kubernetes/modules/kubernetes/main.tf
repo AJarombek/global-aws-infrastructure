@@ -327,6 +327,7 @@ resource "kubernetes_ingress" "ingress" {
     annotations = {
       "kubernetes.io/ingress.class" = "alb"
       "external-dns.alpha.kubernetes.io/hostname" = "jenkins.jarombek.io,www.jenkins.jarombek.io"
+      "alb.ingress.kubernetes.io/actions.ssl-redirect" = "{\"Type\": \"redirect\", \"RedirectConfig\": {\"Protocol\": \"HTTPS\", \"Port\": \"443\", \"StatusCode\": \"HTTP_301\"}}"
       "alb.ingress.kubernetes.io/backend-protocol" = "HTTP"
       "alb.ingress.kubernetes.io/certificate-arn" = "${local.cert_arn},${local.wildcard_cert_arn}"
       "alb.ingress.kubernetes.io/healthcheck-path" = "/login"
@@ -355,6 +356,15 @@ resource "kubernetes_ingress" "ingress" {
           path = "/*"
 
           backend {
+            service_name = "ssl-redirect"
+            service_port = "use-annotation"
+          }
+        }
+
+        path {
+          path = "/*"
+
+          backend {
             service_name = "jenkins-service"
             service_port = 80
           }
@@ -366,6 +376,15 @@ resource "kubernetes_ingress" "ingress" {
       host = "www.jenkins.jarombek.io"
 
       http {
+        path {
+          path = "/*"
+
+          backend {
+            service_name = "ssl-redirect"
+            service_port = "use-annotation"
+          }
+        }
+
         path {
           path = "/*"
 

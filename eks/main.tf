@@ -180,7 +180,7 @@ module "andrew-jarombek-eks-cluster" {
 
   create_eks = true
   cluster_name = local.cluster_name
-  cluster_version = "1.16"
+  cluster_version = "1.18"
   vpc_id = data.aws_vpc.application-vpc.id
   subnets = [
     data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id,
@@ -270,6 +270,26 @@ resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
   cidr_blocks = ["10.0.0.0/8"]
   security_group_id = module.andrew-jarombek-eks-cluster.worker_security_group_id
   description = "Inbound access to worker nodes from ALBs created by an EKS ingress controller."
+}
+
+resource "aws_security_group_rule" "rds-outbound-security-group-rule" {
+  type = "egress"
+  from_port = 3306
+  to_port = 3306
+  protocol = "TCP"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.andrew-jarombek-eks-cluster.worker_security_group_id
+  description = "Outbound access to RDS instances from the worker nodes."
+}
+
+resource "aws_security_group_rule" "rds-inbound-security-group-rule" {
+  type = "ingress"
+  from_port = 3306
+  to_port = 3306
+  protocol = "TCP"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.andrew-jarombek-eks-cluster.worker_security_group_id
+  description = "Inbound access from RDS instances to the worker nodes."
 }
 
 #-----------------------------

@@ -7,13 +7,9 @@ jenkins:
     globalMatrix:
       permissions:
         - "Overall/Administer:andy"
-        - "Credentials/View:guest"
-        - "Agent/Build:guest"
-        - "Job/Cancel:guest"
         - "Job/Discover:guest"
         - "Job/Read:guest"
         - "Job/Workspace:guest"
-        - "Run/Replay:guest"
         - "View/Read:guest"
   clouds:
     - kubernetes:
