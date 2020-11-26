@@ -5,10 +5,11 @@ Date: 7/1/2020
 """
 
 import unittest
+
 import boto3
 from boto3_type_annotations.secretsmanager import Client as SecretsManagerClient
 
-from utils.secretsManager import SecretsManager
+from aws_test_functions.SecretsManager import SecretsManager
 
 
 class TestSecretsManager(unittest.TestCase):

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../cloud-modules" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/0b71abc3505bdb2eb4990e971392bbec" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/534d9a843049848b79094620ff311b8e" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/8fd21e217d102edaa7dea17ed2ea131c" vcs="Git" />
@@ -21,5 +22,6 @@
     <mapping directory="$PROJECT_DIR$/root/.terraform/modules/65af64434d19713703f34465fa66daa6" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/root/.terraform/modules/b259574dfe34887baa8ad063f572f71a" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/root/.terraform/modules/resources-vpc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../terraform-modules" vcs="Git" />
   </component>
 </project>

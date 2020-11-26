@@ -7,8 +7,9 @@ Date: 4/27/2019
 import unittest
 
 import boto3
-from utils.ec2 import EC2
-from utils.securityGroup import SecurityGroup
+
+from aws_test_functions.EC2 import EC2
+from aws_test_functions.SecurityGroup import SecurityGroup
 
 
 class TestJenkins(unittest.TestCase):

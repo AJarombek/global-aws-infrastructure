@@ -5,8 +5,10 @@ Date: 9/15/2020
 """
 
 import unittest
-import boto3
 from typing import List
+
+import boto3
+
 from boto3_type_annotations.ec2 import Client as EC2Client
 
 

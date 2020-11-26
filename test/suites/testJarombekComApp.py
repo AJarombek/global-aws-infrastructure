@@ -7,8 +7,9 @@ Date: 5/4/2019
 import unittest
 
 import boto3
-from utils.vpc import VPC
-from utils.securityGroup import SecurityGroup
+
+from aws_test_functions.VPC import VPC
+from aws_test_functions.SecurityGroup import SecurityGroup
 
 
 class TestJarombekComApp(unittest.TestCase):

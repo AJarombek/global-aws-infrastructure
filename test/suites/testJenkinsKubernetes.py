@@ -5,14 +5,15 @@ Date: 4/27/2019
 """
 
 import unittest
-import boto3
 import os
+
+import boto3
 from boto3_type_annotations.route53 import Client as Route53Client
 from boto3_type_annotations.acm import Client as ACMClient
 from boto3_type_annotations.ecr import Client as ECRClient
 
-from utils.route53 import Route53
-from utils.securityGroup import SecurityGroup
+from aws_test_functions.Route53 import Route53
+from aws_test_functions.SecurityGroup import SecurityGroup
 
 try:
     env = os.environ['TEST_ENV']

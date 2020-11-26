@@ -5,15 +5,15 @@ Date: 7/2/2020
 """
 
 import unittest
+
 import boto3
 from boto3_type_annotations.eks import Client as EKSClient
 from boto3_type_annotations.iam import Client as IAMClient
 from boto3_type_annotations.sts import Client as STSClient
 from boto3_type_annotations.ec2 import Client as EC2Client
 
-from utils.ec2 import EC2
-from utils.vpc import VPC
-from utils.securityGroup import SecurityGroup
+from aws_test_functions.EC2 import EC2
+from aws_test_functions.VPC import VPC
 
 
 class TestEKS(unittest.TestCase):

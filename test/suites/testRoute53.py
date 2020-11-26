@@ -5,8 +5,10 @@ Date: 4/27/2019
 """
 
 import unittest
+
 import boto3
-from utils.route53 import Route53
+
+from aws_test_functions.Route53 import Route53
 
 
 class TestRoute53(unittest.TestCase):
