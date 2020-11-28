@@ -9,6 +9,7 @@ package main
 
 import (
 	"fmt"
+	k8sfuncs "github.com/ajarombek/cloud-modules/kubernetes-test-functions"
 	v1 "k8s.io/api/core/v1"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
@@ -17,13 +18,13 @@ import (
 // TestJenkinsNamespaceDeploymentCount determines if the number of 'Deployment' objects in the 'jenkins' namespace is
 // as expected.
 func TestJenkinsNamespaceDeploymentCount(t *testing.T) {
-	expectedDeploymentCount(t, ClientSet, "jenkins", 1)
+	k8sfuncs.ExpectedDeploymentCount(t, ClientSet, "jenkins", 1)
 }
 
 // TestJenkinsDeploymentExists determines if a deployment exists in the 'jenkins' namespace with the name
 // 'jenkins-deployment'.
 func TestJenkinsDeploymentExists(t *testing.T) {
-	deploymentExists(t, ClientSet, "jenkins-deployment", "jenkins")
+	k8sfuncs.DeploymentExists(t, ClientSet, "jenkins-deployment", "jenkins")
 }
 
 // TestJenkinsDeploymentExists determines if the 'jenkins-deployment' is running error free.
@@ -36,24 +37,24 @@ func TestJenkinsDeploymentErrorFree(t *testing.T) {
 
 	deploymentConditions := deployment.Status.Conditions
 
-	conditionStatusMet(t, deploymentConditions, "Available", "True")
-	conditionStatusMet(t, deploymentConditions, "Progressing", "True")
+	k8sfuncs.ConditionStatusMet(t, deploymentConditions, "Available", "True")
+	k8sfuncs.ConditionStatusMet(t, deploymentConditions, "Progressing", "True")
 
 	totalReplicas := deployment.Status.Replicas
 	var expectedTotalReplicas int32 = 1
-	replicaCountAsExpected(t, expectedTotalReplicas, totalReplicas, "total number of replicas")
+	k8sfuncs.ReplicaCountAsExpected(t, expectedTotalReplicas, totalReplicas, "total number of replicas")
 
 	availableReplicas := deployment.Status.AvailableReplicas
 	var expectedAvailableReplicas int32 = 1
-	replicaCountAsExpected(t, expectedAvailableReplicas, availableReplicas, "number of available replicas")
+	k8sfuncs.ReplicaCountAsExpected(t, expectedAvailableReplicas, availableReplicas, "number of available replicas")
 
 	readyReplicas := deployment.Status.ReadyReplicas
 	var expectedReadyReplicas int32 = 1
-	replicaCountAsExpected(t, expectedReadyReplicas, readyReplicas, "number of ready replicas")
+	k8sfuncs.ReplicaCountAsExpected(t, expectedReadyReplicas, readyReplicas, "number of ready replicas")
 
 	UnavailableReplicas := deployment.Status.UnavailableReplicas
 	var expectedUnavailableReplicas int32 = 0
-	replicaCountAsExpected(t, expectedUnavailableReplicas, UnavailableReplicas, "number of unavailable replicas")
+	k8sfuncs.ReplicaCountAsExpected(t, expectedUnavailableReplicas, UnavailableReplicas, "number of unavailable replicas")
 }
 
 // TestJenkinsNamespaceIngressCount determines if the number of 'Ingress' objects in the 'jenkins' namespace is
@@ -118,31 +119,32 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 	annotations := ingress.Annotations
 
 	// Kubernetes Ingress class and ExternalDNS annotations
-	annotationsEqual(t, annotations, "kubernetes.io/ingress.class", "alb")
-	annotationsEqual(t, annotations, "external-dns.alpha.kubernetes.io/hostname", "jenkins.jarombek.io,www.jenkins.jarombek.io")
+	k8sfuncs.AnnotationsEqual(t, annotations, "kubernetes.io/ingress.class", "alb")
+	k8sfuncs.AnnotationsEqual(t, annotations, "external-dns.alpha.kubernetes.io/hostname", "jenkins.jarombek.io,www.jenkins.jarombek.io")
 
 	// ALB Ingress annotations
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/backend-protocol", "HTTP")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/scheme", "internet-facing")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/listen-ports", "[{\"HTTP\":80}, {\"HTTPS\":443}]")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-path", "/login")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-protocol", "HTTP")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/target-type", "instance")
-	annotationsEqual(t, annotations, "alb.ingress.kubernetes.io/tags", "Name=jenkins-load-balancer,Application=jenkins,Environment=production")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/actions.ssl-redirect", "{\"Type\": \"redirect\", \"RedirectConfig\": {\"Protocol\": \"HTTPS\", \"Port\": \"443\", \"StatusCode\": \"HTTP_301\"}}")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/backend-protocol", "HTTP")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/scheme", "internet-facing")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/listen-ports", "[{\"HTTP\":80}, {\"HTTPS\":443}]")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-path", "/login")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/healthcheck-protocol", "HTTP")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/target-type", "instance")
+	k8sfuncs.AnnotationsEqual(t, annotations, "alb.ingress.kubernetes.io/tags", "Name=jenkins-load-balancer,Application=jenkins,Environment=production")
 
 	// ALB Ingress annotations pattern matching
 	uuidPattern := "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 	certificateArnPattern := fmt.Sprintf("arn:aws:acm:us-east-1:739088120071:certificate/%s", uuidPattern)
 	certificatesPattern := fmt.Sprintf("^%s,%s$", certificateArnPattern, certificateArnPattern)
-	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/certificate-arn", certificatesPattern)
+	k8sfuncs.AnnotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/certificate-arn", certificatesPattern)
 
 	sgPattern := "^sg-[0-9a-f]+$"
-	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/security-groups", sgPattern)
+	k8sfuncs.AnnotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/security-groups", sgPattern)
 
 	subnetsPattern := "^subnet-[0-9a-f]+,subnet-[0-9a-f]+$"
-	annotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/subnets", subnetsPattern)
+	k8sfuncs.AnnotationsMatchPattern(t, annotations, "alb.ingress.kubernetes.io/subnets", subnetsPattern)
 
-	expectedAnnotationsLength := 12
+	expectedAnnotationsLength := 13
 	annotationLength := len(annotations)
 
 	if expectedAnnotationsLength == annotationLength {

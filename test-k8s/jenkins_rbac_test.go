@@ -7,6 +7,7 @@
 package main
 
 import (
+	k8sfuncs "github.com/ajarombek/cloud-modules/kubernetes-test-functions"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
 )
@@ -40,13 +41,13 @@ func TestJenkinsNamespaceServiceAccountCount(t *testing.T) {
 // TestJenkinsServerServiceAccountExists tests that the 'jenkins-server' service account exists in
 // the 'jenkins' namespace.
 func TestJenkinsServerServiceAccountExists(t *testing.T)  {
-	serviceAccountExists(t, ClientSet, "jenkins-server", "jenkins")
+	k8sfuncs.ServiceAccountExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
 // TestJenkinsServerServiceAccountExists tests that the 'jenkins-kubernetes-test' service account exists in
 // the 'jenkins' namespace.
 func TestJenkinsKubernetesTestServiceAccountExists(t *testing.T)  {
-	serviceAccountExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
+	k8sfuncs.ServiceAccountExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
 }
 
 // TestJenkinsNamespaceRoleCount determines if the expected number of roles exist in the 'jenkins' namespace.
@@ -76,12 +77,12 @@ func TestJenkinsNamespaceRoleCount(t *testing.T) {
 
 // TestJenkinsServerRoleExists tests that the 'jenkins-server' role exists in the 'jenkins' namespace.
 func TestJenkinsServerRoleExists(t *testing.T) {
-	roleExists(t, ClientSet, "jenkins-server", "jenkins")
+	k8sfuncs.RoleExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
 // TestJenkinsKubernetesTestRoleExists tests that the 'jenkins-kubernetes-test' cluster role exists.
 func TestJenkinsKubernetesTestRoleExists(t *testing.T) {
-	clusterRoleExists(t, ClientSet, "jenkins-kubernetes-test")
+	k8sfuncs.ClusterRoleExists(t, ClientSet, "jenkins-kubernetes-test")
 }
 
 // TestJenkinsNamespaceRoleBindingCount determines if the expected number of RoleBinding objects exist in the
@@ -112,12 +113,12 @@ func TestJenkinsNamespaceRoleBindingCount(t *testing.T) {
 
 // TestJenkinsServerRoleBindingExists tests that the 'jenkins-server' role binding exists in the 'jenkins' namespace.
 func TestJenkinsServerRoleBindingExists(t *testing.T) {
-	roleBindingExists(t, ClientSet, "jenkins-server", "jenkins")
+	k8sfuncs.RoleBindingExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
 // TestJenkinsKubernetesTestRoleBindingExists tests that the 'jenkins-kubernetes-test' cluster role binding exists.
 func TestJenkinsKubernetesTestRoleBindingExists(t *testing.T) {
-	clusterRoleBindingExists(t, ClientSet, "jenkins-kubernetes-test")
+	k8sfuncs.ClusterRoleBindingExists(t, ClientSet, "jenkins-kubernetes-test")
 }
 
 

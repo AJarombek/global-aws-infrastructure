@@ -1,9 +1,17 @@
-module jarombek.io/testeks
+// Go module definition for the global-k8s-infrastructure-tests module.
+// Author: Andrew Jarombek
+// Date: 11/28/2020
+
+module github.com/ajarombek/global-k8s-infrastructure-tests
 
 go 1.14
 
 require (
-	k8s.io/api v0.0.0-20190918155943-95b840bb6a1f
-	k8s.io/apimachinery v0.0.0-20190913080033-27d36303b655
-	k8s.io/client-go v0.0.0-20190918160344-1fbdaa4c8d90
+	github.com/ajarombek/cloud-modules/kubernetes-test-functions v0.2.6
+	k8s.io/api v0.17.0
+	k8s.io/apimachinery v0.17.3-beta.0
+	k8s.io/client-go v0.17.0
 )
+
+// For local use - replace the github repository module with a local path.
+// replace github.com/ajarombek/cloud-modules/kubernetes-test-functions => ../../cloud-modules/kubernetes-test-functions

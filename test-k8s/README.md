@@ -4,6 +4,7 @@
 
 ```bash
 brew install go@1.14
+echo 'export PATH="/usr/local/opt/go@1.14/bin:$PATH"' >> ~/.zshrc
 go version
 
 # Setup Go module
@@ -30,7 +31,6 @@ go test --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew
 | `jenkins_test.go`        | Kubernetes tests for the 'jenkins' namespace.                                                |
 | `main_test.go`           | Setup functions for Kubernetes tests.                                                        |
 | `namespace_test.go`      | Kubernetes tests for namespaces in the cluster.                                              |
-| `utils.go`               | Utility functions to assist Kubernetes tests.                                                |
 | `go.mod`                 | Go module definition and dependency specification.                                           |
 | `go.sum`                 | Versions of modules installed as dependencies for this Go module.                            |
 
