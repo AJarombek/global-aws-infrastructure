@@ -1,0 +1,17 @@
+{
+  "name": "upload-picture-layer",
+  "version": "1.0.0",
+  "description": "An AWS Lambda Layer used for uploading pictures to AWS S3.",
+  "main": "picture.js",
+  "repository": "https://github.com/AJarombek/saints-xctf-functions/upload-group-picture",
+  "author": "Andrew Jarombek <andrew@jarombek.com>",
+  "keywords": [
+    "NodeJS",
+    "AWS Lambda"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.797.0"
+  }
+}

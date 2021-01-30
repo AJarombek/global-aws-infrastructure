@@ -39,6 +39,7 @@ AWS infrastructure in the previous three days.
 | `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
 | `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |
 | `jenkins-efs`        | *DEPRECATED* - Terraform scripts for creating an EFS for the Jenkins server.|
+| `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
 | `root`               | Root Terraform scripts for creating the accounts VPCs.                      |
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |
 | `s3`                 | Terraform scripts for global S3 assets.                                     |
