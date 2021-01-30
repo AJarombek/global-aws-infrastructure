@@ -15,6 +15,7 @@ repository.
 | `testJenkins.py`           | *DEPRECATED* Test suite for the Jenkins EC2 infrastructure.                             |
 | `testJenkinsEFS.py`        | *DEPRECATED* Test suite for the EFS persistent storage for the Jenkins EC2 instance.    |
 | `testJenkinsKubernetes.py` | Test suite for the Jenkins infrastructure on Kubernetes.                                |
+| `testLambdaLayers.py`      | Test suite for reusable AWS Lambda layers.                                              |
 | `testRoot.py`              | Test suite for the Root infrastructure for my AWS cloud.                                |
 | `testRoute53.py`           | Test suite for Route53 records used globally.                                           |
 | `testS3.py`                | Test suite for a global S3 bucket.                                                      |
