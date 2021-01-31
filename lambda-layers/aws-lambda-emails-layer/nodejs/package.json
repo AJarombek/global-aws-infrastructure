@@ -1,0 +1,16 @@
+{
+  "name": "aws-lambda-emails-layer",
+  "version": "1.0.0",
+  "description": "AWS Lambda layer for the aws-lambda-emails repository",
+  "main": "index.js",
+  "repository": "https://github.com/AJarombek/global-aws-infrastructure/lambda-layers/aws-lambda-emails-layer",
+  "author": "Andrew Jarombek <andrew@jarombek.com>",
+  "keywords": [
+    "NodeJS",
+    "AWS Lambda"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "aws-lambda-emails": "git://github.com/ajarombek/aws-lambda-emails.git#v1.0.0"
+  }
+}
