@@ -43,11 +43,33 @@ resource "aws_cloudtrail" "trail" {
   is_organization_trail = false
   include_global_service_events = true
 
+  event_selector {
+    read_write_type = "All"
+    include_management_events = true
+
+    data_resource {
+      type = "AWS::Lambda::Function"
+      values = ["arn:aws:lambda"]
+    }
+  }
+
+  event_selector {
+    read_write_type = "All"
+    include_management_events = true
+
+    data_resource {
+      type = "AWS::S3::Object"
+      values = ["arn:aws:s3:::"]
+    }
+  }
+
   tags = {
     Name = "andrew-jarombek-cloudtrail"
     Application = "global"
     Environment = "all"
   }
+
+  depends_on = [aws_s3_bucket_policy.andrew-jarombek-cloud-trail-policy]
 }
 
 resource "aws_s3_bucket" "andrew-jarombek-cloud-trail" {

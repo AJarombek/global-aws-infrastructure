@@ -8,7 +8,8 @@ repository.
 | Filename                   | Description                                                                             |
 |----------------------------|-----------------------------------------------------------------------------------------|
 | `testApplicationVPC.py`    | Test suite for the Application VPC.                                                     |
-| `testBackend.py`           | Test suite for the Terraform S3 Backend.                                                |
+| `testBackend.py`           | Test suite for AWS CloudTrail configuration.                                            |
+| `testCloudTrail.py`        | Test suite for the Terraform S3 Backend.                                                |
 | `testEKS.py`               | Test suite for the EKS cluster.                                                         |
 | `testIAM.py`               | Test suite for IAM roles and policies used globally.                                    |
 | `testJarombekComApp.py`    | Test suite for the Amazon HTTPS certificates.                                           |
