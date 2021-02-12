@@ -1,29 +1,28 @@
 # global-aws-infrastructure
 
+![Maintained Label](https://img.shields.io/badge/Maintained-Yes-brightgreen?style=for-the-badge)
+
 ### Overview
 
 This repository contains all the global infrastructure-as-code (IaC) for Andrew Jarombek.  All other IaC
 repositories are referenced in separate directories and README.md files.
 
-### CI/CD
+### Integration
 
-There are multiple Jenkins job for this infrastructure.  They are all located in the 
+There are multiple Jenkins jobs for this infrastructure.  They are all located in the 
 [`global-aws`](http://jenkins.jarombek.io/job/global-aws/) folder:
 
-- [`global-aws-infrastructure-test-prod`](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-prod/) 
-Runs tests on the production environment AWS infrastructure created with Terraform.
-- [`global-aws-infrastructure-test-dev`](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-dev/) 
-Runs tests on the development environment AWS infrastructure created with Terraform.
-- [`global-kubernetes-infrastructure-test`](http://jenkins.jarombek.io/job/global-aws/job/global-kubernetes-infrastructure-test/) 
-Runs tests on the Kubernetes (EKS) infrastructure created with Terraform.
-- [`cost-detection`](http://jenkins.jarombek.io/job/global-aws/job/cost-detection/) Detects the rolling average cost for 
-AWS infrastructure in the previous three days.
+[![Jenkins](https://img.shields.io/badge/Jenkins-%20global--aws--infrastructure--test--prod-blue?style=for-the-badge)](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-prod/)
+> Runs tests on the production environment AWS infrastructure created with Terraform.
 
-### Infrastructure Diagram
+[![Jenkins](https://img.shields.io/badge/Jenkins-%20global--aws--infrastructure--test--dev-blue?style=for-the-badge)](http://jenkins.jarombek.io/job/global-aws/job/global-aws-infrastructure-test-dev/)
+> Runs tests on the development environment AWS infrastructure created with Terraform.
 
-![AWS Model](aws-model.png)
+[![Jenkins](https://img.shields.io/badge/Jenkins-%20global--kubernetes--infrastructure--test-blue?style=for-the-badge)](http://jenkins.jarombek.io/job/global-aws/job/global-kubernetes-infrastructure-test/)
+> Runs tests on the Kubernetes (EKS) infrastructure created with Terraform.
 
-*Last Updated: Feb 10th, 2019*
+[![Jenkins](https://img.shields.io/badge/Jenkins-%20cost--detection-blue?style=for-the-badge)](http://jenkins.jarombek.io/job/global-aws/job/cost-detection/)
+> AWS infrastructure in the previous three days.
 
 ### Directories
 
@@ -33,6 +32,8 @@ AWS infrastructure in the previous three days.
 | `api-gateway`        | Global API Gateway configuration.                                           |
 | `apps`               | Infrastructure for individual applications.                                 |
 | `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
+| `budgets`            | Terraform scripts for setting AWS account budgets.                          |
+| `cloud-trail`        | Terraform scripts for AWS account auditing with CloudTrail.                 |
 | `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
 | `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                  |
 | `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
@@ -44,13 +45,30 @@ AWS infrastructure in the previous three days.
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |
 | `s3`                 | Terraform scripts for global S3 assets.                                     |
 | `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.             |
+| `sns`                | Terraform scripts for AWS SNS notifications.                                |
 | `vpc-peering`        | Terraform scripts for VPC peering connections between my VPCs.              |
 | `test`               | Python AWS infrastructure test suite.                                       |
 | `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
 ### Version History
 
-**[V.1.0.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v1.0.0) - MVP Release**
+**[v2.0.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.0) - Second Release**
+
+> Release Date: February 12th, 2021
+
+Tagging the repository with all the changes made after 2+ years of experience working with AWS.  The changes since 
+version 1 include but are not limited to:
+
+* EKS Cluster
+* Kubernetes Jenkins Server
+* Secrets in Secrets Manager
+* Lambda Layers
+* Reusable Dockerfiles
+* Route53 Health Checks
+* Budget Alarms
+* SNS Topics
+
+**[v1.0.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v1.0.0) - MVP Release**
 
 > Release Date: May 13th, 2019
 

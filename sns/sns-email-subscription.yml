@@ -1,0 +1,31 @@
+# CloudFormation template for creating an SNS Subscription that sends emails.
+# Author: Andrew Jarombek
+# Date: 2/12/2021
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'A SNS subscription which sends emails'
+
+Parameters:
+  SNSTopicArn:
+    Type: 'String'
+    Description: 'Amazon Resource Name for an SNS Topic'
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    -
+      Label:
+        default: 'Terraform AWS Data'
+    Parameters:
+      - SNSTopicArn
+    ParameterLabels:
+      SNSTopicArn:
+        default: 'Terraform AWS Data'
+
+Resources:
+  SNSEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: andrew@jarombek.com
+      Protocol: email
+      TopicArn: !Ref 'SNSTopicArn'

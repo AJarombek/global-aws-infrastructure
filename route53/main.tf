@@ -23,6 +23,14 @@ terraform {
   }
 }
 
+#---------------------------------------
+# Existing AWS Resources used by Route53
+#---------------------------------------
+
+data "aws_sns_topic" "alert-email" {
+  name = "alert-email-topic"
+}
+
 #------------------------------
 # New AWS Resources for Route53
 #------------------------------
@@ -71,7 +79,7 @@ resource "aws_cloudwatch_metric_alarm" "jarombek-com-health-check-alarm" {
   threshold = 0
   alarm_description = "Determine if jarombek.com is down."
 
-  alarm_actions = [aws_sns_topic.alert-email.arn]
+  alarm_actions = [data.aws_sns_topic.alert-email.arn]
   ok_actions = []
   insufficient_data_actions = []
 
@@ -112,7 +120,7 @@ resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-health-check-alarm" {
   threshold = 0
   alarm_description = "Determine if saintsxctf.com is down."
 
-  alarm_actions = [aws_sns_topic.alert-email.arn]
+  alarm_actions = [data.aws_sns_topic.alert-email.arn]
   ok_actions = []
   insufficient_data_actions = []
 
@@ -124,16 +132,5 @@ resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-health-check-alarm" {
     Name = "saints-xctf-com-health-check-alarm"
     Application = "saints-xctf-com"
     Environment = "production"
-  }
-}
-
-# NOTE - an email subscription to this topic needs to be created manually through the console or CloudFormation,
-# not Terraform.
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription#protocol
-resource "aws_sns_topic" "alert-email" {
-  name = "alert-email-topic"
-
-  tags = {
-    Name = "alert-email-topic"
   }
 }
