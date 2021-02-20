@@ -5,8 +5,11 @@ Date: 4/27/2019
 """
 
 import unittest
+from typing import List
 
 import boto3
+from boto3_type_annotations.route53 import Client as Route53Client
+from boto3_type_annotations.cloudwatch import Client as CloudwatchClient
 
 from aws_test_functions.Route53 import Route53
 
@@ -17,7 +20,8 @@ class TestRoute53(unittest.TestCase):
         """
         Perform set-up logic before executing any unit tests
         """
-        self.route53 = boto3.client('route53')
+        self.route53: Route53Client = boto3.client('route53')
+        self.cloudwatch: CloudwatchClient = boto3.client('cloudwatch')
 
     def test_jarombek_io_zone_exists(self) -> None:
         """
@@ -71,3 +75,83 @@ class TestRoute53(unittest.TestCase):
             return
     
         self.assertTrue(a_record.get('Name') == 'www.jarombek.io.' and a_record.get('Type') == 'A')
+
+    def test_jarombek_com_health_check_exists(self) -> None:
+        """
+        Determine if a Route53 Health Check exists for jarombek.com
+        """
+        health_checks: List[dict] = self.route53.list_health_checks().get('HealthChecks')
+        jarombek_com_health_checks = [
+            health_check for health_check in health_checks
+            if health_check.get('HealthCheckConfig').get('FullyQualifiedDomainName') == 'jarombek.com'
+        ]
+
+        self.assertEqual(1, len(jarombek_com_health_checks))
+
+        health_check_config = jarombek_com_health_checks[0].get('HealthCheckConfig')
+        self.assertEqual(443, health_check_config.get('Port'))
+        self.assertEqual('HTTPS', health_check_config.get('Type'))
+        self.assertEqual('/', health_check_config.get('ResourcePath'))
+        self.assertEqual(30, health_check_config.get('RequestInterval'))
+        self.assertEqual(3, health_check_config.get('FailureThreshold'))
+
+    def test_saintsxctf_com_health_check_exists(self) -> None:
+        """
+        Determine if a Route53 Health Check exists for saintsxctf.com
+        """
+        health_checks: List[dict] = self.route53.list_health_checks().get('HealthChecks')
+        saintsxctf_com_health_checks = [
+            health_check for health_check in health_checks
+            if health_check.get('HealthCheckConfig').get('FullyQualifiedDomainName') == 'saintsxctf.com'
+        ]
+
+        self.assertEqual(1, len(saintsxctf_com_health_checks))
+
+        health_check_config = saintsxctf_com_health_checks[0].get('HealthCheckConfig')
+        self.assertEqual(443, health_check_config.get('Port'))
+        self.assertEqual('HTTPS', health_check_config.get('Type'))
+        self.assertEqual('/', health_check_config.get('ResourcePath'))
+        self.assertEqual(30, health_check_config.get('RequestInterval'))
+        self.assertEqual(3, health_check_config.get('FailureThreshold'))
+
+    def test_jarombek_com_health_check_alarm_exists(self) -> None:
+        """
+        Determine if the Route53 Health Check for jarombek.com has a Cloudwatch alarm.
+        """
+        alarms: List[dict] = self.cloudwatch\
+            .describe_alarms(AlarmNames=['jarombek-com-health-check-alarm'])\
+            .get('MetricAlarms')
+
+        self.assertEqual(1, len(alarms))
+
+        alarm = alarms[0]
+        self.assertEqual('Determine if jarombek.com is down.', alarm.get('AlarmDescription'))
+        self.assertEqual('OK', alarm.get('StateValue'))
+        self.assertEqual('AWS/Route53', alarm.get('Namespace'))
+        self.assertEqual('HealthCheckStatus', alarm.get('MetricName'))
+        self.assertEqual('Minimum', alarm.get('Statistic'))
+        self.assertEqual('LessThanOrEqualToThreshold', alarm.get('ComparisonOperator'))
+        self.assertEqual(60, alarm.get('Period'))
+        self.assertEqual(2, alarm.get('EvaluationPeriods'))
+        self.assertEqual(0, alarm.get('Threshold'))
+
+    def test_saintsxctf_com_health_check_alarm_exists(self) -> None:
+        """
+        Determine if the Route53 Health Check for saintsxctf.com has a Cloudwatch alarm.
+        """
+        alarms: List[dict] = self.cloudwatch \
+            .describe_alarms(AlarmNames=['saints-xctf-com-health-check-alarm']) \
+            .get('MetricAlarms')
+
+        self.assertEqual(1, len(alarms))
+
+        alarm = alarms[0]
+        self.assertEqual('Determine if saintsxctf.com is down.', alarm.get('AlarmDescription'))
+        self.assertEqual('OK', alarm.get('StateValue'))
+        self.assertEqual('AWS/Route53', alarm.get('Namespace'))
+        self.assertEqual('HealthCheckStatus', alarm.get('MetricName'))
+        self.assertEqual('Minimum', alarm.get('Statistic'))
+        self.assertEqual('LessThanOrEqualToThreshold', alarm.get('ComparisonOperator'))
+        self.assertEqual(60, alarm.get('Period'))
+        self.assertEqual(2, alarm.get('EvaluationPeriods'))
+        self.assertEqual(0, alarm.get('Threshold'))

@@ -11,7 +11,7 @@ from boto3_type_annotations.budgets import Client as BudgetsClient
 from boto3_type_annotations.sts import Client as STSClient
 
 
-class TestCloudTrail(unittest.TestCase):
+class TestBudgets(unittest.TestCase):
 
     def setUp(self) -> None:
         """

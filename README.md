@@ -50,7 +50,7 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 | `test`               | Python AWS infrastructure test suite.                                       |
 | `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
-### Version History
+### Versions
 
 **[v2.0.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.0) - Second Release**
 

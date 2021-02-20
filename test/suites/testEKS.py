@@ -43,7 +43,7 @@ class TestEKS(unittest.TestCase):
         cluster_status = cluster.get('cluster').get('status')
 
         self.assertEqual('andrew-jarombek-eks-cluster', cluster_name)
-        self.assertEqual('1.16', kubernetes_version)
+        self.assertEqual('1.18', kubernetes_version)
         self.assertEqual('eks.3', platform_version)
         self.assertEqual('ACTIVE', cluster_status)
 
@@ -79,7 +79,7 @@ class TestEKS(unittest.TestCase):
         cluster_oidc_issuer = cluster_oidc_issuer.replace('https://', '')
 
         account_id = self.sts.get_caller_identity().get('Account')
-        us_east_1_thumbprint = 'ce777ad27909e070d99eece1ff2f774624e1e7e7'
+        us_east_1_thumbprint = '9e99a48a9960b14926bb7f3b02e22da2b0ab7280'
 
         open_id_connect_provider = self.iam.get_open_id_connect_provider(
             OpenIDConnectProviderArn=f'arn:aws:iam::{account_id}:oidc-provider/{cluster_oidc_issuer}'

@@ -16,6 +16,7 @@
         "apigateway:*",
         "acm:*",
         "autoscaling:*",
+        "budgets:*",
         "ce:*",
         "cloudfront:*",
         "cloudwatch:*",
