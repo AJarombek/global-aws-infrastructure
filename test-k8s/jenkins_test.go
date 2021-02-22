@@ -163,6 +163,7 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 }
 
 // TestJenkinsNamespaceServiceCount determines if the expected number of Service objects exist in the 'jenkins'
+// TestJenkinsNamespaceServiceCount determines if the expected number of Service objects exist in the 'jenkins'
 // namespace.
 func TestJenkinsNamespaceServiceCount(t *testing.T) {
 	expectedServiceCount := 2

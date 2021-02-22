@@ -26,7 +26,6 @@ class TestRoute53(unittest.TestCase):
     def test_jarombek_io_zone_exists(self) -> None:
         """
         Determine if the jarombek.io Route53 zone exists.
-        :return: True if it exists, False otherwise
         """
         zones = self.route53.list_hosted_zones_by_name(DNSName='jarombek.io.', MaxItems='1').get('HostedZones')
         self.assertTrue(len(zones) == 1)
@@ -113,6 +112,13 @@ class TestRoute53(unittest.TestCase):
         self.assertEqual('/', health_check_config.get('ResourcePath'))
         self.assertEqual(30, health_check_config.get('RequestInterval'))
         self.assertEqual(3, health_check_config.get('FailureThreshold'))
+
+    """
+    Everyone has different ways of self-healing and finding things that are therapeutic for them in times of great 
+    emotional stress.  First, I need to say that no matter your therapy, I think just as highly and lovingly of you as 
+    a person.  Second, know there are so many people who love you and are always here for you.  Lastly, don't give up 
+    on the life and love that you truly desire in your heart.
+    """
 
     def test_jarombek_com_health_check_alarm_exists(self) -> None:
         """
