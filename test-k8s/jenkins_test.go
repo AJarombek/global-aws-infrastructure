@@ -52,9 +52,9 @@ func TestJenkinsDeploymentErrorFree(t *testing.T) {
 	var expectedReadyReplicas int32 = 1
 	k8sfuncs.ReplicaCountAsExpected(t, expectedReadyReplicas, readyReplicas, "number of ready replicas")
 
-	UnavailableReplicas := deployment.Status.UnavailableReplicas
+	unavailableReplicas := deployment.Status.UnavailableReplicas
 	var expectedUnavailableReplicas int32 = 0
-	k8sfuncs.ReplicaCountAsExpected(t, expectedUnavailableReplicas, UnavailableReplicas, "number of unavailable replicas")
+	k8sfuncs.ReplicaCountAsExpected(t, expectedUnavailableReplicas, unavailableReplicas, "number of unavailable replicas")
 }
 
 // TestJenkinsNamespaceIngressCount determines if the number of 'Ingress' objects in the 'jenkins' namespace is
@@ -162,7 +162,6 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 	}
 }
 
-// TestJenkinsNamespaceServiceCount determines if the expected number of Service objects exist in the 'jenkins'
 // TestJenkinsNamespaceServiceCount determines if the expected number of Service objects exist in the 'jenkins'
 // namespace.
 func TestJenkinsNamespaceServiceCount(t *testing.T) {

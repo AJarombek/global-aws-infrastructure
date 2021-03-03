@@ -84,14 +84,14 @@ resource "aws_security_group" "jenkins-lb-sg" {
     protocol = "tcp"
     from_port = 80
     to_port = 80
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.jenkins_access_cidr]
   }
 
   ingress {
     protocol = "tcp"
     from_port = 443
     to_port = 443
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.jenkins_access_cidr]
   }
 
   egress {
