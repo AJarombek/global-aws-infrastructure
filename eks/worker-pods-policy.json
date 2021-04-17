@@ -20,6 +20,7 @@
         "ce:*",
         "cloudfront:*",
         "cloudwatch:*",
+        "dynamodb:*",
         "ec2:*",
         "ecr:*",
         "ecs:*",

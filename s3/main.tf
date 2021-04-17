@@ -9,7 +9,11 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.13"
+
+  required_providers {
+    aws = ">= 3.37.0"
+  }
 
   backend "s3" {
     bucket = "andrew-jarombek-terraform-state"
@@ -95,6 +99,9 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
   # Whether the cloudfront distribution is enabled to accept uer requests
   enabled = true
 
+  # Which HTTP version to use for requests
+  http_version = "http2"
+
   # Whether the cloudfront distribution can use ipv6
   is_ipv6_enabled = true
 
@@ -109,22 +116,23 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
 
   default_cache_behavior {
     # Which HTTP verbs CloudFront processes
-    allowed_methods = ["HEAD", "GET"]
+    allowed_methods = ["HEAD", "GET", "OPTIONS"]
 
     # Which HTTP verbs CloudFront caches responses to requests
-    cached_methods = ["HEAD", "GET"]
+    cached_methods = ["HEAD", "GET", "OPTIONS"]
 
     forwarded_values {
       cookies {
         forward = "none"
       }
+      headers = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
       query_string = false
     }
 
     target_origin_id = local.s3_origin_id
 
     # Which protocols to use which accessing items from CloudFront
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
 
     # Determines the amount of time an object exists in the CloudFront cache
     min_ttl = 0
@@ -170,6 +178,9 @@ resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
   # Whether the cloudfront distribution can use ipv6
   is_ipv6_enabled = true
 
+  # Which HTTP version to use for requests
+  http_version = "http2"
+
   comment = "www.global.jarombek.io CloudFront Distribution"
   default_root_object = "index.json"
 
@@ -181,22 +192,23 @@ resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
 
   default_cache_behavior {
     # Which HTTP verbs CloudFront processes
-    allowed_methods = ["HEAD", "GET"]
+    allowed_methods = ["HEAD", "GET", "OPTIONS"]
 
     # Which HTTP verbs CloudFront caches responses to requests
-    cached_methods = ["HEAD", "GET"]
+    cached_methods = ["HEAD", "GET", "OPTIONS"]
 
     forwarded_values {
       cookies {
         forward = "none"
       }
+      headers = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
       query_string = false
     }
 
     target_origin_id = local.www_s3_origin_id
 
     # Which protocols to use which accessing items from CloudFront
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "redirect-to-https"
 
     # Determines the amount of time an object exists in the CloudFront cache
     min_ttl = 0
