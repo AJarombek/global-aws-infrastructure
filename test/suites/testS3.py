@@ -69,9 +69,14 @@ class TestS3(unittest.TestCase):
 
         self.assertTrue(all([
             dist.get('Status') == 'Deployed',
-            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Quantity') == 2,
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Quantity') == 3,
             dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Items')[0] == 'HEAD',
             dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Items')[1] == 'GET',
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('Items')[2] == 'OPTIONS',
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('CachedMethods').get('Quantity') == 3,
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('CachedMethods').get('Items')[0] == 'HEAD',
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('CachedMethods').get('Items')[1] == 'GET',
+            dist.get('DefaultCacheBehavior').get('AllowedMethods').get('CachedMethods').get('Items')[2] == 'OPTIONS',
             dist.get('Restrictions').get('GeoRestriction').get('RestrictionType') == 'none',
             dist.get('HttpVersion') == 'HTTP2'
         ]))

@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13.6"
+  required_version = ">= 0.15.0"
 
   required_providers {
     aws = ">= 2.66.0"
@@ -180,7 +180,7 @@ provider "kubernetes" {
 
 module "andrew-jarombek-eks-cluster" {
   source = "terraform-aws-modules/eks/aws"
-  version = "~> 12.1.0"
+  version = "~> 15.1.0"
 
   create_eks = true
   cluster_name = local.cluster_name
@@ -190,6 +190,10 @@ module "andrew-jarombek-eks-cluster" {
     data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id,
     data.aws_subnet.kubernetes-dotty-public-subnet.id
   ]
+
+  workers_group_defaults = {
+    root_volume_type = "gp2"
+  }
 
   worker_groups = [
     {

@@ -32,6 +32,7 @@
         "rds:*",
         "route53:*",
         "s3:*",
+        "sns:*",
         "secretsmanager:*"
       ],
       "Resource": ["*"]
