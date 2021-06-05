@@ -90,3 +90,4 @@ kubectl logs -n kube-system --selector 'k8s-app=kube-proxy'
 9) [External DNS New Endpoints Permissions](https://github.com/kubernetes-sigs/external-dns/issues/961#issuecomment-664849509)
 10) [ALB Ingress Controller Annotations](https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/#annotations)
 11) [TLS Certificate Thumbprint List](https://marcincuber.medium.com/amazon-eks-with-oidc-provider-iam-roles-for-kubernetes-services-accounts-59015d15cb0c)
+12) [EC2 Instance Pricing](https://aws.amazon.com/ec2/pricing/on-demand/)

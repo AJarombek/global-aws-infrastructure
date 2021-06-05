@@ -204,6 +204,20 @@ resource "kubernetes_deployment" "deployment" {
       }
 
       spec {
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key = "workload"
+                  operator = "In"
+                  values = ["development-tests"]
+                }
+              }
+            }
+          }
+        }
+
         container {
           name = "jenkins-server"
           image = "${local.account_id}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:${local.short_version}"

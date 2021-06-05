@@ -16,7 +16,7 @@ variable "jenkins_access_cidr" {
   type = string
 
   validation {
-    condition = can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))$", var.jenkins_access_cidr))
+    condition = can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$", var.jenkins_access_cidr))
     error_message = "An invalid CIDR block was provided for Jenkins access."
   }
 }

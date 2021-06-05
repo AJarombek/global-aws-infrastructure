@@ -30,12 +30,23 @@ spec:
         environment: production
         application: jenkins-server
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: workload
+                    operator: In
+                    values:
+                      - development-tests
       containers:
         - name: jenkins-server
           image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/jenkins-jarombek-io:1.0.0
           volumeMounts:
             - mountPath: "/var/run/docker.sock"
               name: dockersock
+            - mountPath: "/usr/bin/docker"
+              name: dockercli
           readinessProbe:
             periodSeconds: 5
             initialDelaySeconds: 20
