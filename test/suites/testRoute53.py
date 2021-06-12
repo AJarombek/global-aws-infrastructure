@@ -113,6 +113,25 @@ class TestRoute53(unittest.TestCase):
         self.assertEqual(30, health_check_config.get('RequestInterval'))
         self.assertEqual(3, health_check_config.get('FailureThreshold'))
 
+    def test_saintsxctf_com_api_health_check_exists(self) -> None:
+        """
+        Determine if a Route53 Health Check exists for api.saintsxctf.com
+        """
+        health_checks: List[dict] = self.route53.list_health_checks().get('HealthChecks')
+        saintsxctf_com_api_health_checks = [
+            health_check for health_check in health_checks
+            if health_check.get('HealthCheckConfig').get('FullyQualifiedDomainName') == 'api.saintsxctf.com'
+        ]
+
+        self.assertEqual(1, len(saintsxctf_com_api_health_checks))
+
+        health_check_config = saintsxctf_com_api_health_checks[0].get('HealthCheckConfig')
+        self.assertEqual(443, health_check_config.get('Port'))
+        self.assertEqual('HTTPS', health_check_config.get('Type'))
+        self.assertEqual('/', health_check_config.get('ResourcePath'))
+        self.assertEqual(30, health_check_config.get('RequestInterval'))
+        self.assertEqual(3, health_check_config.get('FailureThreshold'))
+
     """
     Everyone has different ways of self-healing and finding things that are therapeutic for them in times of great 
     emotional stress.  First, I need to say that no matter your therapy, I think just as highly and lovingly of you as 
@@ -153,6 +172,27 @@ class TestRoute53(unittest.TestCase):
 
         alarm = alarms[0]
         self.assertEqual('Determine if saintsxctf.com is down.', alarm.get('AlarmDescription'))
+        self.assertEqual('OK', alarm.get('StateValue'))
+        self.assertEqual('AWS/Route53', alarm.get('Namespace'))
+        self.assertEqual('HealthCheckStatus', alarm.get('MetricName'))
+        self.assertEqual('Minimum', alarm.get('Statistic'))
+        self.assertEqual('LessThanOrEqualToThreshold', alarm.get('ComparisonOperator'))
+        self.assertEqual(60, alarm.get('Period'))
+        self.assertEqual(2, alarm.get('EvaluationPeriods'))
+        self.assertEqual(0, alarm.get('Threshold'))
+
+    def test_saintsxctf_com_api_health_check_alarm_exists(self) -> None:
+        """
+        Determine if the Route53 Health Check for api.saintsxctf.com has a Cloudwatch alarm.
+        """
+        alarms: List[dict] = self.cloudwatch \
+            .describe_alarms(AlarmNames=['saints-xctf-com-api-health-check-alarm']) \
+            .get('MetricAlarms')
+
+        self.assertEqual(1, len(alarms))
+
+        alarm = alarms[0]
+        self.assertEqual('Determine if api.saintsxctf.com is down.', alarm.get('AlarmDescription'))
         self.assertEqual('OK', alarm.get('StateValue'))
         self.assertEqual('AWS/Route53', alarm.get('Namespace'))
         self.assertEqual('HealthCheckStatus', alarm.get('MetricName'))

@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 0.15"
 
   required_providers {
     aws = ">= 3.27.0"
@@ -130,6 +130,47 @@ resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-health-check-alarm" {
 
   tags = {
     Name = "saints-xctf-com-health-check-alarm"
+    Application = "saints-xctf-com"
+    Environment = "production"
+  }
+}
+
+resource "aws_route53_health_check" "saints-xctf-com-api-health-check" {
+  type = "HTTPS"
+  fqdn = "api.saintsxctf.com"
+  port = 443
+  resource_path = "/"
+  failure_threshold = 3
+  request_interval = 30
+
+  tags = {
+    Name = "saints-xctf-com-api-health-check"
+    Application = "saints-xctf-com"
+    Environment = "production"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-api-health-check-alarm" {
+  alarm_name = "saints-xctf-com-api-health-check-alarm"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  metric_name = "HealthCheckStatus"
+  namespace = "AWS/Route53"
+  evaluation_periods = 2
+  period = 60
+  statistic = "Minimum"
+  threshold = 0
+  alarm_description = "Determine if api.saintsxctf.com is down."
+
+  alarm_actions = [data.aws_sns_topic.alert-email.arn]
+  ok_actions = []
+  insufficient_data_actions = []
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.saints-xctf-com-api-health-check.id
+  }
+
+  tags = {
+    Name = "saints-xctf-com-api-health-check-alarm"
     Application = "saints-xctf-com"
     Environment = "production"
   }
