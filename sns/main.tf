@@ -9,10 +9,10 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.0.1"
 
   required_providers {
-    aws = ">= 3.27.0"
+    aws = ">= 3.48.0"
   }
 
   backend "s3" {
@@ -31,6 +31,26 @@ resource "aws_sns_topic" "alert-email" {
 
   tags = {
     Name = "alert-email-topic"
+  }
+}
+
+resource "aws_sns_topic_policy" "alert-email" {
+  arn = aws_sns_topic.alert-email.arn
+  policy = data.aws_iam_policy_document.sns-topic-policy.json
+}
+
+data "aws_iam_policy_document" "sns-topic-policy" {
+  statement {
+    sid = "PublishEventsToEmailTopic"
+    effect = "Allow"
+
+    principals {
+      identifiers = ["events.amazonaws.com"]
+      type = "Service"
+    }
+
+    actions = ["sns:Publish"]
+    resources = [aws_sns_topic.alert-email.arn]
   }
 }
 
