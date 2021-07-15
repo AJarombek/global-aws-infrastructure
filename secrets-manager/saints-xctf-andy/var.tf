@@ -11,4 +11,5 @@ variable "saints_xctf_password" {
   }
 
   type = map
+  sensitive = true
 }

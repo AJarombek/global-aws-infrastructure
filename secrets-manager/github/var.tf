@@ -12,4 +12,5 @@ variable "github_secret" {
   }
 
   type = map
+  sensitive = true
 }

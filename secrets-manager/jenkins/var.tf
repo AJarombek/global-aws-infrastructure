@@ -11,4 +11,5 @@ variable "jenkins_secret" {
   }
 
   type = map
+  sensitive = true
 }

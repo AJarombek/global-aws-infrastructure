@@ -11,4 +11,5 @@ variable "dockerhub_secret" {
   }
 
   type = map
+  sensitive = true
 }

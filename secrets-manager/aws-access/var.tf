@@ -13,4 +13,5 @@ variable "aws_access_secret" {
   }
 
   type = map
+  sensitive = true
 }

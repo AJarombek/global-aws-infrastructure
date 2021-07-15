@@ -40,6 +40,7 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 | `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
 | `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |
 | `jenkins-efs`        | *DEPRECATED* - Terraform scripts for creating an EFS for the Jenkins server.|
+| `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
 | `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
 | `root`               | Root Terraform scripts for creating the accounts VPCs.                      |
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |

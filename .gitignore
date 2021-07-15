@@ -1,6 +1,7 @@
 **/.idea
-**/.idea/vcs.xml
+.idea/vcs.xml
 **/.terraform
+*.tfplan
 *.pem
 **/__pycache__
 jenkins-kubernetes/docker/jenkins.yaml

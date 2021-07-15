@@ -11,4 +11,5 @@ variable "google_account_secrets" {
   }
 
   type = map
+  sensitive = true
 }

@@ -12,4 +12,5 @@ variable "github_access_token" {
   }
 
   type = map
+  sensitive = true
 }

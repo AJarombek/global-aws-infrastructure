@@ -36,10 +36,10 @@ resource "aws_sns_topic" "alert-email" {
 
 resource "aws_sns_topic_policy" "alert-email" {
   arn = aws_sns_topic.alert-email.arn
-  policy = data.aws_iam_policy_document.sns-topic-policy.json
+  policy = data.aws_iam_policy_document.sns-email-topic-policy.json
 }
 
-data "aws_iam_policy_document" "sns-topic-policy" {
+data "aws_iam_policy_document" "sns-email-topic-policy" {
   statement {
     sid = "PublishEventsToEmailTopic"
     effect = "Allow"
@@ -66,5 +66,39 @@ resource "aws_cloudformation_stack" "sns-email-subscription" {
 
   tags = {
     Name = "sns-email-subscription"
+  }
+}
+
+resource "aws_sns_topic" "alert-sms" {
+  name = "alert-sms-topic"
+
+  tags = {
+    Name = "alert-sms-topic"
+  }
+}
+
+resource "aws_sns_topic_subscription" "sns-sms-subscription" {
+  endpoint = var.phone_number
+  protocol = "sms"
+  topic_arn = aws_sns_topic.alert-sms.arn
+}
+
+resource "aws_sns_topic_policy" "alert-sms" {
+  arn = aws_sns_topic.alert-sms.arn
+  policy = data.aws_iam_policy_document.sns-sms-topic-policy.json
+}
+
+data "aws_iam_policy_document" "sns-sms-topic-policy" {
+  statement {
+    sid = "PublishEventsToSMSTopic"
+    effect = "Allow"
+
+    principals {
+      identifiers = ["events.amazonaws.com"]
+      type = "Service"
+    }
+
+    actions = ["sns:Publish"]
+    resources = [aws_sns_topic.alert-sms.arn]
   }
 }
