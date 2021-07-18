@@ -12,7 +12,7 @@ terraform {
   required_version = ">= 1.0.1"
 
   required_providers {
-    aws = ">= 3.48.0"
+    aws = ">= 3.50.0"
   }
 
   backend "s3" {
@@ -89,4 +89,30 @@ resource "aws_iam_policy" "daily-cost-lambda-policy" {
 resource "aws_iam_role_policy_attachment" "lambda-logging-policy-attachment" {
   role = aws_iam_role.daily-cost-lambda-role.name
   policy_arn = aws_iam_policy.daily-cost-lambda-policy.arn
+}
+
+resource "aws_cloudwatch_event_rule" "daily-cost-schedule-rule" {
+  name = "daily-cost-lambda-rule"
+  description = "Execute the Daily Cost Lambda Function Daily"
+  schedule_expression = "cron(0 7 * * ? *)"
+  is_enabled = true
+
+  tags = {
+    Name = "daily-cost-lambda-rule"
+    Environment = "all"
+    Application = "all"
+  }
+}
+
+resource "aws_cloudwatch_event_target" "daily-cost-schedule-target" {
+  arn = aws_lambda_function.daily-cost.arn
+  rule = aws_cloudwatch_event_rule.daily-cost-schedule-rule.name
+}
+
+resource "aws_lambda_permission" "daily-cost-schedule-permission" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.daily-cost.function_name
+  principal = "events.amazonaws.com"
+  source_arn = aws_cloudwatch_event_rule.daily-cost-schedule-rule.arn
 }
