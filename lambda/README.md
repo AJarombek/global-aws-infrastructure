@@ -10,6 +10,7 @@ This directory contains infrastructure and source code for AWS Lambda functions.
 cd daily-cost
 zip -r9 AWSDailyCost.zip .
 mv AWSDailyCost.zip ../AWSDailyCost.zip
+cd -
 ```
 
 ### Files

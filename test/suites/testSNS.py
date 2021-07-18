@@ -60,7 +60,7 @@ class TestSNS(unittest.TestCase):
 
     def test_sns_email_policy_exists(self) -> None:
         """
-        Determine if an SNS topic exists with a proper policy attached.
+        Determine if an SNS topic for sending emails exists with a proper policy attached.
         """
         matching_topics = self.get_sns_topics('alert-email-topic')
         self.assertEqual(1, len(matching_topics))
@@ -84,4 +84,53 @@ class TestSNS(unittest.TestCase):
         self.assertEqual(
             statement.get('Resource'),
             f"arn:aws:sns:us-east-1:{self.sts.get_caller_identity().get('Account')}:alert-email-topic"
+        )
+
+    def test_sns_sms_topic_exists(self) -> None:
+        """
+        Determine if an SNS topic exists which sends text messages.
+        """
+        matching_topics = self.get_sns_topics('alert-sms-topic')
+        self.assertEqual(1, len(matching_topics))
+
+    def test_sns_sms_subscription_exists(self) -> None:
+        """
+        Determine if an SNS subscription exists which sends text messages.
+        """
+        account_id = self.sts.get_caller_identity().get('Account')
+        subscriptions = self.sns.list_subscriptions()
+        print(subscriptions)
+        matching_subscriptions = [
+            subscription for subscription
+            in subscriptions.get('Subscriptions')
+            if subscription.get('Protocol') == 'sms'
+            and subscription.get('Endpoint') == '+12035508738'
+            and subscription.get('TopicArn') == f'arn:aws:sns:us-east-1:{account_id}:alert-sms-topic'
+        ]
+
+        self.assertEqual(1, len(matching_subscriptions))
+
+    def test_sns_sms_policy_exists(self) -> None:
+        """
+        Determine if an SNS topic for sending text messages exists with a proper policy attached.
+        """
+        matching_topics = self.get_sns_topics('alert-sms-topic')
+        self.assertEqual(1, len(matching_topics))
+        topic = matching_topics[0]
+        topic_arn = topic.get('TopicArn')
+
+        topic_attributes = self.sns.get_topic_attributes(TopicArn=topic_arn)
+        topic_policy_str = topic_attributes.get('Attributes').get('Policy')
+        topic_policy: Dict[str, Any] = json.loads(topic_policy_str)
+
+        self.assertEqual(topic_policy.get('Version'), '2012-10-17')
+
+        statement: Dict[str, Any] = topic_policy.get('Statement')[0]
+        self.assertEqual(statement.get('Sid'), 'PublishEventsToSMSTopic')
+        self.assertEqual(statement.get('Effect'), 'Allow')
+        self.assertEqual(statement.get('Principal').get('Service'), 'events.amazonaws.com')
+        self.assertEqual(statement.get('Action'), 'sns:Publish')
+        self.assertEqual(
+            statement.get('Resource'),
+            f"arn:aws:sns:us-east-1:{self.sts.get_caller_identity().get('Account')}:alert-sms-topic"
         )
