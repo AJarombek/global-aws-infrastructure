@@ -35,6 +35,23 @@ class TestSNS(unittest.TestCase):
             if topic.get('TopicArn') == f'arn:aws:sns:us-east-1:{account_id}:{topic_name}'
         ]
 
+    def test_sns_sms_preferences(self) -> None:
+        """
+        Determine if SNS has the proper SMS preferences.
+        """
+        response = self.sns.get_sms_attributes(
+            attributes=[
+                'MonthlySpendLimit',
+                'DefaultSenderID',
+                'DefaultSMSType'
+            ]
+        )
+
+        sms_attributes: Dict[str, str] = response.get('attributes')
+        self.assertEqual('Promotional', sms_attributes.get('DefaultSMSType'))
+        self.assertEqual('JarombekAWS', sms_attributes.get('DefaultSenderID'))
+        self.assertEqual('1', sms_attributes.get('MonthlySpendLimit'))
+
     def test_sns_email_topic_exists(self) -> None:
         """
         Determine if an SNS topic exists which sends emails.

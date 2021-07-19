@@ -102,3 +102,9 @@ data "aws_iam_policy_document" "sns-sms-topic-policy" {
     resources = [aws_sns_topic.alert-sms.arn]
   }
 }
+
+resource "aws_sns_sms_preferences" "preferences" {
+  monthly_spend_limit = "1"
+  default_sender_id = "JarombekAWS"
+  default_sms_type = "Promotional"
+}

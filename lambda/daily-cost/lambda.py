@@ -32,7 +32,7 @@ def handler(event, context):
     cost_description = f"AWS Costs Yesterday: {cost}"
 
     account_id = sts.get_caller_identity().get('Account')
-    topic_arn = f'arn:aws:sns:us-east-1:{account_id}:alert-sms-topic'
+    topic_arn = f'arn:aws:sns:us-east-1:{account_id}:alert-email-topic'
 
     sns.publish(TopicArn=topic_arn, Message=cost_description)
     return cost_description

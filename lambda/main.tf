@@ -66,7 +66,9 @@ data "aws_iam_policy_document" "daily-cost-lambda-policy" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "logs:DescribeLogStreams"
+      "logs:DescribeLogStreams",
+      "ce:GetCostAndUsage",
+      "sns:Publish"
     ]
     resources = ["*"]
   }
