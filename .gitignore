@@ -11,3 +11,4 @@ lambda-layers/*.zip
 lambda/*.zip
 .DS_Store
 **/node_modules
+file-vault/objects

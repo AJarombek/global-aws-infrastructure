@@ -33,7 +33,8 @@
         "route53:*",
         "s3:*",
         "sns:*",
-        "secretsmanager:*"
+        "secretsmanager:*",
+        "synthetics:*"
       ],
       "Resource": ["*"]
     }

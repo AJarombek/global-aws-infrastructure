@@ -36,6 +36,7 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 | `cloud-trail`        | Terraform scripts for AWS account auditing with CloudTrail.                 |
 | `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
 | `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                  |
+| `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
 | `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
 | `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server.|
 | `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |
@@ -52,6 +53,12 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 | `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
 ### Versions
+
+**[v2.0.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.1) - Lambda Functions & SNS Release**
+
+> Release Date: July 18th, 2021
+
+Added lambda functions and altered SNS topics and subscriptions.
 
 **[v2.0.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.0) - Second Release**
 
