@@ -197,9 +197,9 @@ module "andrew-jarombek-eks-cluster" {
 
   worker_groups = [
     {
-      instance_type = "t3.small"
-      asg_max_size = 4
-      asg_desired_capacity = 3
+      instance_type = "t3.medium"
+      asg_max_size = 3
+      asg_desired_capacity = 2
       asg_min_size = 2
       kubelet_extra_args = "--node-labels=workload=production-applications"
     },
