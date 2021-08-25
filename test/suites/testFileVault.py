@@ -13,7 +13,7 @@ from boto3_type_annotations.s3 import Client as S3Client
 from boto3_type_annotations.sts import Client as STSClient
 
 
-class TestS3(unittest.TestCase):
+class TestFileVault(unittest.TestCase):
 
     def setUp(self) -> None:
         """

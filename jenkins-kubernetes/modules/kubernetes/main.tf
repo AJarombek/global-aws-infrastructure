@@ -232,6 +232,18 @@ resource "kubernetes_deployment" "deployment" {
             name = "dockercli"
           }
 
+          resources {
+            requests = {
+              memory = "512Mi"
+              cpu = "250m"
+            }
+
+            limits = {
+              memory = "2Gi"
+              cpu = "500m"
+            }
+          }
+
           readiness_probe {
             period_seconds = 5
             initial_delay_seconds = 20
