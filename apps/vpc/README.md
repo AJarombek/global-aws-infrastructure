@@ -1,8 +1,7 @@
 ### Overview
 
-VPC infrastructure for the [saintsxctf.com](https://www.saintsxctf.com/) website, jenkins server, and more.  SaintsXCTF 
-application specific infrastructure exists in the 
-[saints-xctf-infrastructure](https://github.com/AJarombek/saints-xctf-infrastructure.git) repository.
+VPC infrastructure for the [saintsxctf.com](https://www.saintsxctf.com/) and [jarombek.com](https://www.jarombek.com/) 
+websites, jenkins server, and more.  Contains a Kubernetes cluster for my Docker-based infrastructure.
 
 ### Files
 

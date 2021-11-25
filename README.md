@@ -54,6 +54,12 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 
 ### Versions
 
+**[v2.0.2](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.2) - VPC and Subnet Changes**
+
+> Release Date: November 24th, 2021
+
+Removed the (no longer used) `jarombek-com-vpc` VPC and added private subnets to the `application-vpc` VPC.
+
 **[v2.0.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.1) - Lambda Functions & SNS Release**
 
 > Release Date: July 18th, 2021

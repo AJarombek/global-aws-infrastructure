@@ -7,7 +7,7 @@
 locals {
   public_cidr = "0.0.0.0/0"
   public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+  private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24", "10.0.7.0/24", "10.0.8.0/24"]
 
   vpc_sg_rules = [
     {
@@ -78,6 +78,8 @@ locals {
   private_subnet_azs = [
     "us-east-1e",
     "us-east-1c",
+    "us-east-1a",
+    "us-east-1b"
   ]
 
   saints_xctf_subnet_tags = {
@@ -85,6 +87,10 @@ locals {
   }
 
   kubernetes_subnet_tags = {
+    Application = "all"
+  }
+
+  application_subnet_tags = {
     Application = "all"
   }
 
@@ -96,7 +102,9 @@ locals {
   ]
   private_subnet_tags = [
     local.saints_xctf_subnet_tags,
-    local.saints_xctf_subnet_tags
+    local.saints_xctf_subnet_tags,
+    local.application_subnet_tags,
+    local.application_subnet_tags
   ]
 }
 
@@ -105,10 +113,10 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.0.0"
 
   required_providers {
-    aws = ">= 3.7.0"
+    aws = ">= 3.66.0"
   }
 
   backend "s3" {
@@ -142,7 +150,9 @@ module "application-vpc" {
   ]
   private_subnet_names = [
     "saints-xctf-com-cassiah-private-subnet",
-    "saints-xctf-com-carolined-private-subnet"
+    "saints-xctf-com-carolined-private-subnet",
+    "application-lily-private-subnet",
+    "application-teddy-private-subnet"
   ]
 
   public_subnet_azs    = local.public_subnet_azs
