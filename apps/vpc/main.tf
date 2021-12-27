@@ -137,7 +137,7 @@ module "application-vpc" {
   # Optional arguments
   vpc_cidr = "10.0.0.0/16"
   public_subnet_count = 4
-  private_subnet_count = 2
+  private_subnet_count = 4
   enable_dns_support = true
   enable_dns_hostnames = true
   enable_nat_gateway = false

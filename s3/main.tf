@@ -45,6 +45,17 @@ data "aws_route53_zone" "jarombek-io" {
   name = "jarombek.io."
 }
 
+#---------------------------------
+# S3 Account Control Configuration
+#---------------------------------
+
+resource "aws_s3_account_public_access_block" "access" {
+  block_public_acls = false
+  block_public_policy = false
+  restrict_public_buckets = false
+  ignore_public_acls = false
+}
+
 #------------------------
 # S3 Bucket Configuration
 #------------------------
@@ -71,6 +82,15 @@ resource "aws_s3_bucket" "global-jarombek-io" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "global-jarombek-io" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+
+  block_public_acls = false
+  block_public_policy = false
+  restrict_public_buckets = false
+  ignore_public_acls = false
+}
+
 resource "aws_s3_bucket" "www-global-jarombek-io" {
   bucket = "www.global.jarombek.io"
   acl = "public-read"
@@ -84,6 +104,15 @@ resource "aws_s3_bucket" "www-global-jarombek-io" {
   website {
     redirect_all_requests_to = "https://global.jenkins.io"
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "www-global-jarombek-io" {
+  bucket = aws_s3_bucket.www-global-jarombek-io.id
+
+  block_public_acls = false
+  block_public_policy = false
+  restrict_public_buckets = false
+  ignore_public_acls = false
 }
 
 resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
