@@ -7,6 +7,10 @@ Date: 4/27/2019
 import unittest
 
 import boto3
+from boto3_type_annotations.sts import Client as STSClient
+from boto3_type_annotations.s3 import Client as S3Client
+from boto3_type_annotations.s3control import Client as S3ControlClient
+from boto3_type_annotations.cloudfront import Client as CloudfrontClient
 
 
 class TestS3(unittest.TestCase):
@@ -15,8 +19,23 @@ class TestS3(unittest.TestCase):
         """
         Perform set-up logic before executing any unit tests
         """
-        self.s3 = boto3.client('s3')
-        self.cloudfront = boto3.client('cloudfront')
+        self.sts: STSClient = boto3.client('sts')
+        self.s3: S3Client = boto3.client('s3')
+        self.s3_control: S3ControlClient = boto3.client('s3control')
+        self.cloudfront: CloudfrontClient = boto3.client('cloudfront')
+
+    def test_s3_account_public_access_block(self) -> None:
+        """
+        Test if the AWS account has the proper S3 public access settings
+        """
+        account_id = self.sts.get_caller_identity().get('Account')
+        public_access_block = self.s3_control.get_public_access_block(AccountId=account_id)
+
+        config = public_access_block.get('PublicAccessBlockConfiguration')
+        self.assertFalse(config.get('BlockPublicAcls'))
+        self.assertFalse(config.get('IgnorePublicAcls'))
+        self.assertFalse(config.get('BlockPublicPolicy'))
+        self.assertFalse(config.get('RestrictPublicBuckets'))
 
     def test_s3_bucket_exists(self) -> None:
         """
@@ -27,32 +46,14 @@ class TestS3(unittest.TestCase):
 
     def test_s3_bucket_public_access(self) -> None:
         """
-        Test whether the public access configuration for a global.jarombek.io S3 bucket it correct
+        Test whether the public access configuration for a global.jarombek.io S3 bucket is correct
         """
         public_access_block = self.s3.get_public_access_block(Bucket='global.jarombek.io')
         config = public_access_block.get('PublicAccessBlockConfiguration')
-        self.assertFalse(config.get('BlockPublicAcls'))
-        self.assertFalse(config.get('IgnorePublicAcls'))
-        self.assertFalse(config.get('BlockPublicPolicy'))
-        self.assertFalse(config.get('RestrictPublicBuckets'))
-
-    def test_www_s3_bucket_exists(self) -> None:
-        """
-        Test if an S3 bucket for www.global.jarombek.io exists
-        """
-        s3_bucket = self.s3.list_objects(Bucket='www.global.jarombek.io')
-        return s3_bucket.get('Name') == 'www.global.jarombek.io'
-
-    def test_www_s3_bucket_public_access(self) -> None:
-        """
-        Test whether the public access configuration for a www.global.jarombek.io S3 bucket it correct
-        """
-        public_access_block = self.s3.get_public_access_block(Bucket='www.global.jarombek.io')
-        config = public_access_block.get('PublicAccessBlockConfiguration')
-        self.assertFalse(config.get('BlockPublicAcls'))
-        self.assertFalse(config.get('IgnorePublicAcls'))
-        self.assertFalse(config.get('BlockPublicPolicy'))
-        self.assertFalse(config.get('RestrictPublicBuckets'))
+        self.assertTrue(config.get('BlockPublicAcls'))
+        self.assertTrue(config.get('IgnorePublicAcls'))
+        self.assertTrue(config.get('BlockPublicPolicy'))
+        self.assertTrue(config.get('RestrictPublicBuckets'))
 
     def test_s3_bucket_objects_correct(self) -> None:
         """

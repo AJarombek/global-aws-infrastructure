@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.0"
 
   required_providers {
     aws = ">= 3.26.0"
@@ -86,4 +86,13 @@ resource "aws_s3_bucket" "andrew-jarombek-cloud-trail" {
 resource "aws_s3_bucket_policy" "andrew-jarombek-cloud-trail-policy" {
   bucket = aws_s3_bucket.andrew-jarombek-cloud-trail.id
   policy = data.template_file.cloud-trail-s3-bucket-policy.rendered
+}
+
+resource "aws_s3_bucket_public_access_block" "andrew-jarombek-cloud-trail" {
+  bucket = aws_s3_bucket.andrew-jarombek-cloud-trail.id
+
+  block_public_acls = true
+  block_public_policy = true
+  restrict_public_buckets = true
+  ignore_public_acls = true
 }

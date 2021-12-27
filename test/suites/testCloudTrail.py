@@ -37,3 +37,15 @@ class TestCloudTrail(unittest.TestCase):
         """
         s3_bucket = self.s3.list_objects(Bucket='andrew-jarombek-cloud-trail')
         return s3_bucket.get('Name') == 'andrew-jarombek-cloud-trail'
+
+    @unittest.skip('CloudTrail not currently enabled.')
+    def test_s3_bucket_public_access(self) -> None:
+        """
+        Test whether the public access configuration for a andrew-jarombek-cloud-trail S3 bucket is correct
+        """
+        public_access_block = self.s3.get_public_access_block(Bucket='andrew-jarombek-cloud-trail')
+        config = public_access_block.get('PublicAccessBlockConfiguration')
+        self.assertTrue(config.get('BlockPublicAcls'))
+        self.assertTrue(config.get('IgnorePublicAcls'))
+        self.assertTrue(config.get('BlockPublicPolicy'))
+        self.assertTrue(config.get('RestrictPublicBuckets'))
