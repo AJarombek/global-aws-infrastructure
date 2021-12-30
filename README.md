@@ -43,6 +43,7 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 | `jenkins-efs`        | *DEPRECATED* - Terraform scripts for creating an EFS for the Jenkins server.|
 | `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
 | `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
+| `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.               |
 | `root`               | Root Terraform scripts for creating the accounts VPCs.                      |
 | `route53`            | Terraform scripts for creating DNS records for the account.                 |
 | `s3`                 | Terraform scripts for global S3 assets.                                     |

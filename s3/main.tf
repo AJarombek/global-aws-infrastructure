@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.15.0"
+  required_version = ">= 1.1.2"
 
   required_providers {
     aws = ">= 3.37.0"
@@ -50,10 +50,10 @@ data "aws_route53_zone" "jarombek-io" {
 #---------------------------------
 
 resource "aws_s3_account_public_access_block" "access" {
-  block_public_acls = false
-  block_public_policy = false
-  restrict_public_buckets = false
-  ignore_public_acls = false
+  block_public_acls = true
+  block_public_policy = true
+  restrict_public_buckets = true
+  ignore_public_acls = true
 }
 
 #------------------------
