@@ -26,7 +26,6 @@ class TestLambda(unittest.TestCase):
     def test_daily_cost_lambda_function_exists(self) -> None:
         """
         Test that a daily cost AWS Lambda function exists.
-        :return: True if the function exists, False otherwise
         """
         Lambda.lambda_function_as_expected(
             test_case=self,
