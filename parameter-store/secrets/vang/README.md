@@ -1,6 +1,6 @@
 ### Overview
 
-Terraform module containing infrastructure for a Parameter Store secret with codename `COIN`.
+Terraform module containing infrastructure for a Parameter Store secret with codename `VANG`.
 
 ### Commands
 
@@ -19,5 +19,5 @@ terraform destroy -auto-approve
 
 | Filename            | Description                                                       |
 |---------------------|-------------------------------------------------------------------|
-| `main.tf`           | Main Terraform file for the Parameter Store `COIN` secret.        |
+| `main.tf`           | Main Terraform file for the Parameter Store `VANG` secret.        |
 | `var.tf`            | Variables used in the Terraform configuration.                    |

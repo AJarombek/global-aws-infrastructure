@@ -22,4 +22,6 @@ terraform destroy -auto-approve
 | Directory Name    | Description                                                                                |
 |-------------------|--------------------------------------------------------------------------------------------|
 | `coin`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `COIN`.   |
+| `fide`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FIDE`.   |
 | `tdam`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `TDAM`.   |
+| `vang`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `VANG`.   |

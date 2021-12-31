@@ -17,7 +17,7 @@ terraform destroy -auto-approve
 
 ### Files
 
-| Filename            | Description                                                                           |
-|---------------------|---------------------------------------------------------------------------------------|
+| Filename            | Description                                                       |
+|---------------------|-------------------------------------------------------------------|
 | `main.tf`           | Main Terraform file for the Parameter Store `COIN` secret.        |
 | `var.tf`            | Variables used in the Terraform configuration.                    |
