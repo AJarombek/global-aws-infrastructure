@@ -16,3 +16,10 @@ terraform apply -auto-approve -var 'secret=XXX'
 # Destroy Infrastructure
 terraform destroy -auto-approve
 ```
+
+### Directories
+
+| Directory Name    | Description                                                                                |
+|-------------------|--------------------------------------------------------------------------------------------|
+| `coin`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `COIN`.   |
+| `tdam`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `TDAM`.   |
