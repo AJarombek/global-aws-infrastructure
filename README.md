@@ -55,6 +55,13 @@ There are multiple Jenkins jobs for this infrastructure.  They are all located i
 
 ### Versions
 
+**[v2.0.3](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.3) - S3 Bucket Updates & Parameter Store**
+
+> Release Date: December 31st, 2021
+
+This release updated the S3 buckets in my infrastructure, making those used as static websites private.  It also 
+implemented AWS Systems Manager Parameter Store infrastructure.
+
 **[v2.0.2](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.2) - VPC and Subnet Changes**
 
 > Release Date: November 24th, 2021
