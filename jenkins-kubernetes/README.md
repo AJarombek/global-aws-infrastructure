@@ -8,6 +8,19 @@ Terraform/Docker configuration for creating Kubernetes infrastructure for a Jenk
 
 - Build the `init` job, approve the Job DSL scripts.
 
+### Commands
+
+```bash
+# View the pods
+kubectl get po -n jenkins
+
+# View logs of a pod
+kubectl logs -f <pod_name> -n jenkins
+
+# Delete a crashed pod
+kubectl delete po <pod_name> -n jenkins
+```
+
 ### Directories
 
 | Directory Name    | Description                                                                 |

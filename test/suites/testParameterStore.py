@@ -43,6 +43,17 @@ class TestLambda(unittest.TestCase):
         self.assertEqual(account_id, key.get('AWSAccountId'))
         self.assertEqual('KMS Key for Parameter Store', key.get('Description'))
 
+    def test_ally_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename ALLY exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/ALLY', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/ALLY', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
     def test_coin_parameter_exists(self) -> None:
         """
         Test that a parameter with codename COIN exists in AWS Systems Manager Parameter Store.
@@ -62,6 +73,17 @@ class TestLambda(unittest.TestCase):
         parameter: Dict[str, Any] = response.get('Parameter')
 
         self.assertEqual('/external/FIDE', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
+    def test_gemi_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename GEMI exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/GEMI', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/GEMI', parameter.get('Name'))
         self.assertEqual('SecureString', parameter.get('Type'))
         self.assertEqual('text', parameter.get('DataType'))
 

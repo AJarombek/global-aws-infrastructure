@@ -1,6 +1,6 @@
 ### Overview
 
-Environments for ECS Jenkins server infrastructure.
+Environments for Kubernetes (EKS) Jenkins server infrastructure.
 
 ### Directories
 
