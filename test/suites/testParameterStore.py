@@ -43,6 +43,17 @@ class TestLambda(unittest.TestCase):
         self.assertEqual(account_id, key.get('AWSAccountId'))
         self.assertEqual('KMS Key for Parameter Store', key.get('Description'))
 
+    def test_aapl_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename AAPL exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/AAPL', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/AAPL', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
     def test_ally_parameter_exists(self) -> None:
         """
         Test that a parameter with codename ALLY exists in AWS Systems Manager Parameter Store.

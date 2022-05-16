@@ -21,6 +21,7 @@ terraform destroy -auto-approve
 
 | Directory Name    | Description                                                                                |
 |-------------------|--------------------------------------------------------------------------------------------|
+| `aapl`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `AAPL`.   |
 | `ally`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `ALLY`.   |
 | `coin`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `COIN`.   |
 | `fide`            | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FIDE`.   |
