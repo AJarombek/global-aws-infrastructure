@@ -76,6 +76,17 @@ class TestLambda(unittest.TestCase):
         self.assertEqual('SecureString', parameter.get('Type'))
         self.assertEqual('text', parameter.get('DataType'))
 
+    def test_dbrx_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename DBRX exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/DBRX', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/DBRX', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
     def test_fide_parameter_exists(self) -> None:
         """
         Test that a parameter with codename FIDE exists in AWS Systems Manager Parameter Store.
