@@ -27,6 +27,11 @@ jobs:
 
       - run: echo "Checked out branch '${{ github.ref }}' of the ${{ github.repository }} repository"
 
+      - name: Install Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
       - name: Install Pipenv Dependencies
         run: |
           pip install pipenv
