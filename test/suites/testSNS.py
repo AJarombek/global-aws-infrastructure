@@ -116,7 +116,6 @@ class TestSNS(unittest.TestCase):
         """
         account_id = self.sts.get_caller_identity().get('Account')
         subscriptions = self.sns.list_subscriptions()
-        print(subscriptions)
         matching_subscriptions = [
             subscription for subscription
             in subscriptions.get('Subscriptions')
