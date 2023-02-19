@@ -47,3 +47,7 @@ jobs:
       - name: Test
         run: go test --kubeconfig ./kubeconfig
         working-directory: ./test-k8s
+        env:
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
