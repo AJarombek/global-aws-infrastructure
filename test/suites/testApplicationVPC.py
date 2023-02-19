@@ -55,11 +55,9 @@ class TestSaintsxctfComApp(unittest.TestCase):
         Ensure that the security group attached to the application-vpc is as expected
         """
         sg = SecurityGroup.get_security_groups('application-vpc-security')[0]
-    
-        self.assertTrue(all([
-            sg.get('GroupName') == 'application-vpc-security',
-            self.validate_application_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
-        ]))
+
+        self.assertTrue(sg.get('GroupName') == 'application-vpc-security')
+        self.validate_application_sg_rules(sg.get('IpPermissions'), sg.get('IpPermissionsEgress'))
 
     def test_application_lisag_public_subnet_exists(self) -> None:
         """
@@ -221,8 +219,7 @@ class TestSaintsxctfComApp(unittest.TestCase):
     Helper methods for the application VPC
     """
 
-    @staticmethod
-    def validate_application_sg_rules(ingress: list, egress: list):
+    def validate_application_sg_rules(self, ingress: list, egress: list):
         """
         Ensure that the application-vpc security group rules are as expected
         :param ingress: Ingress rules for the security group
@@ -231,21 +228,22 @@ class TestSaintsxctfComApp(unittest.TestCase):
         """
         ingress_80 = SecurityGroup.validate_sg_rule_cidr(ingress[0], 'tcp', 80, 80, '0.0.0.0/0')
         ingress_22 = SecurityGroup.validate_sg_rule_cidr(ingress[1], 'tcp', 22, 22, '0.0.0.0/0')
-        ingress_443 = SecurityGroup.validate_sg_rule_cidr(ingress[2], 'tcp', 443, 443, '0.0.0.0/0')
-        ingress_neg1 = SecurityGroup.validate_sg_rule_cidr(ingress[3], 'icmp', -1, -1, '0.0.0.0/0')
+        ingress_neg1 = SecurityGroup.validate_sg_rule_cidr(ingress[2], 'icmp', -1, -1, '0.0.0.0/0')
+        ingress_443 = SecurityGroup.validate_sg_rule_cidr(ingress[3], 'tcp', 443, 443, '0.0.0.0/0')
+        ingress_9418 = SecurityGroup.validate_sg_rule_cidr(ingress[4], 'tcp', 9418, 9418, '0.0.0.0/0')
     
         egress_80 = SecurityGroup.validate_sg_rule_cidr(egress[0], 'tcp', 80, 80, '0.0.0.0/0')
         egress_neg1 = SecurityGroup.validate_sg_rule_cidr(egress[1], '-1', 0, 0, '0.0.0.0/0')
         egress_443 = SecurityGroup.validate_sg_rule_cidr(egress[2], 'tcp', 443, 443, '0.0.0.0/0')
-    
-        return all([
-            len(ingress) == 4,
-            ingress_80,
-            ingress_22,
-            ingress_443,
-            ingress_neg1,
-            len(egress) == 3,
-            egress_80,
-            egress_neg1,
-            egress_443
-        ])
+
+        self.assertTrue(len(ingress) == 5)
+        self.assertTrue(ingress_80)
+        self.assertTrue(ingress_22)
+        self.assertTrue(ingress_9418)
+        self.assertTrue(ingress_443)
+        self.assertTrue(ingress_neg1)
+
+        self.assertTrue(len(egress) == 3)
+        self.assertTrue(egress_80)
+        self.assertTrue(egress_neg1)
+        self.assertTrue(egress_443)

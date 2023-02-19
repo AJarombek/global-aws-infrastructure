@@ -43,8 +43,8 @@ class TestEKS(unittest.TestCase):
         cluster_status = cluster.get('cluster').get('status')
 
         self.assertEqual('andrew-jarombek-eks-cluster', cluster_name)
-        self.assertEqual('1.18', kubernetes_version)
-        self.assertEqual('eks.3', platform_version)
+        self.assertEqual('1.22', kubernetes_version)
+        self.assertEqual('eks.10', platform_version)
         self.assertEqual('ACTIVE', cluster_status)
 
     def test_eks_cluster_vpc_subnet(self) -> None:
@@ -111,7 +111,7 @@ class TestEKS(unittest.TestCase):
         Ensure that the EKS worker node EC2 instance is in a running state.
         """
         worker_ec2 = EC2.get_ec2(name='andrew-jarombek-eks-cluster-0-eks_asg')
-        self.assertEqual(1, len(worker_ec2))
+        self.assertEqual(2, len(worker_ec2))
 
     def test_eks_worker_node_managed_by_eks(self) -> None:
         """

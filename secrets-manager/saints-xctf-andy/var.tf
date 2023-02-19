@@ -10,6 +10,6 @@ variable "saints_xctf_password" {
     password = "password"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

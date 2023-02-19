@@ -8,10 +8,10 @@
 variable "aws_access_secret" {
   description = "Secrets for AWS access to place in AWS Secret Manager.  Never use the default value beyond POC"
   default = {
-    aws_access_key_id = "aws_access_key_id"
+    aws_access_key_id     = "aws_access_key_id"
     aws_secret_access_key = "aws_secret_access_key"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

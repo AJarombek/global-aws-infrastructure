@@ -5,65 +5,73 @@
  */
 
 locals {
-  public_cidr = "0.0.0.0/0"
-  public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  public_cidr          = "0.0.0.0/0"
+  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24", "10.0.7.0/24", "10.0.8.0/24"]
 
   vpc_sg_rules = [
     {
       # Inbound traffic from the internet
-      type = "ingress"
-      from_port = 80
-      to_port = 80
-      protocol = "tcp"
+      type        = "ingress"
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
       cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic from the internet
-      type = "ingress"
-      from_port = 443
-      to_port = 443
-      protocol = "tcp"
+      type        = "ingress"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = local.public_cidr
+    },
+    {
+      # Inbound traffic for Jenkins
+      type        = "ingress"
+      from_port   = 9418
+      to_port     = 9418
+      protocol    = "tcp"
       cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic for SSH
-      type = "ingress"
-      from_port = 22
-      to_port = 22
-      protocol = "tcp"
+      type        = "ingress"
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
       cidr_blocks = local.public_cidr
     },
     {
       # Inbound traffic for ping
-      type = "ingress"
-      from_port = -1
-      to_port = -1
-      protocol = "icmp"
+      type        = "ingress"
+      from_port   = -1
+      to_port     = -1
+      protocol    = "icmp"
       cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for health checks
-      type = "egress"
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
       cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTP
-      type = "egress"
-      from_port = 80
-      to_port = 80
-      protocol = "tcp"
+      type        = "egress"
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
       cidr_blocks = local.public_cidr
     },
     {
       # Outbound traffic for HTTPS
-      type = "egress"
-      from_port = 443
-      to_port = 443
-      protocol = "tcp"
+      type        = "egress"
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
       cidr_blocks = local.public_cidr
     },
   ]
@@ -120,10 +128,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/apps/vpc"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/apps/vpc"
+    region  = "us-east-1"
   }
 }
 
@@ -131,16 +139,16 @@ module "application-vpc" {
   source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.13"
 
   # Mandatory arguments
-  name = "application"
+  name     = "application"
   tag_name = "application"
 
   # Optional arguments
-  vpc_cidr = "10.0.0.0/16"
-  public_subnet_count = 4
+  vpc_cidr             = "10.0.0.0/16"
+  public_subnet_count  = 4
   private_subnet_count = 4
-  enable_dns_support = true
+  enable_dns_support   = true
   enable_dns_hostnames = true
-  enable_nat_gateway = false
+  enable_nat_gateway   = false
 
   public_subnet_names = [
     "saints-xctf-com-lisag-public-subnet",
@@ -160,11 +168,11 @@ module "application-vpc" {
   public_subnet_cidrs  = local.public_subnet_cidrs
   private_subnet_cidrs = local.private_subnet_cidrs
 
-  public_subnet_tags = local.public_subnet_tags
+  public_subnet_tags  = local.public_subnet_tags
   private_subnet_tags = local.private_subnet_tags
 
   public_subnet_map_public_ip_on_launch = true
 
   enable_security_groups = true
-  sg_rules = local.vpc_sg_rules
+  sg_rules               = local.vpc_sg_rules
 }

@@ -12,25 +12,25 @@ terraform {
   required_version = ">= 0.14"
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager/dockerhub"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/secrets-manager/dockerhub"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_secretsmanager_secret" "dockerhub-secret" {
-  name = "dockerhub-secret"
+  name        = "dockerhub-secret"
   description = "DockerHub key for cloning and pushing to repositories"
 
   tags = {
-    Name = "dockerhub-secret"
+    Name        = "dockerhub-secret"
     Environment = "production"
     Application = "sandbox"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "dockerhub-secret-version" {
-  secret_id = aws_secretsmanager_secret.dockerhub-secret.id
+  secret_id     = aws_secretsmanager_secret.dockerhub-secret.id
   secret_string = jsonencode(var.dockerhub_secret)
 }

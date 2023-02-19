@@ -16,25 +16,25 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager/aws-access"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/secrets-manager/aws-access"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_secretsmanager_secret" "aws-access-secrets" {
-  name = "aws-access-secrets"
+  name        = "aws-access-secrets"
   description = "AWS access secrets for using the AWS CLI and SDKs"
 
   tags = {
-    Name = "aws-access-secrets"
+    Name        = "aws-access-secrets"
     Environment = "production"
     Application = "all"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "aws-access-secrets-version" {
-  secret_id = aws_secretsmanager_secret.aws-access-secrets.id
+  secret_id     = aws_secretsmanager_secret.aws-access-secrets.id
   secret_string = jsonencode(var.aws_access_secret)
 }

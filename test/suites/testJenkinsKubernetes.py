@@ -15,12 +15,8 @@ from boto3_type_annotations.ecr import Client as ECRClient
 from aws_test_functions.Route53 import Route53
 from aws_test_functions.SecurityGroup import SecurityGroup
 
-try:
-    env = os.environ['TEST_ENV']
-    prod_env = env == "prod"
-except KeyError:
-    env = "prod"
-    prod_env = True
+ENV = os.environ.get('TEST_ENV', 'prod')
+PROD_ENV = ENV == "prod"
 
 
 class TestJenkinsKubernetes(unittest.TestCase):
@@ -32,7 +28,7 @@ class TestJenkinsKubernetes(unittest.TestCase):
         self.route53: Route53Client = boto3.client('route53')
         self.acm: ACMClient = boto3.client('acm')
         self.ecr: ECRClient = boto3.client('ecr')
-        self.prod_env = prod_env
+        self.prod_env = PROD_ENV
 
     def test_acm_wildcard_cert_issued(self) -> None:
         """
@@ -46,6 +42,7 @@ class TestJenkinsKubernetes(unittest.TestCase):
 
         self.assertTrue(False)
 
+    @unittest.skip("DEV certificate not actively maintained.")
     def test_acm_dev_wildcard_cert_issued(self) -> None:
         """
         Test that the '*.dev.jenkins.jarombek.io' wildcard ACM certificate exists
@@ -79,12 +76,12 @@ class TestJenkinsKubernetes(unittest.TestCase):
 
         self.assertTrue(a_record.get('Name') == 'jenkins.jarombek.io.' and a_record.get('Type') == 'A')
 
-    @unittest.skipIf(not prod_env, 'Jenkins server not setup in development.')
+    @unittest.skipIf(not PROD_ENV, 'Jenkins server not setup in development.')
     def test_jenkins_load_balancer_security_group(self) -> None:
-        sg = SecurityGroup.get_security_groups(name=f'jenkins-{env}-lb-security-group')[0]
+        sg = SecurityGroup.get_security_groups(name=f'jenkins-{ENV}-lb-security-group')[0]
 
         self.assertTrue(all([
-            sg.get('GroupName') == f'jenkins-{env}-lb-security-group',
+            sg.get('GroupName') == f'jenkins-{ENV}-lb-security-group',
             TestJenkinsKubernetes.validate_jenkins_load_balancer_sg_rules(
                 sg.get('IpPermissions'), sg.get('IpPermissionsEgress')
             )

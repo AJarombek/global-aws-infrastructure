@@ -16,25 +16,25 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager/jenkins"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/secrets-manager/jenkins"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_secretsmanager_secret" "jenkins-secret" {
-  name = "jenkins-secret"
+  name        = "jenkins-secret"
   description = "Jenkins Credentials"
 
   tags = {
-    Name = "jenkins-secret"
+    Name        = "jenkins-secret"
     Environment = "production"
     Application = "jenkins-jarombek-io"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "jenkins-secret-version" {
-  secret_id = aws_secretsmanager_secret.jenkins-secret.id
+  secret_id     = aws_secretsmanager_secret.jenkins-secret.id
   secret_string = jsonencode(var.jenkins_secret)
 }

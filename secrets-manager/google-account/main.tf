@@ -12,25 +12,25 @@ terraform {
   required_version = ">= 0.14"
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager/google-account"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/secrets-manager/google-account"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_secretsmanager_secret" "google-account-secret" {
-  name = "google-account-secret"
+  name        = "google-account-secret"
   description = "Google Account Credentials"
 
   tags = {
-    Name = "google-account-secret"
+    Name        = "google-account-secret"
     Environment = "production"
     Application = "sandbox"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "google-account-secret-version" {
-  secret_id = aws_secretsmanager_secret.google-account-secret.id
+  secret_id     = aws_secretsmanager_secret.google-account-secret.id
   secret_string = jsonencode(var.google_account_secrets)
 }

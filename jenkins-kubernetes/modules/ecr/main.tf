@@ -5,7 +5,7 @@
  */
 
 resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
-  name = "jenkins-jarombek-io"
+  name                 = "jenkins-jarombek-io"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -13,7 +13,7 @@ resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
   }
 
   tags = {
-    Name = "jenkins-jarombek-io-container-repository"
+    Name        = "jenkins-jarombek-io-container-repository"
     Application = "all"
     Environment = "all"
   }
@@ -21,5 +21,5 @@ resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
 
 resource "aws_ecr_lifecycle_policy" "jenkins-jarombek-io-repository-policy" {
   repository = aws_ecr_repository.jenkins-jarombek-io-repository.name
-  policy = file("${path.module}/repo-policy.json")
+  policy     = file("${path.module}/repo-policy.json")
 }

@@ -10,6 +10,6 @@ variable "dockerhub_secret" {
     private_key = "private_key"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

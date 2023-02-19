@@ -16,10 +16,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/jenkins-ecs/env/all"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/jenkins-ecs/env/all"
+    region  = "us-east-1"
   }
 }
 

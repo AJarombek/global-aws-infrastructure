@@ -35,29 +35,29 @@ resource "aws_sns_topic" "alert-email" {
 }
 
 resource "aws_sns_topic_policy" "alert-email" {
-  arn = aws_sns_topic.alert-email.arn
+  arn    = aws_sns_topic.alert-email.arn
   policy = data.aws_iam_policy_document.sns-email-topic-policy.json
 }
 
 data "aws_iam_policy_document" "sns-email-topic-policy" {
   statement {
-    sid = "PublishEventsToEmailTopic"
+    sid    = "PublishEventsToEmailTopic"
     effect = "Allow"
 
     principals {
       identifiers = ["events.amazonaws.com"]
-      type = "Service"
+      type        = "Service"
     }
 
-    actions = ["sns:Publish"]
+    actions   = ["sns:Publish"]
     resources = [aws_sns_topic.alert-email.arn]
   }
 }
 
 resource "aws_cloudformation_stack" "sns-email-subscription" {
-  name = "sns-email-subscription"
-  template_body = file("sns-email-subscription.yml")
-  on_failure = "DELETE"
+  name               = "sns-email-subscription"
+  template_body      = file("sns-email-subscription.yml")
+  on_failure         = "DELETE"
   timeout_in_minutes = 20
 
   parameters = {
@@ -78,33 +78,33 @@ resource "aws_sns_topic" "alert-sms" {
 }
 
 resource "aws_sns_topic_subscription" "sns-sms-subscription" {
-  endpoint = var.phone_number
-  protocol = "sms"
+  endpoint  = var.phone_number
+  protocol  = "sms"
   topic_arn = aws_sns_topic.alert-sms.arn
 }
 
 resource "aws_sns_topic_policy" "alert-sms" {
-  arn = aws_sns_topic.alert-sms.arn
+  arn    = aws_sns_topic.alert-sms.arn
   policy = data.aws_iam_policy_document.sns-sms-topic-policy.json
 }
 
 data "aws_iam_policy_document" "sns-sms-topic-policy" {
   statement {
-    sid = "PublishEventsToSMSTopic"
+    sid    = "PublishEventsToSMSTopic"
     effect = "Allow"
 
     principals {
       identifiers = ["events.amazonaws.com"]
-      type = "Service"
+      type        = "Service"
     }
 
-    actions = ["sns:Publish"]
+    actions   = ["sns:Publish"]
     resources = [aws_sns_topic.alert-sms.arn]
   }
 }
 
 resource "aws_sns_sms_preferences" "preferences" {
   monthly_spend_limit = "1"
-  default_sender_id = "JarombekAWS"
-  default_sms_type = "Promotional"
+  default_sender_id   = "JarombekAWS"
+  default_sms_type    = "Promotional"
 }

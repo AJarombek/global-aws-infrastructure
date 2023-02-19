@@ -10,6 +10,6 @@ variable "google_account_secrets" {
     password = "password"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

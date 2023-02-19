@@ -10,6 +10,6 @@ variable "jenkins_secret" {
     password = "andy"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

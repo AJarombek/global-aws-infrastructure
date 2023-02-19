@@ -5,8 +5,8 @@
  */
 
 locals {
-  prod = true
-  env = "production"
+  prod        = true
+  env         = "production"
   public_cidr = "0.0.0.0/0"
 }
 
@@ -18,19 +18,19 @@ terraform {
   required_version = ">= 0.15"
 
   required_providers {
-    aws = ">= 2.66.0"
+    aws        = ">= 2.66.0"
     kubernetes = ">= 1.11"
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/jenkins-ecs/env/prod"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/jenkins-ecs/env/prod"
+    region  = "us-east-1"
   }
 }
 
 module "kubernetes" {
   source = "../../modules/kubernetes"
-  prod = local.prod
+  prod   = local.prod
 }

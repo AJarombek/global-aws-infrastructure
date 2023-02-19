@@ -12,15 +12,15 @@ terraform {
   required_version = ">= 1.0"
 
   required_providers {
-    aws = ">= 3.26.0"
+    aws      = ">= 3.26.0"
     template = ">= 2.2.0"
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/cloud-trail"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/cloud-trail"
+    region  = "us-east-1"
   }
 }
 
@@ -35,36 +35,36 @@ data "template_file" "cloud-trail-s3-bucket-policy" {
 }
 
 resource "aws_cloudtrail" "trail" {
-  name = "andrew-jarombek-cloudtrail"
+  name           = "andrew-jarombek-cloudtrail"
   s3_bucket_name = aws_s3_bucket.andrew-jarombek-cloud-trail.id
   enable_logging = true
 
-  is_multi_region_trail = false
-  is_organization_trail = false
+  is_multi_region_trail         = false
+  is_organization_trail         = false
   include_global_service_events = true
 
   event_selector {
-    read_write_type = "All"
+    read_write_type           = "All"
     include_management_events = true
 
     data_resource {
-      type = "AWS::Lambda::Function"
+      type   = "AWS::Lambda::Function"
       values = ["arn:aws:lambda"]
     }
   }
 
   event_selector {
-    read_write_type = "All"
+    read_write_type           = "All"
     include_management_events = true
 
     data_resource {
-      type = "AWS::S3::Object"
+      type   = "AWS::S3::Object"
       values = ["arn:aws:s3:::"]
     }
   }
 
   tags = {
-    Name = "andrew-jarombek-cloudtrail"
+    Name        = "andrew-jarombek-cloudtrail"
     Application = "global"
     Environment = "all"
   }
@@ -73,11 +73,11 @@ resource "aws_cloudtrail" "trail" {
 }
 
 resource "aws_s3_bucket" "andrew-jarombek-cloud-trail" {
-  bucket = "andrew-jarombek-cloud-trail"
+  bucket        = "andrew-jarombek-cloud-trail"
   force_destroy = true
 
   tags = {
-    Name = "andrew-jarombek-cloud-trail"
+    Name        = "andrew-jarombek-cloud-trail"
     Application = "global"
     Environment = "all"
   }
@@ -91,8 +91,8 @@ resource "aws_s3_bucket_policy" "andrew-jarombek-cloud-trail-policy" {
 resource "aws_s3_bucket_public_access_block" "andrew-jarombek-cloud-trail" {
   bucket = aws_s3_bucket.andrew-jarombek-cloud-trail.id
 
-  block_public_acls = true
-  block_public_policy = true
+  block_public_acls       = true
+  block_public_policy     = true
   restrict_public_buckets = true
-  ignore_public_acls = true
+  ignore_public_acls      = true
 }

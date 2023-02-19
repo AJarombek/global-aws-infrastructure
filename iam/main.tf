@@ -12,10 +12,10 @@ terraform {
   required_version = ">= 0.12"
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/iam"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/iam"
+    region  = "us-east-1"
   }
 }
 
@@ -39,12 +39,12 @@ resource "aws_iam_user" "andy-user" {
 
 resource "aws_iam_user_group_membership" "jenkins-user-groups" {
   groups = [aws_iam_group.admin-group.id]
-  user = aws_iam_user.andy-user.id
+  user   = aws_iam_user.andy-user.id
 }
 
 resource "aws_iam_user_policy" "andy-user-policy" {
-  name = "andy-user-policy"
-  user = aws_iam_user.andy-user.id
+  name   = "andy-user-policy"
+  user   = aws_iam_user.andy-user.id
   policy = file("policies/andy-user-policy.json")
 }
 
@@ -53,19 +53,19 @@ resource "aws_iam_user_policy" "andy-user-policy" {
 # ---------
 
 resource "aws_iam_role" "jenkins-role" {
-  name = "jenkins-role"
-  path = "/admin/"
+  name               = "jenkins-role"
+  path               = "/admin/"
   assume_role_policy = file("policies/assume-role-policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "jenkins-role-admin-policy" {
   policy_arn = aws_iam_policy.admin-policy.arn
-  role = aws_iam_role.jenkins-role.name
+  role       = aws_iam_role.jenkins-role.name
 }
 
 resource "aws_iam_role_policy_attachment" "jenkins-role-elastic-ip-policy" {
   policy_arn = aws_iam_policy.elastic-ip-policy.arn
-  role = aws_iam_role.jenkins-role.name
+  role       = aws_iam_role.jenkins-role.name
 }
 
 # ------------
@@ -73,13 +73,13 @@ resource "aws_iam_role_policy_attachment" "jenkins-role-elastic-ip-policy" {
 # ------------
 
 resource "aws_iam_policy" "admin-policy" {
-  name = "admin-policy"
-  path = "/admin/"
+  name   = "admin-policy"
+  path   = "/admin/"
   policy = file("policies/admin-policy.json")
 }
 
 resource "aws_iam_policy" "elastic-ip-policy" {
-  name = "elastic-ip-policy"
-  path = "/resource/"
+  name   = "elastic-ip-policy"
+  path   = "/resource/"
   policy = file("policies/elastic-ip-policy.json")
 }

@@ -6,7 +6,7 @@
 
 variable "secret" {
   description = "Secret to store in System Manager Parameter Store"
-  default = ""
-  type = string
-  sensitive = true
+  default     = ""
+  type        = string
+  sensitive   = true
 }

@@ -9,17 +9,17 @@
 #---------------------------------
 
 module "jenkins-jarombek-io-acm-certificate" {
-  source = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
+  source  = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
   enabled = true
 
   # Mandatory arguments
-  name = "jenkins-jarombek-io-acm-certificate"
-  tag_name = "jenkins-jarombek-io-acm-certificate"
+  name            = "jenkins-jarombek-io-acm-certificate"
+  tag_name        = "jenkins-jarombek-io-acm-certificate"
   tag_application = "jarombek-io"
   tag_environment = "production"
 
   route53_zone_name = "jarombek.io."
-  acm_domain_name = "*.jenkins.jarombek.io"
+  acm_domain_name   = "*.jenkins.jarombek.io"
 
   # Optional arguments
   route53_zone_private = false
@@ -30,17 +30,17 @@ module "jenkins-jarombek-io-acm-certificate" {
 #-------------------------------------
 
 module "dev-jenkins-jarombek-io-acm-certificate" {
-  source = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
+  source  = "github.com/ajarombek/terraform-modules//acm-certificate?ref=v0.1.9"
   enabled = true
 
   # Mandatory arguments
-  name = "dev-jenkins-jarombek-io-acm-certificate"
-  tag_name = "dev-jenkins-jarombek-io-acm-certificate"
+  name            = "dev-jenkins-jarombek-io-acm-certificate"
+  tag_name        = "dev-jenkins-jarombek-io-acm-certificate"
   tag_application = "jarombek-io"
   tag_environment = "development"
 
   route53_zone_name = "jarombek.io."
-  acm_domain_name = "*.dev.jenkins.jarombek.io"
+  acm_domain_name   = "*.dev.jenkins.jarombek.io"
 
   # Optional arguments
   route53_zone_private = false

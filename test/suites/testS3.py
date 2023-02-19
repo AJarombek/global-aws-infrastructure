@@ -32,10 +32,10 @@ class TestS3(unittest.TestCase):
         public_access_block = self.s3_control.get_public_access_block(AccountId=account_id)
 
         config = public_access_block.get('PublicAccessBlockConfiguration')
-        self.assertFalse(config.get('BlockPublicAcls'))
-        self.assertFalse(config.get('IgnorePublicAcls'))
-        self.assertFalse(config.get('BlockPublicPolicy'))
-        self.assertFalse(config.get('RestrictPublicBuckets'))
+        self.assertTrue(config.get('BlockPublicAcls'))
+        self.assertTrue(config.get('IgnorePublicAcls'))
+        self.assertTrue(config.get('BlockPublicPolicy'))
+        self.assertTrue(config.get('RestrictPublicBuckets'))
 
     def test_s3_bucket_exists(self) -> None:
         """

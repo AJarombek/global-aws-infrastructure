@@ -1,0 +1,43 @@
+# GitHub Action for running AWS tests.
+# Author: Andrew Jarombek
+# Date: 2/19/2023
+
+name: AWS Tests
+
+on:
+  push:
+    branches: ["main", "feature/*"]
+  pull_request:
+    branches: ["main"]
+
+  schedule:
+    - cron: "0 5 * * 5"
+
+  workflow_dispatch:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "Job running on a ${{ runner.os }} server"
+
+      - name: Check Out Repository Code
+        uses: actions/checkout@v3
+
+      - run: echo "Checked out branch '${{ github.ref }}' of the ${{ github.repository }} repository"
+
+      - name: Install Pipenv Dependencies
+        uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: install
+
+      - name: Run AWS Infrastructure Tests
+        uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: run test
+        env:
+          TEST_ENV: prod
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -6,6 +6,6 @@
 
 variable "phone_number" {
   description = "Phone number to send SMS alerts."
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }

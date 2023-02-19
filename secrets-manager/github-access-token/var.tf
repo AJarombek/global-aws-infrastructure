@@ -11,6 +11,6 @@ variable "github_access_token" {
     access_token = "access_token"
   }
 
-  type = map
+  type      = map(any)
   sensitive = true
 }

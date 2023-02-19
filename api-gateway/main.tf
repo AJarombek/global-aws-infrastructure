@@ -16,32 +16,32 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/api-gateway"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/api-gateway"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_api_gateway_account" "account" {
-    cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
+  cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
 }
 
 resource "aws_iam_role" "cloudwatch" {
-  name = "api-gateway-cloudwatch-role"
-  path = "/global/"
+  name               = "api-gateway-cloudwatch-role"
+  path               = "/global/"
   assume_role_policy = file("assume_role_policy.json")
-  description = "IAM Role for using Cloudwatch with API Gateway"
+  description        = "IAM Role for using Cloudwatch with API Gateway"
 }
 
 resource "aws_iam_policy" "cloudwatch" {
-  name = "api-gateway-cloudwatch-policy"
-  path = "/global/"
-  policy = file("policy.json")
+  name        = "api-gateway-cloudwatch-policy"
+  path        = "/global/"
+  policy      = file("policy.json")
   description = "IAM Policy for using Cloudwatch with API Gateway"
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch" {
   policy_arn = aws_iam_policy.cloudwatch.arn
-  role = aws_iam_role.cloudwatch.id
+  role       = aws_iam_role.cloudwatch.id
 }

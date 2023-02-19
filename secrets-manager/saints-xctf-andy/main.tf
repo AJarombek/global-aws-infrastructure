@@ -16,25 +16,25 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "andrew-jarombek-terraform-state"
+    bucket  = "andrew-jarombek-terraform-state"
     encrypt = true
-    key = "global-aws-infrastructure/secrets-manager/saints-xctf-andy"
-    region = "us-east-1"
+    key     = "global-aws-infrastructure/secrets-manager/saints-xctf-andy"
+    region  = "us-east-1"
   }
 }
 
 resource "aws_secretsmanager_secret" "saints-xctf-andy" {
-  name = "saints-xctf-andy-password"
+  name        = "saints-xctf-andy-password"
   description = "SaintsXCTF Password"
 
   tags = {
-    Name = "saints-xctf-andy-password"
+    Name        = "saints-xctf-andy-password"
     Environment = "production"
     Application = "saints-xctf-com"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "saints-xctf-andy-version" {
-  secret_id = aws_secretsmanager_secret.saints-xctf-andy.id
+  secret_id     = aws_secretsmanager_secret.saints-xctf-andy.id
   secret_string = jsonencode(var.saints_xctf_password)
 }
