@@ -67,6 +67,7 @@ class TestFileVault(unittest.TestCase):
         """
         contents = self.s3.list_objects(Bucket=self.bucket_name).get('Contents')
         self.assertTrue(all([
-            len(contents) == 1,
-            contents[0].get('Key') == 'github-recovery-codes.txt'
+            len(contents) == 2,
+            contents[0].get('Key') == 'github-recovery-codes.txt',
+            contents[1].get('Key') == 'kubeconfig_andrew-jarombek-eks-cluster'
         ]))

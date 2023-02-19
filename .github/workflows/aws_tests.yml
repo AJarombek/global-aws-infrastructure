@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  format:
+  aws_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -28,16 +28,16 @@ jobs:
       - run: echo "Checked out branch '${{ github.ref }}' of the ${{ github.repository }} repository"
 
       - name: Install Pipenv Dependencies
-        working-directory: ./test
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
           command: install
+        working-directory: ./test
 
       - name: Run AWS Infrastructure Tests
-        working-directory: ./test
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
           command: run test
+        working-directory: ./test
         env:
           TEST_ENV: prod
           AWS_DEFAULT_REGION: us-east-1

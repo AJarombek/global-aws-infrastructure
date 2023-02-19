@@ -75,3 +75,11 @@ resource "aws_s3_bucket_object" "github-recovery-codes-txt" {
   etag         = filemd5("objects/github-recovery-codes.txt")
   content_type = "text/plain"
 }
+
+resource "aws_s3_bucket_object" "kubeconfig_andrew-jarombek-eks-cluster" {
+  bucket       = aws_s3_bucket.andrew-jarombek-file-vault.id
+  key          = "kubeconfig_andrew-jarombek-eks-cluster"
+  source       = "objects/kubeconfig_andrew-jarombek-eks-cluster"
+  etag         = filemd5("objects/kubeconfig_andrew-jarombek-eks-cluster")
+  content_type = "text/plain"
+}
