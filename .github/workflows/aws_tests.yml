@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  format:
+  aws_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -27,17 +27,20 @@ jobs:
 
       - run: echo "Checked out branch '${{ github.ref }}' of the ${{ github.repository }} repository"
 
-      - name: Install Pipenv Dependencies
-        working-directory: ./test
-        uses: VaultVulp/action-pipenv@v2.0.1
+      - name: Install Python 3.8
+        uses: actions/setup-python@v4
         with:
-          command: install
+          python-version: '3.8'
+
+      - name: Install Pipenv Dependencies
+        run: |
+          pip install pipenv
+          pipenv install
+        working-directory: ./test
 
       - name: Run AWS Infrastructure Tests
+        run: pipenv run test
         working-directory: ./test
-        uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: run test
         env:
           TEST_ENV: prod
           AWS_DEFAULT_REGION: us-east-1
