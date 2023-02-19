@@ -184,7 +184,7 @@ module "andrew-jarombek-eks-cluster" {
 
   create_eks = true
   cluster_name = local.cluster_name
-  cluster_version = "1.18"
+  cluster_version = "1.22"
   vpc_id = data.aws_vpc.application-vpc.id
   subnets = [
     data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id,
