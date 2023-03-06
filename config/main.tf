@@ -28,7 +28,7 @@ locals {
 }
 
 resource "aws_config_configuration_recorder" "recorder" {
-  name = "jarombek"
+  name     = "jarombek"
   role_arn = aws_iam_role.config_role.arn
 
   recording_group {
@@ -84,7 +84,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 data "aws_iam_policy_document" "policy" {
   statement {
-    effect = "Allow"
+    effect  = "Allow"
     actions = ["s3:*"]
     resources = [
       aws_s3_bucket.config_jarombek.arn,
@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "policy" {
 }
 
 resource "aws_iam_role" "config_role" {
-  name = "aws-config-jarombek"
+  name               = "aws-config-jarombek"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   tags = {
@@ -103,9 +103,14 @@ resource "aws_iam_role" "config_role" {
 }
 
 resource "aws_iam_role_policy" "config_policy" {
-  name = "aws-config-jarombek"
+  name   = "aws-config-jarombek"
   policy = data.aws_iam_policy_document.policy.json
   role   = aws_iam_role.config_role.id
+}
+
+resource "aws_iam_role_policy_attachment" "config_policy_attachment" {
+  role       = aws_iam_role.config_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
 resource "aws_s3_bucket" "config_jarombek" {
@@ -117,7 +122,7 @@ resource "aws_s3_bucket" "config_jarombek" {
 }
 
 resource "aws_config_delivery_channel" "delivery_channel" {
-  name = "aws-config-jarombek"
+  name           = "aws-config-jarombek"
   s3_bucket_name = aws_s3_bucket.config_jarombek.bucket
 }
 
