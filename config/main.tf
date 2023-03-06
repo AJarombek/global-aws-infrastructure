@@ -32,8 +32,40 @@ resource "aws_config_configuration_recorder" "recorder" {
   role_arn = aws_iam_role.config_role.arn
 
   recording_group {
-    all_supported = true
-    include_global_resource_types = true
+    all_supported = false
+    resource_types = [
+      "AWS::ApiGateway::Stage",
+      "AWS::ApiGateway::RestApi",
+      "AWS::ApiGatewayV2::Stage",
+      "AWS::ApiGatewayV2::Api",
+      "AWS::AutoScaling::AutoScalingGroup",
+      "AWS::AutoScaling::LaunchConfiguration",
+      "AWS::DynamoDB::Table",
+      "AWS::EC2::Instance",
+      "AWS::EC2::InternetGateway",
+      "AWS::EC2::NetworkAcl",
+      "AWS::EC2::NetworkInterface",
+      "AWS::EC2::RouteTable",
+      "AWS::EC2::SecurityGroup",
+      "AWS::EC2::Subnet",
+      "AWS::EC2::VPC",
+      "AWS::EC2::VPCEndpoint",
+      "AWS::ECR::Repository",
+      "AWS::ECR::PublicRepository",
+      "AWS::ElasticLoadBalancing::LoadBalancer",
+      "AWS::ElasticLoadBalancingV2::Listener",
+      "AWS::IAM::Policy",
+      "AWS::IAM::Role",
+      "AWS::KMS::Key",
+      "AWS::Lambda::Function",
+      "AWS::RDS::DBInstance",
+      "AWS::Route53::HostedZone",
+      "AWS::S3::Bucket",
+      "AWS::S3::AccountPublicAccessBlock",
+      "AWS::SecretsManager::Secret",
+      "AWS::SNS::Topic",
+      "AWS::SQS::Queue"
+    ]
   }
 }
 
@@ -50,6 +82,17 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+data "aws_iam_policy_document" "policy" {
+  statement {
+    effect = "Allow"
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.config_jarombek.arn,
+      "${aws_s3_bucket.config_jarombek.arn}/*"
+    ]
+  }
+}
+
 resource "aws_iam_role" "config_role" {
   name = "aws-config-jarombek"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -57,4 +100,29 @@ resource "aws_iam_role" "config_role" {
   tags = {
     Terraform = local.terraform_tag
   }
+}
+
+resource "aws_iam_role_policy" "config_policy" {
+  name = "aws-config-jarombek"
+  policy = data.aws_iam_policy_document.policy.json
+  role   = aws_iam_role.config_role.id
+}
+
+resource "aws_s3_bucket" "config_jarombek" {
+  bucket = "aws-config-jarombek"
+
+  tags = {
+    Terraform = local.terraform_tag
+  }
+}
+
+resource "aws_config_delivery_channel" "delivery_channel" {
+  name = "aws-config-jarombek"
+  s3_bucket_name = aws_s3_bucket.config_jarombek.bucket
+}
+
+resource "aws_config_configuration_recorder_status" "recorder_status" {
+  name       = aws_config_configuration_recorder.recorder.name
+  is_enabled = true
+  depends_on = [aws_config_delivery_channel.delivery_channel]
 }
