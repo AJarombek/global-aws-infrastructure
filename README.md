@@ -40,6 +40,12 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.0.5](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.5) - AWS Config Infrastructure**
+
+> Release Date: March 12th, 2023
+
+Infrastructure for using AWS Config, along with corresponding Python tests.
+
 **[v2.0.4](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.4) - GitHub Actions**
 
 > Release Date: February 19th, 2023
