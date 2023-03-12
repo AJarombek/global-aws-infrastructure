@@ -8,6 +8,8 @@ import unittest
 
 import boto3
 
+from boto3_type_annotations.iam import Client as IAMClient
+
 
 class TestIAM(unittest.TestCase):
 
@@ -15,7 +17,7 @@ class TestIAM(unittest.TestCase):
         """
         Perform set-up logic before executing any unit tests
         """
-        self.iam = boto3.client('iam')
+        self.iam: IAMClient = boto3.client('iam')
 
     def test_admin_group_exists(self) -> None:
         """
