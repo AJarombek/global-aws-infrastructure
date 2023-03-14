@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 1.3.9"
 
   required_providers {
-    aws = ">= 2.66.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -21,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/api-gateway"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/api-gateway"
 }
 
 resource "aws_api_gateway_account" "account" {
@@ -32,6 +39,13 @@ resource "aws_iam_role" "cloudwatch" {
   path               = "/global/"
   assume_role_policy = file("assume_role_policy.json")
   description        = "IAM Role for using Cloudwatch with API Gateway"
+
+  tags = {
+    Name        = "api-gateway-cloudwatch-role"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_policy" "cloudwatch" {
@@ -39,6 +53,13 @@ resource "aws_iam_policy" "cloudwatch" {
   path        = "/global/"
   policy      = file("policy.json")
   description = "IAM Policy for using Cloudwatch with API Gateway"
+
+  tags = {
+    Name        = "api-gateway-cloudwatch-policy"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch" {

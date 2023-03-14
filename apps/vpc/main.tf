@@ -5,6 +5,7 @@
  */
 
 locals {
+  terraform_tag        = "global-aws-infrastructure/apps/vpc"
   public_cidr          = "0.0.0.0/0"
   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24", "10.0.7.0/24", "10.0.8.0/24"]
@@ -92,14 +93,20 @@ locals {
 
   saints_xctf_subnet_tags = {
     Application = "saints-xctf"
+    Environment = "all"
+    Terraform   = local.terraform_tag
   }
 
   kubernetes_subnet_tags = {
     Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
   }
 
   application_subnet_tags = {
     Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
   }
 
   public_subnet_tags = [
@@ -121,10 +128,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.3.9"
 
   required_providers {
-    aws = ">= 3.66.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -136,7 +146,7 @@ terraform {
 }
 
 module "application-vpc" {
-  source = "github.com/ajarombek/terraform-modules//vpc?ref=v0.1.13"
+  source = "github.com/ajarombek/cloud-modules//terraform-modules/vpc?ref=v0.2.14"
 
   # Mandatory arguments
   name     = "application"
