@@ -27,5 +27,6 @@ terraform destroy -auto-approve
 | `dbrx`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `DBRX`. |
 | `fide`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FIDE`. |
 | `gemi`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `GEMI`. |
+| `jbrn`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `JBRN`. |
 | `tdam`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `TDAM`. |
 | `vang`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `VANG`. |

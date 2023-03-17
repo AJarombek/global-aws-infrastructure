@@ -30,7 +30,7 @@ class TestBudgets(unittest.TestCase):
             .get('Budget')
 
         self.assertEqual('Andrew Jarombek AWS Budget', budget.get('BudgetName'))
-        self.assertEqual('325.0', budget.get('BudgetLimit').get('Amount'))
+        self.assertEqual('360.0', budget.get('BudgetLimit').get('Amount'))
         self.assertEqual('USD', budget.get('BudgetLimit').get('Unit'))
         self.assertEqual('MONTHLY', budget.get('TimeUnit'))
         self.assertEqual('COST', budget.get('BudgetType'))

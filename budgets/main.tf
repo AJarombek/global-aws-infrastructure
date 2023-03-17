@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.3.9"
 
   required_providers {
-    aws = ">= 3.27.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -26,7 +29,7 @@ terraform {
 resource "aws_budgets_budget" "cost" {
   name              = "Andrew Jarombek AWS Budget"
   budget_type       = "COST"
-  limit_amount      = "325"
+  limit_amount      = "360"
   limit_unit        = "USD"
   time_period_start = "2021-02-01_12:00"
   time_unit         = "MONTHLY"

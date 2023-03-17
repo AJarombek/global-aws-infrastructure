@@ -9,15 +9,16 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.15.0"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws      = ">= 2.66.0"
-    random   = ">= 2.2"
-    null     = ">= 2.1"
-    local    = ">= 1.4"
-    template = ">= 2.1"
-    external = ">= 1.2"
+    aws      = "~> 4.58.0"
+    random   = "~> 3.4.3"
+    null     = "~> 3.2.1"
+    local    = "~> 2.4.0"
+    template = "~> 2.2.0"
+    external = "~> 2.3.1"
+    kubernetes = "~> 2.0.3"
   }
 
   backend "s3" {
@@ -35,91 +36,8 @@ terraform {
 locals {
   public_cidr  = "0.0.0.0/0"
   cluster_name = "andrew-jarombek-eks-cluster"
-
-  kubernetes_public_subnet_cidrs = [
-    "10.1.1.0/24",
-    "10.1.2.0/24"
-  ]
-
-  kubernetes_private_subnet_cidrs = [
-    "10.1.3.0/24",
-    "10.1.4.0/24"
-  ]
-
-  kubernetes_vpc_sg_rules = [
-    {
-      # Inbound traffic from the internet
-      type        = "ingress"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      type        = "ingress"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      type        = "ingress"
-      from_port   = -1
-      to_port     = -1
-      protocol    = "icmp"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      type        = "ingress"
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      # Outbound traffic for health checks
-      type        = "egress"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      # Outbound traffic for HTTP
-      type        = "egress"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = local.public_cidr
-    },
-    {
-      # Outbound traffic for HTTPS
-      type        = "egress"
-      from_port   = 443
-      to_port     = 443
-      protocol    = "tcp"
-      cidr_blocks = local.public_cidr
-    },
-  ]
-
-  kubernetes_public_subnet_azs = [
-    "us-east-1a",
-    "us-east-1b"
-  ]
-
-  kubernetes_private_subnet_azs = [
-    "us-east-1b",
-    "us-east-1c"
-  ]
-
-  subnet_tags = {
-    Application                                   = "kubernetes",
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared",
-    "kubernetes.io/role/elb"                      = "1"
-  }
-
-  kubernetes_public_subnet_tags  = [local.subnet_tags, local.subnet_tags]
-  kubernetes_private_subnet_tags = [local.subnet_tags, local.subnet_tags]
+  cluster_version = "1.22"
+  terraform_tag = "global-aws-infrastructure/eks"
 }
 
 #-----------------------
@@ -184,7 +102,7 @@ module "andrew-jarombek-eks-cluster" {
 
   create_eks      = true
   cluster_name    = local.cluster_name
-  cluster_version = "1.22"
+  cluster_version = local.cluster_version
   vpc_id          = data.aws_vpc.application-vpc.id
   subnets = [
     data.aws_subnet.kubernetes-grandmas-blanket-public-subnet.id,
@@ -211,6 +129,13 @@ module "andrew-jarombek-eks-cluster" {
       kubelet_extra_args   = "--node-labels=workload=development-tests"
     }
   ]
+
+  tags = {
+    Name        = local.cluster_name
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_openid_connect_provider" "eks" {
@@ -244,12 +169,26 @@ resource "aws_iam_role" "alb-ingress-controller-role" {
   name               = "aws-alb-ingress-controller"
   path               = "/kubernetes/"
   assume_role_policy = data.aws_iam_policy_document.alb-ingress-controller-policy-document.json
+
+  tags = {
+    Name        = "aws-alb-ingress-controller"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_policy" "alb-ingress-controller-policy" {
   name   = "aws-alb-ingress-controller"
   path   = "/kubernetes/"
   policy = file("${path.module}/alb-ingress-controller-policy.json")
+
+  tags = {
+    Name        = "aws-alb-ingress-controller"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "alb-ingress-controller-role-policy" {
@@ -261,6 +200,13 @@ resource "aws_iam_policy" "external-dns-policy" {
   name   = "external-dns"
   path   = "/kubernetes/"
   policy = file("${path.module}/external-dns-policy.json")
+
+  tags = {
+    Name        = "external-dns"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "external-dns-role-policy" {
@@ -272,6 +218,13 @@ resource "aws_iam_policy" "worker-pods-policy" {
   name   = "worker-pods"
   path   = "/kubernetes/"
   policy = file("${path.module}/worker-pods-policy.json")
+
+  tags = {
+    Name        = "worker-pods"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "worker-pods-role-policy" {

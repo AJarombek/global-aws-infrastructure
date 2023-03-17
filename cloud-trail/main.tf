@@ -9,11 +9,11 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.0"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws      = ">= 3.26.0"
-    template = ">= 2.2.0"
+    aws      = "~> 4.58.0"
+    template = "~> 2.2.0"
   }
 
   backend "s3" {

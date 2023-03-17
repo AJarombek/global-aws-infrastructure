@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.0.1"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.37.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -27,17 +30,24 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "andrew-jarombek-file-vault" {
   bucket = "andrew-jarombek-file-vault"
-  acl    = "private"
-
-  versioning {
-    enabled = false
-  }
 
   tags = {
     Name        = "andrew-jarombek-file-vault"
     Application = "all"
     Environment = "all"
   }
+}
+
+resource "aws_s3_bucket_versioning" "andrew-jarombek-file-vault" {
+  bucket = aws_s3_bucket.andrew-jarombek-file-vault.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_acl" "andrew-jarombek-file-vault" {
+  bucket = aws_s3_bucket.andrew-jarombek-file-vault.id
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_policy" "andrew-jarombek-file-vault-policy" {
@@ -68,7 +78,7 @@ resource "aws_s3_bucket_public_access_block" "andrew-jarombek-file-vault" {
   ignore_public_acls      = true
 }
 
-resource "aws_s3_bucket_object" "github-recovery-codes-txt" {
+resource "aws_s3_object" "github-recovery-codes-txt" {
   bucket       = aws_s3_bucket.andrew-jarombek-file-vault.id
   key          = "github-recovery-codes.txt"
   source       = "objects/github-recovery-codes.txt"
@@ -76,10 +86,18 @@ resource "aws_s3_bucket_object" "github-recovery-codes-txt" {
   content_type = "text/plain"
 }
 
-resource "aws_s3_bucket_object" "kubeconfig_andrew-jarombek-eks-cluster" {
+resource "aws_s3_object" "kubeconfig_andrew-jarombek-eks-cluster" {
   bucket       = aws_s3_bucket.andrew-jarombek-file-vault.id
   key          = "kubeconfig_andrew-jarombek-eks-cluster"
   source       = "objects/kubeconfig_andrew-jarombek-eks-cluster"
   etag         = filemd5("objects/kubeconfig_andrew-jarombek-eks-cluster")
+  content_type = "text/plain"
+}
+
+resource "aws_s3_object" "jetbrains-account-recovery-codes-txt" {
+  bucket = aws_s3_bucket.andrew-jarombek-file-vault.id
+  key    = "jetbrains-account-recovery-codes.txt"
+  source = "objects/jetbrains-account-recovery-codes.txt"
+  etag = filemd5("objects/jetbrains-account-recovery-codes.txt")
   content_type = "text/plain"
 }
