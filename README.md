@@ -23,9 +23,7 @@ repositories are referenced in separate directories and README.md files.
 | `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                   |
 | `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files.  |
 | `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.       |
-| `jenkins`            | *DEPRECATED* - Packer AMI & Terraform scripts for creating a Jenkins server. |
 | `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.         |
-| `jenkins-efs`        | *DEPRECATED* - Terraform scripts for creating an EFS for the Jenkins server. |
 | `lambda`             | Terraform scripts for AWS Lambda functions.                                  |
 | `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                          |
 | `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.                |

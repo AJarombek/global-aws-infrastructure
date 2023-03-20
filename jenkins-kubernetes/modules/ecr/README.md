@@ -8,6 +8,7 @@ Module for creating an ECR repository which holds Docker images for a Jenkins se
 |---------------------|----------------------------------------------------------------------------------------------|
 | `main.tf`           | Terraform configuration for an ECR repository.                                               |
 | `repo-policy.json`  | ECR repository policy for the images.                                                        |
+| `var.tf`            | Variables for the Terraform configuration.                                                   |
 
 ### References
 

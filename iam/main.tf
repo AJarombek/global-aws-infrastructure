@@ -9,7 +9,14 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = "~> 1.3.9"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
+  }
 
   backend "s3" {
     bucket  = "andrew-jarombek-terraform-state"
@@ -17,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/iam"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/iam"
 }
 
 # ----------
@@ -35,6 +46,13 @@ resource "aws_iam_group" "admin-group" {
 resource "aws_iam_user" "andy-user" {
   name = "andy-user"
   path = "/admin/"
+
+  tags = {
+    Name        = "andy-user"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_user_group_membership" "jenkins-user-groups" {
@@ -56,6 +74,13 @@ resource "aws_iam_role" "jenkins-role" {
   name               = "jenkins-role"
   path               = "/admin/"
   assume_role_policy = file("policies/assume-role-policy.json")
+
+  tags = {
+    Name        = "jenkins-role"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "jenkins-role-admin-policy" {
@@ -76,10 +101,24 @@ resource "aws_iam_policy" "admin-policy" {
   name   = "admin-policy"
   path   = "/admin/"
   policy = file("policies/admin-policy.json")
+
+  tags = {
+    Name        = "admin-policy"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_policy" "elastic-ip-policy" {
   name   = "elastic-ip-policy"
   path   = "/resource/"
   policy = file("policies/elastic-ip-policy.json")
+
+  tags = {
+    Name        = "elastic-ip-policy"
+    Application = "all"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }

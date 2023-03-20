@@ -12,12 +12,12 @@ terraform {
   required_version = "~> 1.3.9"
 
   required_providers {
-    aws      = "~> 4.58.0"
-    random   = "~> 3.4.3"
-    null     = "~> 3.2.1"
-    local    = "~> 2.4.0"
-    template = "~> 2.2.0"
-    external = "~> 2.3.1"
+    aws        = "~> 4.58.0"
+    random     = "~> 3.4.3"
+    null       = "~> 3.2.1"
+    local      = "~> 2.4.0"
+    template   = "~> 2.2.0"
+    external   = "~> 2.3.1"
     kubernetes = "~> 2.0.3"
   }
 
@@ -34,10 +34,10 @@ terraform {
 #----------------
 
 locals {
-  public_cidr  = "0.0.0.0/0"
-  cluster_name = "andrew-jarombek-eks-cluster"
+  public_cidr     = "0.0.0.0/0"
+  cluster_name    = "andrew-jarombek-eks-cluster"
   cluster_version = "1.22"
-  terraform_tag = "global-aws-infrastructure/eks"
+  terraform_tag   = "global-aws-infrastructure/eks"
 }
 
 #-----------------------

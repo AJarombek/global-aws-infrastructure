@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.13"
 
   required_providers {
-    aws = ">= 2.66.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 2.66.0"
+    }
   }
 
   backend "s3" {
@@ -23,10 +26,16 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/jenkins-ecs/env/all"
+}
+
 module "acm" {
-  source = "../../modules/acm"
+  source        = "../../modules/acm"
+  terraform_tag = local.terraform_tag
 }
 
 module "ecr" {
-  source = "../../modules/ecr"
+  source        = "../../modules/ecr"
+  terraform_tag = local.terraform_tag
 }

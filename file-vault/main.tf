@@ -95,9 +95,9 @@ resource "aws_s3_object" "kubeconfig_andrew-jarombek-eks-cluster" {
 }
 
 resource "aws_s3_object" "jetbrains-account-recovery-codes-txt" {
-  bucket = aws_s3_bucket.andrew-jarombek-file-vault.id
-  key    = "jetbrains-account-recovery-codes.txt"
-  source = "objects/jetbrains-account-recovery-codes.txt"
-  etag = filemd5("objects/jetbrains-account-recovery-codes.txt")
+  bucket       = aws_s3_bucket.andrew-jarombek-file-vault.id
+  key          = "jetbrains-account-recovery-codes.txt"
+  source       = "objects/jetbrains-account-recovery-codes.txt"
+  etag         = filemd5("objects/jetbrains-account-recovery-codes.txt")
   content_type = "text/plain"
 }

@@ -16,6 +16,7 @@ resource "aws_ecr_repository" "jenkins-jarombek-io-repository" {
     Name        = "jenkins-jarombek-io-container-repository"
     Application = "all"
     Environment = "all"
+    Terraform   = var.terraform_tag
   }
 }
 
