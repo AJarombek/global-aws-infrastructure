@@ -9,7 +9,7 @@
 #---------------------------------
 
 module "jenkins-jarombek-io-acm-certificate" {
-  source  = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"
+  source = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"
 
   # Mandatory arguments
   name              = "jenkins-jarombek-io-acm-certificate"
@@ -32,7 +32,7 @@ module "jenkins-jarombek-io-acm-certificate" {
 #-------------------------------------
 
 module "dev-jenkins-jarombek-io-acm-certificate" {
-  source  = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"
+  source = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"
 
   # Mandatory arguments
   name              = "dev-jenkins-jarombek-io-acm-certificate"

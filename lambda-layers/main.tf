@@ -9,12 +9,21 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws     = ">= 3.26.0"
-    archive = ">= 2.0.0"
-    null    = ">= 3.0.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2.0.0"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 3.0.0"
+    }
   }
 
   backend "s3" {

@@ -5,9 +5,10 @@
  */
 
 locals {
-  prod        = false
-  env         = "development"
-  public_cidr = "0.0.0.0/0"
+  prod          = false
+  env           = "development"
+  public_cidr   = "0.0.0.0/0"
+  terraform_tag = "global-aws-infrastructure/jenkins-ecs/env/dev"
 }
 
 provider "aws" {
@@ -15,11 +16,17 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.12"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws        = ">= 2.66.0"
-    kubernetes = ">= 1.11"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "~> 2.0.3"
+    }
   }
 
   backend "s3" {
@@ -31,6 +38,7 @@ terraform {
 }
 
 module "kubernetes" {
-  source = "../../modules/kubernetes"
-  prod   = local.prod
+  source        = "../../modules/kubernetes"
+  prod          = local.prod
+  terraform_tag = local.terraform_tag
 }

@@ -20,3 +20,8 @@ variable "jenkins_access_cidr" {
     error_message = "An invalid CIDR block was provided for Jenkins access."
   }
 }
+
+variable "terraform_tag" {
+  description = "Name of the terraform backend key used to store the infrastructure state"
+  type        = string
+}

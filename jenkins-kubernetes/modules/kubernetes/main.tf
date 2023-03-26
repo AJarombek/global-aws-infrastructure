@@ -109,6 +109,7 @@ resource "aws_security_group" "jenkins-lb-sg" {
     Name        = "jenkins-${local.short_env}-lb-security-group"
     Application = "jenkins-jarombek-io"
     Environment = local.env
+    Terraform   = var.terraform_tag
   }
 }
 

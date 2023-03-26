@@ -7,6 +7,86 @@
 This repository contains all the global infrastructure-as-code (IaC) for Andrew Jarombek.  All other IaC
 repositories are referenced in separate directories and README.md files.
 
+### Terraform Modules
+
+### `acm`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `api-gateway`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `apps`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `backend`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `budgets`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `cloud-trail`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `config`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `eks`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `file-vault`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `iam`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `jenkins-kubernetes`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `lambda`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [x] Jenkins Deployment
+
+### `lambda-layers`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [x] Jenkins Deployment
+
 ### Directories
 
 | Directory Name       | Description                                                                  |
