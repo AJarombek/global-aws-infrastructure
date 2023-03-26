@@ -26,6 +26,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/lambda"
+}
+
 resource "aws_lambda_function" "daily-cost" {
   function_name    = "AWSDailyCost"
   filename         = "${path.module}/AWSDailyCost.zip"
@@ -41,12 +45,20 @@ resource "aws_lambda_function" "daily-cost" {
     Name        = "aws-daily-cost"
     Environment = "all"
     Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 
 resource "aws_cloudwatch_log_group" "daily-cost-log-group" {
   name              = "/aws/lambda/AWSDailyCost"
   retention_in_days = 7
+
+  tags = {
+    Name        = "aws-daily-cost"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 data "aws_iam_policy_document" "daily-cost-lambda-assume-role-policy" {
@@ -82,6 +94,13 @@ resource "aws_iam_role" "daily-cost-lambda-role" {
   path               = "/global/"
   assume_role_policy = data.aws_iam_policy_document.daily-cost-lambda-assume-role-policy.json
   description        = "IAM role for an AWS Lambda function which computes daily AWS costs"
+
+  tags = {
+    Name        = "daily-cost-lambda-role"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_policy" "daily-cost-lambda-policy" {
@@ -89,6 +108,13 @@ resource "aws_iam_policy" "daily-cost-lambda-policy" {
   path        = "/global/"
   policy      = data.aws_iam_policy_document.daily-cost-lambda-policy.json
   description = "IAM policy for an AWS Lambda function which computes daily AWS costs"
+
+  tags = {
+    Name        = "daily-cost-lambda-policy"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lambda-logging-policy-attachment" {
@@ -106,6 +132,7 @@ resource "aws_cloudwatch_event_rule" "daily-cost-schedule-rule" {
     Name        = "daily-cost-lambda-rule"
     Environment = "all"
     Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 

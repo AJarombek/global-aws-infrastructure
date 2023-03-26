@@ -48,6 +48,7 @@ resource "aws_ssm_parameter" "jbrn" {
   tags = {
     Name        = "external/JBRN"
     Application = "external"
+    Environment = "external"
     Terraform   = local.terraform_tag
   }
 }

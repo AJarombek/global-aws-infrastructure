@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.1.2"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.70.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -21,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/parameter-store/config"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/parameter-store/config"
 }
 
 data "aws_caller_identity" "current" {}
@@ -35,6 +42,8 @@ resource "aws_kms_key" "key" {
   tags = {
     Name        = "parameter-store-kms-key"
     Application = "external"
+    Environment = "external"
+    Terraform   = local.terraform_tag
   }
 }
 

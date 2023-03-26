@@ -34,6 +34,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/lambda-layers"
+}
+
 data "archive_file" "upload-picture-layer-zip" {
   source_dir  = "upload-picture-layer"
   output_path = "upload-picture-layer.zip"

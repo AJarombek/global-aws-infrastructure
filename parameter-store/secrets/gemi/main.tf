@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.1.2"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 4.10.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -21,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/parameter-store/secrets/gemi"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/parameter-store/secrets/gemi"
 }
 
 data "aws_kms_alias" "parameter-store" {
@@ -41,5 +48,7 @@ resource "aws_ssm_parameter" "gemi" {
   tags = {
     Name        = "external/GEMI"
     Application = "external"
+    Environment = "external"
+    Terraform   = local.terraform_tag
   }
 }

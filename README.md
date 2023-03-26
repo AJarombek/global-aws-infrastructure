@@ -87,6 +87,18 @@ repositories are referenced in separate directories and README.md files.
 - [x] Local Deployment
 - [x] Jenkins Deployment
 
+### `parameter-store`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `root`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
 ### Directories
 
 | Directory Name       | Description                                                                  |
