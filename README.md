@@ -99,6 +99,18 @@ repositories are referenced in separate directories and README.md files.
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
+### `route53`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `s3`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
 ### Directories
 
 | Directory Name       | Description                                                                  |

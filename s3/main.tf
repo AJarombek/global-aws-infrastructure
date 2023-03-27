@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.1.2"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.37.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -24,6 +27,15 @@ terraform {
 }
 
 locals {
+  terraform_tag = "global-aws-infrastructure/s3"
+
+  s3_object_tags = {
+    Name        = "global.jarombek.io"
+    Application = "global-jarombek-io"
+    Environment = "production"
+    Terraform   = local.terraform_tag
+  }
+
   # A unique identifier for the S3 origin.  This is needed for CloudFront.
   s3_origin_id     = "globalJarombekIO"
   www_s3_origin_id = "wwwGlobalJarombekIO"
@@ -62,21 +74,38 @@ resource "aws_s3_account_public_access_block" "access" {
 
 resource "aws_s3_bucket" "global-jarombek-io" {
   bucket = "global.jarombek.io"
-  acl    = "private"
 
   tags = {
     Name        = "global.jarombek.io"
+    Application = "global-jarombek-io"
     Environment = "production"
+    Terraform   = local.terraform_tag
+  }
+}
+
+resource "aws_s3_bucket_acl" "global-jarombek-io" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_website_configuration" "global-jarombek-io" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
+
+  index_document {
+    suffix = "index.json"
   }
 
-  website {
-    index_document = "index.json"
-    error_document = "index.json"
+  error_document {
+    key = "index.json"
   }
+}
+
+resource "aws_s3_bucket_cors_configuration" "global-jarombek-io" {
+  bucket = aws_s3_bucket.global-jarombek-io.id
 
   cors_rule {
-    allowed_origins = ["*"]
     allowed_methods = ["GET"]
+    allowed_origins = ["*"]
     allowed_headers = ["*"]
   }
 }
@@ -195,7 +224,9 @@ resource "aws_cloudfront_distribution" "global-jarombek-io-distribution" {
 
   tags = {
     Name        = "global-jarombek-io-cloudfront"
+    Application = "global-jarombek-io"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -271,7 +302,9 @@ resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
 
   tags = {
     Name        = "www-global-jarombek-io-cloudfront"
+    Application = "global-jarombek-io"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -308,175 +341,196 @@ resource "aws_route53_record" "www-global-jarombek-io-a" {
 # S3 Bucket Contents
 #-------------------
 
-resource "aws_s3_bucket_object" "index-json" {
+resource "aws_s3_object" "index-json" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "index.json"
   source       = "global/index.json"
   etag         = filemd5("global/index.json")
   content_type = "application/json"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "aws-key-gen" {
+resource "aws_s3_object" "aws-key-gen" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "aws-key-gen.sh"
   source       = "global/aws-key-gen.sh"
   etag         = filemd5("global/aws-key-gen.sh")
   content_type = "application/octet-stream"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fonts-css" {
+resource "aws_s3_object" "fonts-css" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts.css"
   source       = "global/fonts.css"
   etag         = filemd5("global/fonts.css")
   content_type = "text/css"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "allura-regular-otf" {
+resource "aws_s3_object" "allura-regular-otf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/Allura-Regular.otf"
   source       = "global/fonts/Allura-Regular.otf"
   etag         = filemd5("global/fonts/Allura-Regular.otf")
   content_type = "font/otf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "dyslexie-bold-ttf" {
+resource "aws_s3_object" "dyslexie-bold-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/dyslexie-bold.ttf"
   source       = "global/fonts/dyslexie-bold.ttf"
   etag         = filemd5("global/fonts/dyslexie-bold.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "elegant-icons-eot" {
+resource "aws_s3_object" "elegant-icons-eot" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/ElegantIcons.eot"
   source       = "global/fonts/ElegantIcons.eot"
   etag         = filemd5("global/fonts/ElegantIcons.eot")
   content_type = "font/otf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "elegant-icons-ttf" {
+resource "aws_s3_object" "elegant-icons-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/ElegantIcons.ttf"
   source       = "global/fonts/ElegantIcons.ttf"
   etag         = filemd5("global/fonts/ElegantIcons.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "elegant-icons-woff" {
+resource "aws_s3_object" "elegant-icons-woff" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/ElegantIcons.woff"
   source       = "global/fonts/ElegantIcons.woff"
   etag         = filemd5("global/fonts/ElegantIcons.woff")
   content_type = "font/woff"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-eot" {
+resource "aws_s3_object" "fantasque-sans-mono-bold-eot" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/FantasqueSansMono-Bold.eot"
   source       = "global/fonts/FantasqueSansMono-Bold.eot"
   etag         = filemd5("global/fonts/FantasqueSansMono-Bold.eot")
   content_type = "font/otf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-otf" {
+resource "aws_s3_object" "fantasque-sans-mono-bold-otf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/FantasqueSansMono-Bold.otf"
   source       = "global/fonts/FantasqueSansMono-Bold.otf"
   etag         = filemd5("global/fonts/FantasqueSansMono-Bold.otf")
   content_type = "font/otf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-ttf" {
+resource "aws_s3_object" "fantasque-sans-mono-bold-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/FantasqueSansMono-Bold.ttf"
   source       = "global/fonts/FantasqueSansMono-Bold.ttf"
   etag         = filemd5("global/fonts/FantasqueSansMono-Bold.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-woff" {
+resource "aws_s3_object" "fantasque-sans-mono-bold-woff" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/FantasqueSansMono-Bold.woff"
   source       = "global/fonts/FantasqueSansMono-Bold.woff"
   etag         = filemd5("global/fonts/FantasqueSansMono-Bold.woff")
   content_type = "font/woff"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "fantasque-sans-mono-bold-woff2" {
+resource "aws_s3_object" "fantasque-sans-mono-bold-woff2" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/FantasqueSansMono-Bold.woff2"
   source       = "global/fonts/FantasqueSansMono-Bold.woff2"
   etag         = filemd5("global/fonts/FantasqueSansMono-Bold.woff2")
   content_type = "font/woff2"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "longway-regular-otf" {
+resource "aws_s3_object" "longway-regular-otf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/Longway-Regular.otf"
   source       = "global/fonts/Longway-Regular.otf"
   etag         = filemd5("global/fonts/Longway-Regular.otf")
   content_type = "font/otf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "roboto-bold-ttf" {
+resource "aws_s3_object" "roboto-bold-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/Roboto-Bold.ttf"
   source       = "global/fonts/Roboto-Bold.ttf"
   etag         = filemd5("global/fonts/Roboto-Bold.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "roboto-regular-ttf" {
+resource "aws_s3_object" "roboto-regular-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/Roboto-Regular.ttf"
   source       = "global/fonts/Roboto-Regular.ttf"
   etag         = filemd5("global/fonts/Roboto-Regular.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "roboto-thin-ttf" {
+resource "aws_s3_object" "roboto-thin-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/Roboto-Thin.ttf"
   source       = "global/fonts/Roboto-Thin.ttf"
   etag         = filemd5("global/fonts/Roboto-Thin.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "robotoslab-bold-ttf" {
+resource "aws_s3_object" "robotoslab-bold-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/RobotoSlab-Bold.ttf"
   source       = "global/fonts/RobotoSlab-Bold.ttf"
   etag         = filemd5("global/fonts/RobotoSlab-Bold.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "robotoslab-light-ttf" {
+resource "aws_s3_object" "robotoslab-light-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/RobotoSlab-Light.ttf"
   source       = "global/fonts/RobotoSlab-Light.ttf"
   etag         = filemd5("global/fonts/RobotoSlab-Light.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "robotoslab-regular-ttf" {
+resource "aws_s3_object" "robotoslab-regular-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/RobotoSlab-Regular.ttf"
   source       = "global/fonts/RobotoSlab-Regular.ttf"
   etag         = filemd5("global/fonts/RobotoSlab-Regular.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "robotoslab-thin-ttf" {
+resource "aws_s3_object" "robotoslab-thin-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/RobotoSlab-Thin.ttf"
   source       = "global/fonts/RobotoSlab-Thin.ttf"
   etag         = filemd5("global/fonts/RobotoSlab-Thin.ttf")
   content_type = "font/ttf"
+  tags         = local.s3_object_tags
 }
 
-resource "aws_s3_bucket_object" "sylexiad-sans-thin-otf" {
+resource "aws_s3_object" "sylexiad-sans-thin-otf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/SylexiadSansThin.otf"
   source       = "global/fonts/SylexiadSansThin.otf"
@@ -484,7 +538,7 @@ resource "aws_s3_bucket_object" "sylexiad-sans-thin-otf" {
   content_type = "font/otf"
 }
 
-resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
+resource "aws_s3_object" "sylexiad-sans-thin-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/SylexiadSansThin.ttf"
   source       = "global/fonts/SylexiadSansThin.ttf"
@@ -492,7 +546,7 @@ resource "aws_s3_bucket_object" "sylexiad-sans-thin-ttf" {
   content_type = "font/ttf"
 }
 
-resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-otf" {
+resource "aws_s3_object" "sylexiad-sans-thin-bold-otf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/SylexiadSansThin-Bold.otf"
   source       = "global/fonts/SylexiadSansThin-Bold.otf"
@@ -500,7 +554,7 @@ resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-otf" {
   content_type = "font/otf"
 }
 
-resource "aws_s3_bucket_object" "sylexiad-sans-thin-bold-ttf" {
+resource "aws_s3_object" "sylexiad-sans-thin-bold-ttf" {
   bucket       = aws_s3_bucket.global-jarombek-io.id
   key          = "fonts/SylexiadSansThin-Bold.ttf"
   source       = "global/fonts/SylexiadSansThin-Bold.ttf"

@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.15"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.27.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -21,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/route53"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/route53"
 }
 
 #---------------------------------------
@@ -37,6 +44,13 @@ data "aws_sns_topic" "alert-email" {
 
 resource "aws_route53_zone" "jarombek-io-zone" {
   name = "jarombek.io."
+
+  tags = {
+    Name        = "jarombek-io-zone"
+    Application = "jarombek-io"
+    Environment = "all"
+    Terraform   = local.terraform_tag
+  }
 }
 
 resource "aws_route53_record" "jarombek-io-ns" {
@@ -65,6 +79,7 @@ resource "aws_route53_health_check" "jarombek-com-health-check" {
     Name        = "jarombek-com-health-check"
     Application = "jarombek-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -91,6 +106,7 @@ resource "aws_cloudwatch_metric_alarm" "jarombek-com-health-check-alarm" {
     Name        = "jarombek-com-health-check-alarm"
     Application = "jarombek-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -106,6 +122,7 @@ resource "aws_route53_health_check" "saints-xctf-com-health-check" {
     Name        = "saints-xctf-com-health-check"
     Application = "saints-xctf-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -132,6 +149,7 @@ resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-health-check-alarm" {
     Name        = "saints-xctf-com-health-check-alarm"
     Application = "saints-xctf-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -147,6 +165,7 @@ resource "aws_route53_health_check" "saints-xctf-com-api-health-check" {
     Name        = "saints-xctf-com-api-health-check"
     Application = "saints-xctf-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -173,5 +192,6 @@ resource "aws_cloudwatch_metric_alarm" "saints-xctf-com-api-health-check-alarm" 
     Name        = "saints-xctf-com-api-health-check-alarm"
     Application = "saints-xctf-com"
     Environment = "production"
+    Terraform   = local.terraform_tag
   }
 }
