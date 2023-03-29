@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.0.1"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.48.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -23,6 +26,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/sns"
+}
+
 # NOTE - an email subscription to this topic needs to be created manually through the console or CloudFormation,
 # not Terraform.
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription#protocol
@@ -30,7 +37,10 @@ resource "aws_sns_topic" "alert-email" {
   name = "alert-email-topic"
 
   tags = {
-    Name = "alert-email-topic"
+    Name        = "alert-email-topic"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -65,7 +75,10 @@ resource "aws_cloudformation_stack" "sns-email-subscription" {
   }
 
   tags = {
-    Name = "sns-email-subscription"
+    Name        = "sns-email-subscription"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 
@@ -73,7 +86,10 @@ resource "aws_sns_topic" "alert-sms" {
   name = "alert-sms-topic"
 
   tags = {
-    Name = "alert-sms-topic"
+    Name        = "alert-sms-topic"
+    Environment = "all"
+    Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 

@@ -26,4 +26,3 @@ repository.
 | `testS3.py`                | Test suite for a global S3 bucket.                                                   |
 | `testSecretsManager.py`    | Test suite for credentials stored in Secrets Manager.                                |
 | `testSNS.py`               | Test suite for SNS topics and subscriptions.                                         |
-| `testVPCPeering.py`        | Test suite for VPC peering connections.                                              |

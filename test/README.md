@@ -18,17 +18,8 @@ python3 runner.py test_results.log
 
 ### Files
 
-| Filename             | Description                                                                                  |
-|----------------------|----------------------------------------------------------------------------------------------|
-| `apps/`              | Multiple test suites for different applications in my cloud.                                 |
-| `backend/`           | Test suite for the Terraform backend S3 bucket.                                              |
-| `iam/`               | Test suite for IAM roles and policies.                                                       |
-| `jenkins/`           | Test suite for the Jenkins server `jenkins.jarombek.io`.                                     |
-| `jenkinsefs/`        | Test suite for the Jenkins server elastic file storage (EFS).                                |
-| `jenkinsRoute53/`    | Test suite for the Jenkins server's DNS records.                                             |
-| `root/`              | Test suite for my cloud's root resources (VPCs and Subnets).                                 |
-| `route53/`           | Test suite for my main DNS records.                                                          |
-| `s3/`                | Test suite for an S3 bucket used for sharable files.                                         |
-| `utils/`             | Utility functions used to retrieve & validate data from boto3.                               |
-| `masterTestFuncs.py` | Functions used to help create a test suite environment.                                      |
-| `masterTestSuite.py` | Invokes all the test suites.                                                                 |
+| Filename            | Description                                                              |
+|---------------------|--------------------------------------------------------------------------|
+| `suites`            | Multiple test suites for different resources in my cloud.                |
+| `Pipfile`           | Dependencies and Python virtual environment configuration for the tests. |
+| `runner.py`         | Invokes all the test suites.                                             |

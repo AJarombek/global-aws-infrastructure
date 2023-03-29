@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 2.66.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -23,6 +26,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/secrets-manager/saints-xctf-andy"
+}
+
 resource "aws_secretsmanager_secret" "saints-xctf-andy" {
   name        = "saints-xctf-andy-password"
   description = "SaintsXCTF Password"
@@ -31,6 +38,7 @@ resource "aws_secretsmanager_secret" "saints-xctf-andy" {
     Name        = "saints-xctf-andy-password"
     Environment = "production"
     Application = "saints-xctf-com"
+    Terraform   = local.terraform_tag
   }
 }
 

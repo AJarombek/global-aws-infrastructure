@@ -111,6 +111,18 @@ repositories are referenced in separate directories and README.md files.
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
+### `secrets-manager`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
+### `sns`
+
+- [x] Terraform Version 1.3.9
+- [x] Local Deployment
+- [ ] Jenkins Deployment
+
 ### Directories
 
 | Directory Name       | Description                                                                  |
@@ -136,7 +148,6 @@ repositories are referenced in separate directories and README.md files.
 | `s3`                 | Terraform scripts for global S3 assets.                                      |
 | `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.              |
 | `sns`                | Terraform scripts for AWS SNS notifications.                                 |
-| `vpc-peering`        | Terraform scripts for VPC peering connections between my VPCs.               |
 | `test`               | Python AWS infrastructure test suite.                                        |
 | `test-k8s`           | Go Kubernetes infrastructure test suite.                                     |
 

@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 3.7.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -23,6 +26,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/secrets-manager/aws-access"
+}
+
 resource "aws_secretsmanager_secret" "aws-access-secrets" {
   name        = "aws-access-secrets"
   description = "AWS access secrets for using the AWS CLI and SDKs"
@@ -31,6 +38,7 @@ resource "aws_secretsmanager_secret" "aws-access-secrets" {
     Name        = "aws-access-secrets"
     Environment = "production"
     Application = "all"
+    Terraform   = local.terraform_tag
   }
 }
 

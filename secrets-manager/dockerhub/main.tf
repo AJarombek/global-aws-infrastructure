@@ -9,7 +9,14 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = "~> 1.3.9"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
+  }
 
   backend "s3" {
     bucket  = "andrew-jarombek-terraform-state"
@@ -17,6 +24,10 @@ terraform {
     key     = "global-aws-infrastructure/secrets-manager/dockerhub"
     region  = "us-east-1"
   }
+}
+
+locals {
+  terraform_tag = "global-aws-infrastructure/secrets-manager/dockerhub"
 }
 
 resource "aws_secretsmanager_secret" "dockerhub-secret" {
@@ -27,6 +38,7 @@ resource "aws_secretsmanager_secret" "dockerhub-secret" {
     Name        = "dockerhub-secret"
     Environment = "production"
     Application = "sandbox"
+    Terraform   = local.terraform_tag
   }
 }
 

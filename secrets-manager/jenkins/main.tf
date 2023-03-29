@@ -9,10 +9,13 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = "~> 1.3.9"
 
   required_providers {
-    aws = ">= 2.66.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.58.0"
+    }
   }
 
   backend "s3" {
@@ -23,6 +26,10 @@ terraform {
   }
 }
 
+locals {
+  terraform_tag = "global-aws-infrastructure/secrets-manager/jenkins"
+}
+
 resource "aws_secretsmanager_secret" "jenkins-secret" {
   name        = "jenkins-secret"
   description = "Jenkins Credentials"
@@ -31,6 +38,7 @@ resource "aws_secretsmanager_secret" "jenkins-secret" {
     Name        = "jenkins-secret"
     Environment = "production"
     Application = "jenkins-jarombek-io"
+    Terraform   = local.terraform_tag
   }
 }
 
