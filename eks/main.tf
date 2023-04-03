@@ -445,7 +445,7 @@ resource "kubernetes_deployment" "alb-ingress-controller" {
       spec {
         container {
           name  = "aws-alb-ingress-controller"
-          image = "docker.io/amazon/aws-alb-ingress-controller:v1.1.4"
+          image = "docker.io/amazon/aws-alb-ingress-controller:v2.4.5"
           args = [
             "--ingress-class=alb",
             "--cluster-name=${local.cluster_name}",

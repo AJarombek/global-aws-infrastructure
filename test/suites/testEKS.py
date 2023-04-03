@@ -35,14 +35,14 @@ class TestEKS(unittest.TestCase):
         """
         Determine if the EKS cluster exists as expected.
         """
-        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-cluster')
+        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-v2')
 
         cluster_name = cluster.get('cluster').get('name')
         kubernetes_version = cluster.get('cluster').get('version')
         platform_version = cluster.get('cluster').get('platformVersion')
         cluster_status = cluster.get('cluster').get('status')
 
-        self.assertEqual('andrew-jarombek-eks-cluster', cluster_name)
+        self.assertEqual('andrew-jarombek-eks-v2', cluster_name)
         self.assertEqual('1.22', kubernetes_version)
         self.assertEqual('eks.10', platform_version)
         self.assertEqual('ACTIVE', cluster_status)
@@ -51,7 +51,7 @@ class TestEKS(unittest.TestCase):
         """
         Test that the EKS cluster is in the expected cluster and public subnets.
         """
-        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-cluster').get('cluster')
+        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-v2').get('cluster')
         cluster_vpc: str = cluster.get('resourcesVpcConfig').get('vpcId')
         cluster_subnets: list = cluster.get('resourcesVpcConfig').get('subnetIds')
 
@@ -74,7 +74,7 @@ class TestEKS(unittest.TestCase):
         """
         Test that an Open ID Connect Provider is used by the cluster.
         """
-        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-cluster').get('cluster')
+        cluster = self.eks.describe_cluster(name='andrew-jarombek-eks-v2').get('cluster')
         cluster_oidc_issuer: str = cluster.get('identity').get('oidc').get('issuer')
         cluster_oidc_issuer = cluster_oidc_issuer.replace('https://', '')
 
@@ -110,7 +110,7 @@ class TestEKS(unittest.TestCase):
         """
         Ensure that the EKS worker node EC2 instance is in a running state.
         """
-        worker_ec2 = EC2.get_ec2(name='andrew-jarombek-eks-cluster-0-eks_asg')
+        worker_ec2 = EC2.get_ec2(name='eks-prod')
         self.assertEqual(2, len(worker_ec2))
 
     def test_eks_worker_node_managed_by_eks(self) -> None:
@@ -120,15 +120,7 @@ class TestEKS(unittest.TestCase):
         response = self.ec2.describe_instances(Filters=[
             {
                 'Name': 'tag:Name',
-                'Values': ['andrew-jarombek-eks-cluster-0-eks_asg']
-            },
-            {
-                'Name': 'tag:k8s.io/cluster/andrew-jarombek-eks-cluster',
-                'Values': ['owned']
-            },
-            {
-                'Name': 'tag:kubernetes.io/cluster/andrew-jarombek-eks-cluster',
-                'Values': ['owned']
+                'Values': ['eks-prod']
             }
         ])
         worker_instances = response.get('Reservations')[0].get('Instances')

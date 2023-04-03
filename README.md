@@ -11,147 +11,141 @@ repositories are referenced in separate directories and README.md files.
 
 ### `acm`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `api-gateway`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `apps`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `backend`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `budgets`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `cloud-trail`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `config`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
-### `eks`
+### `eks-v2`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `file-vault`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `iam`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `jenkins-kubernetes`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `lambda`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [x] Jenkins Deployment
 
 ### `lambda-layers`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [x] Jenkins Deployment
 
 ### `parameter-store`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `root`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `route53`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `s3`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `secrets-manager`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### `sns`
 
-- [x] Terraform Version 1.3.9
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
 ### Directories
 
-| Directory Name       | Description                                                                  |
-|----------------------|------------------------------------------------------------------------------|
-| `.github`            | GitHub Actions for CI/CD pipelines.                                          |
-| `acm`                | HTTPS certificates for the `jarombek.io` applications.                       |
-| `api-gateway`        | Global API Gateway configuration.                                            |
-| `apps`               | Infrastructure for individual applications.                                  |
-| `backend`            | The Terraform backend, consisting of an S3 bucket.                           |
-| `budgets`            | Terraform scripts for setting AWS account budgets.                           |
-| `cloud-trail`        | Terraform scripts for AWS account auditing with CloudTrail.                  |
-| `config`             | Terraform scripts for AWS Config.                                            |
-| `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                      |
-| `eks`                | Terraform and Kubernetes configuration for an EKS cluster.                   |
-| `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files.  |
-| `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.       |
-| `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.         |
-| `lambda`             | Terraform scripts for AWS Lambda functions.                                  |
-| `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                          |
-| `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.                |
-| `root`               | Root Terraform scripts for creating the accounts VPCs.                       |
-| `route53`            | Terraform scripts for creating DNS records for the account.                  |
-| `s3`                 | Terraform scripts for global S3 assets.                                      |
-| `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.              |
-| `sns`                | Terraform scripts for AWS SNS notifications.                                 |
-| `test`               | Python AWS infrastructure test suite.                                        |
-| `test-k8s`           | Go Kubernetes infrastructure test suite.                                     |
+| Directory Name       | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `.github`            | GitHub Actions for CI/CD pipelines.                                         |
+| `acm`                | HTTPS certificates for the `jarombek.io` applications.                      |
+| `api-gateway`        | Global API Gateway configuration.                                           |
+| `apps`               | Infrastructure for individual applications.                                 |
+| `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
+| `budgets`            | Terraform scripts for setting AWS account budgets.                          |
+| `cloud-trail`        | Terraform scripts for AWS account auditing with CloudTrail.                 |
+| `config`             | Terraform scripts for AWS Config.                                           |
+| `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
+| `eks`                | *DEPRECATED* Terraform and Kubernetes configuration for an EKS cluster.     |
+| `eks-v2`             | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
+| `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
+| `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
+| `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |
+| `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
+| `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
+| `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.               |
+| `root`               | Root Terraform scripts for creating the accounts VPCs.                      |
+| `route53`            | Terraform scripts for creating DNS records for the account.                 |
+| `s3`                 | Terraform scripts for global S3 assets.                                     |
+| `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.             |
+| `sns`                | Terraform scripts for AWS SNS notifications.                                |
+| `test`               | Python AWS infrastructure test suite.                                       |
+| `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
 
 ### Versions
+
+**[v2.1.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.0) - EKS V2 Cluster**
+
+> Release Date: April 3rd, 2023
+
+Created a new EKS cluster and deprecated the old EKS module.
+
+**[v2.0.6](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.6) - Terraform 1.3 Upgrade**
+
+> Release Date: March 28th, 2023
+
+Infrastructure upgraded to use Terraform 1.3.9.  Removed deprecated and unused Terraform modules.
 
 **[v2.0.5](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.0.5) - AWS Config Infrastructure**
 
