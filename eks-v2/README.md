@@ -29,6 +29,9 @@ aws eks update-kubeconfig --region us-east-1 --name andrew-jarombek-eks-v2
 
 ```bash
 kubectl get po -n my-namespace
+kubectl get deployment -n my-namespace
+kubectl get clusterrole -n my-namespace
+kubectl get clusterrolebinding -n my-namespace
 kubectl logs -f my-pod-name -n my-namespace
 ```
 

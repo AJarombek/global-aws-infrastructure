@@ -17,7 +17,7 @@ go get k8s.io/apimachinery@kubernetes-1.16.0
 
 ```bash
 # Run the Kubernetes tests using the local Kubeconfig file.
-go test --kubeconfig ~/Documents/global-aws-infrastructure/eks/kubeconfig_andrew-jarombek-eks-cluster
+go test --kubeconfig ~/.kube/config
 ```
 
 ### Files

@@ -68,9 +68,11 @@ RUN adduser jenkins sudo \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Configure the Jenkins server with plugins and seed jobs.
-COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY jenkins.yaml /usr/share/jenkins/ref/jenkins.yaml
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli --plugins "ansicolor authorize-project build-timeout cloudbees-folder configuration-as-code" \
+    && jenkins-plugin-cli --plugins "credentials-binding email-ext envinject git github greenballs job-dsl kubernetes" \
+    && jenkins-plugin-cli --plugins "matrix-auth parameterized-scheduler pipeline-build-step pipeline-model-definition" \
+    && jenkins-plugin-cli --plugins "pipeline-stage-view rebuild timestamper workflow-cps-global-lib workflow-job ws-cleanup"
 
 USER jenkins
 EXPOSE 8080 50000

@@ -8,6 +8,7 @@ go 1.14
 
 require (
 	github.com/ajarombek/cloud-modules/kubernetes-test-functions v0.2.6
+	golang.org/x/sys v0.8.0 // indirect
 	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.3-beta.0
 	k8s.io/client-go v0.17.0

@@ -11,38 +11,38 @@ import (
 	"testing"
 )
 
-// TestALBIngressControllerServiceAccountExists tests that the 'aws-alb-ingress-controller' service account exists in
+// TestAWSLoadBalancerControllerServiceAccountExists tests that the 'aws-load-balancer-controller' service account exists in
 // the 'kube-system' namespace.
-func TestALBIngressControllerServiceAccountExists(t *testing.T)  {
-	k8sfuncs.ServiceAccountExists(t, ClientSet, "aws-alb-ingress-controller", "kube-system")
+func TestAWSLoadBalancerControllerServiceAccountExists(t *testing.T) {
+	k8sfuncs.ServiceAccountExists(t, ClientSet, "aws-load-balancer-controller", "kube-system")
 }
 
 // TestExternalDNSServiceAccountExists tests that the 'external-dns' service account exists in
 // the 'kube-system' namespace.
-func TestExternalDNSServiceAccountExists(t *testing.T)  {
+func TestExternalDNSServiceAccountExists(t *testing.T) {
 	k8sfuncs.ServiceAccountExists(t, ClientSet, "external-dns", "kube-system")
 }
 
-// TestALBIngressControllerClusterRoleExists tests that the 'aws-alb-ingress-controller' cluster role exists in
+// TestAWSLoadBalancerControllerClusterRoleExists tests that the 'aws-load-balancer-controller-role' cluster role exists in
 // the 'kube-system' namespace.
-func TestALBIngressControllerClusterRoleExists(t *testing.T)  {
-	k8sfuncs.ClusterRoleExists(t, ClientSet, "aws-alb-ingress-controller")
+func TestAWSLoadBalancerControllerClusterRoleExists(t *testing.T) {
+	k8sfuncs.ClusterRoleExists(t, ClientSet, "aws-load-balancer-controller-role")
 }
 
 // TestExternalDNSClusterRoleExists tests that the 'external-dns' cluster role exists in
 // the 'kube-system' namespace.
-func TestExternalDNSClusterRoleExists(t *testing.T)  {
+func TestExternalDNSClusterRoleExists(t *testing.T) {
 	k8sfuncs.ClusterRoleExists(t, ClientSet, "external-dns")
 }
 
-// TestALBIngressControllerClusterRoleBindingExists tests that the 'aws-alb-ingress-controller' cluster role binding
+// TestAWSLoadBalancerControllerClusterRoleBindingExists tests that the 'aws-load-balancer-controller-rolebinding' cluster role binding
 // exists in the 'kube-system' namespace.
-func TestALBIngressControllerClusterRoleBindingExists(t *testing.T)  {
-	k8sfuncs.ClusterRoleBindingExists(t, ClientSet, "aws-alb-ingress-controller")
+func TestAWSLoadBalancerControllerClusterRoleBindingExists(t *testing.T) {
+	k8sfuncs.ClusterRoleBindingExists(t, ClientSet, "aws-load-balancer-controller-rolebinding")
 }
 
 // TestExternalDNSClusterRoleExists tests that the 'external-dns' cluster role binding exists in
 // the 'kube-system' namespace.
-func TestExternalDNSClusterRoleBindingExists(t *testing.T)  {
+func TestExternalDNSClusterRoleBindingExists(t *testing.T) {
 	k8sfuncs.ClusterRoleBindingExists(t, ClientSet, "external-dns")
 }

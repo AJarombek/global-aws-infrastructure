@@ -18,10 +18,10 @@ func TestKubeSystemNamespaceDeploymentCount(t *testing.T) {
 	k8sfuncs.ExpectedDeploymentCount(t, ClientSet, "kube-system", 3)
 }
 
-// TestALBIngressControllerDeploymentExists determines if a deployment exists in the 'kube-system' namespace with
+// TestAWSLoadBalancerControllerDeploymentExists determines if a deployment exists in the 'kube-system' namespace with
 // the name 'aws-alb-ingress-controller'.
-func TestALBIngressControllerDeploymentExists(t *testing.T) {
-	k8sfuncs.DeploymentExists(t, ClientSet, "aws-alb-ingress-controller", "kube-system")
+func TestAWSLoadBalancerControllerDeploymentExists(t *testing.T) {
+	k8sfuncs.DeploymentExists(t, ClientSet, "aws-load-balancer-controller", "kube-system")
 }
 
 // TestExternalDNSDeploymentExists determines if a deployment exists in the 'kube-system' namespace with the name
@@ -30,10 +30,10 @@ func TestExternalDNSDeploymentExists(t *testing.T) {
 	k8sfuncs.DeploymentExists(t, ClientSet, "external-dns", "kube-system")
 }
 
-// TestALBIngressControllerDeploymentErrorFree determines if the 'aws-alb-ingress-controller' deployment is
+// TestAWSLoadBalancerControllerDeploymentErrorFree determines if the 'aws-alb-ingress-controller' deployment is
 // running error free.
-func TestALBIngressControllerDeploymentErrorFree(t *testing.T) {
-	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get("aws-alb-ingress-controller", v1meta.GetOptions{})
+func TestAWSLoadBalancerControllerDeploymentErrorFree(t *testing.T) {
+	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get("aws-load-balancer-controller", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
