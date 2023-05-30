@@ -16,7 +16,7 @@ aws ecr get-login-password --region us-east-1 \
 **Build and start the Jenkins container locally**
 
 ```bash
-./start-local.sh 1.0.6
+./start-local.sh 1.0.10
 ```
 
 ### Files

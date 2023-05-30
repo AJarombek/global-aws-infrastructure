@@ -66,8 +66,7 @@ class TestFileVault(unittest.TestCase):
         Test if the andrew-jarombek-file-vault S3 bucket contains the proper objects.
         """
         contents = self.s3.list_objects(Bucket=self.bucket_name).get('Contents')
-        self.assertTrue(all([
-            len(contents) == 2,
-            contents[0].get('Key') == 'github-recovery-codes.txt',
-            contents[1].get('Key') == 'kubeconfig_andrew-jarombek-eks-cluster'
-        ]))
+        self.assertEqual(3, len(contents))
+        self.assertEqual('github-recovery-codes.txt', contents[0].get('Key'))
+        self.assertEqual('jetbrains-account-recovery-codes.txt', contents[1].get('Key'))
+        self.assertEqual('kubeconfig_andrew-jarombek-eks-cluster', contents[2].get('Key'))

@@ -7,11 +7,11 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_eks_cluster" "cluster" {
-  name = "andrew-jarombek-eks-cluster"
+  name = "andrew-jarombek-eks-v2"
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = "andrew-jarombek-eks-cluster"
+  name = "andrew-jarombek-eks-v2"
 }
 
 data "aws_vpc" "application-vpc" {
@@ -47,7 +47,7 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 
   exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
+    api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"
     args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
   }
@@ -61,7 +61,7 @@ locals {
   short_env            = var.prod ? "prod" : "dev"
   env                  = var.prod ? "production" : "development"
   namespace            = var.prod ? "jenkins" : "jenkins-dev"
-  short_version        = "1.0.9"
+  short_version        = "1.0.10"
   version              = "v${local.short_version}"
   account_id           = data.aws_caller_identity.current.account_id
   domain_cert          = var.prod ? "*.jarombek.io" : "*.jenkins.jarombek.io"
@@ -212,7 +212,7 @@ resource "kubernetes_deployment" "deployment" {
                 match_expressions {
                   key      = "workload"
                   operator = "In"
-                  values   = ["development-tests"]
+                  values   = ["production-applications"]
                 }
               }
             }
@@ -235,13 +235,13 @@ resource "kubernetes_deployment" "deployment" {
 
           resources {
             requests = {
-              memory = "512Mi"
-              cpu    = "250m"
+              memory = "1Gi"
+              cpu    = "500m"
             }
 
             limits = {
               memory = "2Gi"
-              cpu    = "500m"
+              cpu    = "1000m"
             }
           }
 
@@ -350,7 +350,7 @@ resource "kubernetes_service" "jnlp-service" {
   }
 }
 
-resource "kubernetes_ingress" "ingress" {
+resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name      = "jenkins-ingress"
     namespace = local.namespace
@@ -387,8 +387,12 @@ resource "kubernetes_ingress" "ingress" {
           path = "/*"
 
           backend {
-            service_name = "ssl-redirect"
-            service_port = "use-annotation"
+            service {
+              name = "ssl-redirect"
+              port {
+                name = "use-annotation"
+              }
+            }
           }
         }
 
@@ -396,8 +400,12 @@ resource "kubernetes_ingress" "ingress" {
           path = "/*"
 
           backend {
-            service_name = "jenkins-service"
-            service_port = 80
+            service {
+              name = "jenkins-service"
+              port {
+                number = 80
+              }
+            }
           }
         }
       }
@@ -411,8 +419,12 @@ resource "kubernetes_ingress" "ingress" {
           path = "/*"
 
           backend {
-            service_name = "ssl-redirect"
-            service_port = "use-annotation"
+            service {
+              name = "ssl-redirect"
+              port {
+                name = "use-annotation"
+              }
+            }
           }
         }
 
@@ -420,8 +432,12 @@ resource "kubernetes_ingress" "ingress" {
           path = "/*"
 
           backend {
-            service_name = "jenkins-service"
-            service_port = 80
+            service {
+              name = "jenkins-service"
+              port {
+                number = 80
+              }
+            }
           }
         }
       }
