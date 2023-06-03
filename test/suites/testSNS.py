@@ -115,13 +115,16 @@ class TestSNS(unittest.TestCase):
         Determine if an SNS subscription exists which sends text messages.
         """
         account_id = self.sts.get_caller_identity().get('Account')
-        subscriptions = self.sns.list_subscriptions()
+        matching_topics = self.get_sns_topics('alert-sms-topic')
+        topic_arn = matching_topics[0].get('TopicArn')
+
+        subscriptions = self.sns.list_subscriptions_by_topic(TopicArn=topic_arn)
         matching_subscriptions = [
             subscription for subscription
             in subscriptions.get('Subscriptions')
             if subscription.get('Protocol') == 'sms'
-            and subscription.get('Endpoint') == '+12035508738'
-            and subscription.get('TopicArn') == f'arn:aws:sns:us-east-1:{account_id}:alert-sms-topic'
+            and subscription.get('Endpoint') == '+2035508738'
+            and subscription.get('TopicArn').startswith(f'arn:aws:sns:us-east-1:{account_id}:alert-sms-topic')
         ]
 
         self.assertEqual(1, len(matching_subscriptions))

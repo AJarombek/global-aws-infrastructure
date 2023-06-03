@@ -10,13 +10,13 @@ Docker container for a Jenkins server.
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 aws ecr get-login-password --region us-east-1 \
     | docker login -u AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com
-./push-ecr.sh 1.0.6
+./push-ecr.sh 1.0.10
 ```
 
 **Build and start the Jenkins container locally**
 
 ```bash
-./start-local.sh 1.0.6
+./start-local.sh 1.0.10
 ```
 
 ### Files

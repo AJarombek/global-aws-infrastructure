@@ -38,7 +38,7 @@ def main():
     docker_hub_username, docker_hub_password = get_docker_hub_credentials(secretsmanager)
     github_access_token = get_github_access_token(secretsmanager)
     saintsxctf_rds_dev_username, saintsxctf_rds_dev_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
-    saintsxctf_rds_prod_username, saintsxctf_rds_prod_password = get_saintsxctf_rds_credentials('dev', secretsmanager)
+    saintsxctf_rds_prod_username, saintsxctf_rds_prod_password = get_saintsxctf_rds_credentials('prod', secretsmanager)
     saintsxctf_password = get_saintsxctf_password(secretsmanager)
     aws_access_key_id, aws_secret_access_key = get_aws_access_secrets(secretsmanager)
     kubernetes_url = get_kubernetes_url()
@@ -207,7 +207,7 @@ def get_kubernetes_url() -> str:
     :return: The Kubernetes URL.
     """
     eks: EKSClient = boto3.client('eks')
-    cluster_info: dict = eks.describe_cluster(name='andrew-jarombek-eks-cluster')
+    cluster_info: dict = eks.describe_cluster(name='andrew-jarombek-eks-v2')
     return cluster_info.get('cluster').get('endpoint')
 
 

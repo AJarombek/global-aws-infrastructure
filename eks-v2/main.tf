@@ -51,13 +51,13 @@ data "aws_subnet" "kubernetes-grandmas-blanket-public-subnet" {
 }
 
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
   version = "19.12.0"
 
-  cluster_name = local.cluster_name
-  cluster_version = local.cluster_version
-  cluster_endpoint_private_access = true
-  cluster_endpoint_public_access = true
+  cluster_name                          = local.cluster_name
+  cluster_version                       = local.cluster_version
+  cluster_endpoint_private_access       = true
+  cluster_endpoint_public_access        = true
   cluster_additional_security_group_ids = [aws_security_group.eks.id]
 
   vpc_id = data.aws_vpc.application-vpc.id
@@ -67,21 +67,21 @@ module "eks" {
   ]
 
   eks_managed_node_group_defaults = {
-    ami_type = "AL2_x86_64"
-    disk_size = 50
-    instance_types = ["t3.medium"]
+    ami_type               = "AL2_x86_64"
+    disk_size              = 50
+    instance_types         = ["t3.medium"]
     vpc_security_group_ids = [aws_security_group.eks.id]
   }
 
   eks_managed_node_groups = {
     eks-prod = {
-      min_size = 1
-      max_size = 3
+      min_size     = 1
+      max_size     = 3
       desired_size = 2
 
       instance_types = ["t3.medium"]
       labels = {
-        workload: "production-applications"
+        workload : "production-applications"
       }
       taints = {}
       tags = {
@@ -102,9 +102,9 @@ module "eks" {
 }
 
 resource "aws_security_group" "eks" {
-  name = "andrew-jarombek-eks-cluster"
+  name        = "andrew-jarombek-eks-cluster"
   description = "Allow Traffic to RDS"
-  vpc_id = data.aws_vpc.application-vpc.id
+  vpc_id      = data.aws_vpc.application-vpc.id
 }
 
 resource "aws_security_group_rule" "cluster-nodes-alb-security-group-rule" {
@@ -141,12 +141,12 @@ module "lb_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "5.16.0"
 
-  role_name = "${local.cluster_name}-lb"
+  role_name                              = "${local.cluster_name}-lb"
   attach_load_balancer_controller_policy = true
 
   oidc_providers = {
     main = {
-      provider_arn = module.eks.oidc_provider_arn
+      provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
@@ -177,26 +177,26 @@ provider "helm" {
 
 resource "kubernetes_service_account" "service-account" {
   metadata {
-    name = "aws-load-balancer-controller"
+    name      = "aws-load-balancer-controller"
     namespace = "kube-system"
 
     labels = {
-      "app.kubernetes.io/name" = "aws-load-balancer-controller"
+      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
       "app.kubernetes.io/component" = "controller"
     }
 
     annotations = {
-      "eks.amazonaws.com/role-arn" = module.lb_role.iam_role_arn
+      "eks.amazonaws.com/role-arn"               = module.lb_role.iam_role_arn
       "eks.amazonaws.com/sts-regional-endpoints" = "true"
     }
   }
 }
 
 resource "helm_release" "lb" {
-  name = "aws-load-balancer-controller"
-  repository  = "https://aws.github.io/eks-charts"
-  chart = "aws-load-balancer-controller"
-  namespace = "kube-system"
+  name       = "aws-load-balancer-controller"
+  repository = "https://aws.github.io/eks-charts"
+  chart      = "aws-load-balancer-controller"
+  namespace  = "kube-system"
 
   set {
     name  = "region"

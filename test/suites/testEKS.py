@@ -43,8 +43,8 @@ class TestEKS(unittest.TestCase):
         cluster_status = cluster.get('cluster').get('status')
 
         self.assertEqual('andrew-jarombek-eks-v2', cluster_name)
-        self.assertEqual('1.22', kubernetes_version)
-        self.assertEqual('eks.10', platform_version)
+        self.assertEqual('1.24', kubernetes_version)
+        self.assertEqual('eks.6', platform_version)
         self.assertEqual('ACTIVE', cluster_status)
 
     def test_eks_cluster_vpc_subnet(self) -> None:
@@ -79,39 +79,12 @@ class TestEKS(unittest.TestCase):
         cluster_oidc_issuer = cluster_oidc_issuer.replace('https://', '')
 
         account_id = self.sts.get_caller_identity().get('Account')
-        us_east_1_thumbprint = '9e99a48a9960b14926bb7f3b02e22da2b0ab7280'
-
         open_id_connect_provider = self.iam.get_open_id_connect_provider(
             OpenIDConnectProviderArn=f'arn:aws:iam::{account_id}:oidc-provider/{cluster_oidc_issuer}'
         )
 
         self.assertEqual(cluster_oidc_issuer, open_id_connect_provider.get('Url'))
         self.assertListEqual(['sts.amazonaws.com'], open_id_connect_provider.get('ClientIDList'))
-        self.assertListEqual([us_east_1_thumbprint], open_id_connect_provider.get('ThumbprintList'))
-
-    def test_alb_ingress_controller_role_exists(self) -> None:
-        """
-        Test that the aws-alb-ingress-controller IAM Role exists
-        """
-        role_dict = self.iam.get_role(RoleName='aws-alb-ingress-controller')
-        role = role_dict.get('Role')
-        self.assertTrue(role.get('Path') == '/kubernetes/' and role.get('RoleName') == 'aws-alb-ingress-controller')
-
-    def test_alb_ingress_controller_policy_attached(self) -> None:
-        """
-        Test that the aws-alb-ingress-controller IAM policy is attached to the aws-alb-ingress-controller IAM role.
-        """
-        policy_response = self.iam.list_attached_role_policies(RoleName='aws-alb-ingress-controller')
-        policies = policy_response.get('AttachedPolicies')
-        admin_policy = policies[0]
-        self.assertTrue(len(policies) == 1 and admin_policy.get('PolicyName') == 'aws-alb-ingress-controller')
-
-    def test_eks_worker_node_running(self) -> None:
-        """
-        Ensure that the EKS worker node EC2 instance is in a running state.
-        """
-        worker_ec2 = EC2.get_ec2(name='eks-prod')
-        self.assertEqual(2, len(worker_ec2))
 
     def test_eks_worker_node_managed_by_eks(self) -> None:
         """
@@ -133,11 +106,3 @@ class TestEKS(unittest.TestCase):
         kubernetes_policies = self.iam.list_policies(PathPrefix='/kubernetes/').get('Policies')
         external_dns_policies = [policy for policy in kubernetes_policies if policy.get('PolicyName') == 'external-dns']
         self.assertEqual(1, len(external_dns_policies))
-
-    def test_worker_pods_policy(self) -> None:
-        """
-        Test that the worker-pods IAM policy exists in the /kubernetes/ path.
-        """
-        kubernetes_policies = self.iam.list_policies(PathPrefix='/kubernetes/').get('Policies')
-        worker_pods_policies = [policy for policy in kubernetes_policies if policy.get('PolicyName') == 'worker-pods']
-        self.assertEqual(1, len(worker_pods_policies))

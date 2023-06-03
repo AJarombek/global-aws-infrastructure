@@ -7,7 +7,7 @@ be run independently or all at once.
 To run all test suites at once, execute the following commands from this directory:
 
 ```bash
-python3 runner.py
+pipenv run test
 ```
 
 Or if you want the test results to be placed in a log, execute the following command:
