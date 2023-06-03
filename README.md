@@ -134,6 +134,14 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.1.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.1) - Jenkins on EKS V2**
+
+> Release Date: June 3rd, 2023
+
++ Jenkins functional on the new EKS cluster.
++ Jenkins Dockerfile Updated
++ Tests & GitHub Actions Passing
+
 **[v2.1.0](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.0) - EKS V2 Cluster**
 
 > Release Date: April 3rd, 2023
