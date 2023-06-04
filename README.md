@@ -134,6 +134,12 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.1.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.2) - Kubernetes Tests Updated**
+
+> Release Date: June 3rd, 2023
+
+Kubernetes tests updated to use latest dependency versions and Go 1.20
+
 **[v2.1.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.1) - Jenkins on EKS V2**
 
 > Release Date: June 3rd, 2023

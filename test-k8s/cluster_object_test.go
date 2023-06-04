@@ -7,6 +7,7 @@
 package main
 
 import (
+	"context"
 	k8sfuncs "github.com/ajarombek/cloud-modules/kubernetes-test-functions"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
@@ -33,7 +34,7 @@ func TestExternalDNSDeploymentExists(t *testing.T) {
 // TestAWSLoadBalancerControllerDeploymentErrorFree determines if the 'aws-alb-ingress-controller' deployment is
 // running error free.
 func TestAWSLoadBalancerControllerDeploymentErrorFree(t *testing.T) {
-	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get("aws-load-balancer-controller", v1meta.GetOptions{})
+	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get(context.TODO(), "aws-load-balancer-controller", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -52,7 +53,7 @@ func TestAWSLoadBalancerControllerDeploymentErrorFree(t *testing.T) {
 // TestExternalDNSDeploymentErrorFree determines if the 'aws-alb-ingress-controller' deployment is
 // running error free.
 func TestExternalDNSDeploymentErrorFree(t *testing.T) {
-	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get("external-dns", v1meta.GetOptions{})
+	deployment, err := ClientSet.AppsV1().Deployments("kube-system").Get(context.TODO(), "external-dns", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())

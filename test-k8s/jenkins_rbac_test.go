@@ -7,6 +7,7 @@
 package main
 
 import (
+	"context"
 	k8sfuncs "github.com/ajarombek/cloud-modules/kubernetes-test-functions"
 	v1meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
@@ -16,7 +17,7 @@ import (
 // exist in the 'jenkins' namespace.
 func TestJenkinsNamespaceServiceAccountCount(t *testing.T) {
 	expectedServiceAccountCount := 3
-	serviceAccounts, err := ClientSet.CoreV1().ServiceAccounts("jenkins").List(v1meta.ListOptions{})
+	serviceAccounts, err := ClientSet.CoreV1().ServiceAccounts("jenkins").List(context.TODO(), v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -40,20 +41,20 @@ func TestJenkinsNamespaceServiceAccountCount(t *testing.T) {
 
 // TestJenkinsServerServiceAccountExists tests that the 'jenkins-server' service account exists in
 // the 'jenkins' namespace.
-func TestJenkinsServerServiceAccountExists(t *testing.T)  {
+func TestJenkinsServerServiceAccountExists(t *testing.T) {
 	k8sfuncs.ServiceAccountExists(t, ClientSet, "jenkins-server", "jenkins")
 }
 
 // TestJenkinsServerServiceAccountExists tests that the 'jenkins-kubernetes-test' service account exists in
 // the 'jenkins' namespace.
-func TestJenkinsKubernetesTestServiceAccountExists(t *testing.T)  {
+func TestJenkinsKubernetesTestServiceAccountExists(t *testing.T) {
 	k8sfuncs.ServiceAccountExists(t, ClientSet, "jenkins-kubernetes-test", "jenkins")
 }
 
 // TestJenkinsNamespaceRoleCount determines if the expected number of roles exist in the 'jenkins' namespace.
 func TestJenkinsNamespaceRoleCount(t *testing.T) {
 	expectedRoleCount := 1
-	roles, err := ClientSet.RbacV1().Roles("jenkins").List(v1meta.ListOptions{})
+	roles, err := ClientSet.RbacV1().Roles("jenkins").List(context.TODO(), v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -89,7 +90,7 @@ func TestJenkinsKubernetesTestRoleExists(t *testing.T) {
 // 'jenkins' namespace.
 func TestJenkinsNamespaceRoleBindingCount(t *testing.T) {
 	expectedRoleBindingCount := 1
-	roleBindings, err := ClientSet.RbacV1().RoleBindings("jenkins").List(v1meta.ListOptions{})
+	roleBindings, err := ClientSet.RbacV1().RoleBindings("jenkins").List(context.TODO(), v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -120,5 +121,3 @@ func TestJenkinsServerRoleBindingExists(t *testing.T) {
 func TestJenkinsKubernetesTestRoleBindingExists(t *testing.T) {
 	k8sfuncs.ClusterRoleBindingExists(t, ClientSet, "jenkins-kubernetes-test")
 }
-
-

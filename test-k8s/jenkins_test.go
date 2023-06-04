@@ -8,6 +8,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	k8sfuncs "github.com/ajarombek/cloud-modules/kubernetes-test-functions"
 	v1 "k8s.io/api/core/v1"
@@ -29,7 +30,7 @@ func TestJenkinsDeploymentExists(t *testing.T) {
 
 // TestJenkinsDeploymentExists determines if the 'jenkins-deployment' is running error free.
 func TestJenkinsDeploymentErrorFree(t *testing.T) {
-	deployment, err := ClientSet.AppsV1().Deployments("jenkins").Get("jenkins-deployment", v1meta.GetOptions{})
+	deployment, err := ClientSet.AppsV1().Deployments("jenkins").Get(context.TODO(), "jenkins-deployment", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -60,11 +61,8 @@ func TestJenkinsDeploymentErrorFree(t *testing.T) {
 // TestJenkinsNamespaceIngressCount determines if the number of 'Ingress' objects in the 'jenkins' namespace is
 // as expected.
 func TestJenkinsNamespaceIngressCount(t *testing.T) {
-	// TODO Fix Ingress Tests
-	t.Skip("Skipping test due to k8s client issue")
-
 	expectedIngressCount := 1
-	ingresses, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").List(v1meta.ListOptions{})
+	ingresses, err := ClientSet.NetworkingV1().Ingresses("jenkins").List(context.TODO(), v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -87,13 +85,10 @@ func TestJenkinsNamespaceIngressCount(t *testing.T) {
 }
 
 // TestJenkinsIngressExists determines if an ingress object exists in the 'jenkins' namespace with the name
-//'jenkins-ingress'.
+// 'jenkins-ingress'.
 func TestJenkinsIngressExists(t *testing.T) {
-	// TODO Fix Ingress Tests
-	t.Skip("Skipping test due to k8s client issue")
-
 	expectedIngressName := "jenkins-ingress"
-	ingress, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
+	ingress, err := ClientSet.NetworkingV1().Ingresses("jenkins").Get(context.TODO(), "jenkins-ingress", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -116,10 +111,7 @@ func TestJenkinsIngressExists(t *testing.T) {
 
 // TestJenkinsIngressAnnotations determines if the 'jenkins-ingress' Ingress object contains the expected annotations.
 func TestJenkinsIngressAnnotations(t *testing.T) {
-	// TODO Fix Ingress Tests
-	t.Skip("Skipping test due to k8s client issue")
-
-	ingress, err := ClientSet.NetworkingV1beta1().Ingresses("jenkins").Get("jenkins-ingress", v1meta.GetOptions{})
+	ingress, err := ClientSet.NetworkingV1().Ingresses("jenkins").Get(context.TODO(), "jenkins-ingress", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -175,7 +167,7 @@ func TestJenkinsIngressAnnotations(t *testing.T) {
 // namespace.
 func TestJenkinsNamespaceServiceCount(t *testing.T) {
 	expectedServiceCount := 2
-	services, err := ClientSet.CoreV1().Services("jenkins").List(v1meta.ListOptions{})
+	services, err := ClientSet.CoreV1().Services("jenkins").List(context.TODO(), v1meta.ListOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -200,7 +192,7 @@ func TestJenkinsNamespaceServiceCount(t *testing.T) {
 // TestJenkinsServiceExists determines if a NodePort Service with the name 'jenkins-service' exists in the 'jenkins'
 // namespace.
 func TestJenkinsServiceExists(t *testing.T) {
-	service, err := ClientSet.CoreV1().Services("jenkins").Get("jenkins-service", v1meta.GetOptions{})
+	service, err := ClientSet.CoreV1().Services("jenkins").Get(context.TODO(), "jenkins-service", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
@@ -225,7 +217,7 @@ func TestJenkinsServiceExists(t *testing.T) {
 // TestJenkinsJNLPServiceExists determines if a NodePort Service with the name 'jenkins-jnlp-service' exists in the
 // 'jenkins' namespace.
 func TestJenkinsJNLPServiceExists(t *testing.T) {
-	service, err := ClientSet.CoreV1().Services("jenkins").Get("jenkins-jnlp-service", v1meta.GetOptions{})
+	service, err := ClientSet.CoreV1().Services("jenkins").Get(context.TODO(), "jenkins-jnlp-service", v1meta.GetOptions{})
 
 	if err != nil {
 		panic(err.Error())
