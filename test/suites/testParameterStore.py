@@ -47,86 +47,70 @@ class TestLambda(unittest.TestCase):
         """
         Test that a parameter with codename AAPL exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/AAPL', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/AAPL', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/AAPL')
 
     def test_ally_parameter_exists(self) -> None:
         """
         Test that a parameter with codename ALLY exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/ALLY', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/ALLY', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/ALLY')
 
     def test_coin_parameter_exists(self) -> None:
         """
         Test that a parameter with codename COIN exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/COIN', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/COIN', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/COIN')
 
     def test_dbrx_parameter_exists(self) -> None:
         """
         Test that a parameter with codename DBRX exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/DBRX', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/DBRX', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/DBRX')
 
     def test_fide_parameter_exists(self) -> None:
         """
         Test that a parameter with codename FIDE exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/FIDE', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/FIDE', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/FIDE')
 
     def test_gemi_parameter_exists(self) -> None:
         """
         Test that a parameter with codename GEMI exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/GEMI', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
+        self.parameter_exists_as_expected('/external/GEMI')
 
-        self.assertEqual('/external/GEMI', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+    def test_jbrn_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename JBRN exists in AWS Systems Manager Parameter Store.
+        """
+        self.parameter_exists_as_expected('/external/JBRN')
+
+    def test_shwb_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename SHWB exists in AWS Systems Manager Parameter Store.
+        """
+        self.parameter_exists_as_expected('/external/SHWB')
 
     def test_tdam_parameter_exists(self) -> None:
         """
         Test that a parameter with codename TDAM exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/TDAM', WithDecryption=False)
-        parameter: Dict[str, Any] = response.get('Parameter')
-
-        self.assertEqual('/external/TDAM', parameter.get('Name'))
-        self.assertEqual('SecureString', parameter.get('Type'))
-        self.assertEqual('text', parameter.get('DataType'))
+        self.parameter_exists_as_expected('/external/TDAM')
 
     def test_vang_parameter_exists(self) -> None:
         """
         Test that a parameter with codename VANG exists in AWS Systems Manager Parameter Store.
         """
-        response = self.ssm.get_parameter(Name='/external/VANG', WithDecryption=False)
+        self.parameter_exists_as_expected('/external/VANG')
+
+    def parameter_exists_as_expected(self, name: str) -> None:
+        """
+        Test that a parameter with a certain name exists in AWS Systems Manager Parameter Store.
+        :param name: Name of the parameter in Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name=name, WithDecryption=False)
         parameter: Dict[str, Any] = response.get('Parameter')
 
-        self.assertEqual('/external/VANG', parameter.get('Name'))
+        self.assertEqual(name, parameter.get('Name'))
         self.assertEqual('SecureString', parameter.get('Type'))
         self.assertEqual('text', parameter.get('DataType'))

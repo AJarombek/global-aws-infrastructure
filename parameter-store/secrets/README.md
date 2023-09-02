@@ -28,5 +28,6 @@ terraform destroy -auto-approve
 | `fide`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FIDE`. |
 | `gemi`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `GEMI`. |
 | `jbrn`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `JBRN`. |
+| `shwb`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `SHWB`. |
 | `tdam`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `TDAM`. |
 | `vang`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `VANG`. |
