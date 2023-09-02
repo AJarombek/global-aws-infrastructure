@@ -109,6 +109,28 @@ class TestLambda(unittest.TestCase):
         self.assertEqual('SecureString', parameter.get('Type'))
         self.assertEqual('text', parameter.get('DataType'))
 
+    def test_jbrn_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename JBRN exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/JBRN', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/JBRN', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
+    def test_shwb_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename SHWB exists in AWS Systems Manager Parameter Store.
+        """
+        response = self.ssm.get_parameter(Name='/external/SHWB', WithDecryption=False)
+        parameter: Dict[str, Any] = response.get('Parameter')
+
+        self.assertEqual('/external/SHWB', parameter.get('Name'))
+        self.assertEqual('SecureString', parameter.get('Type'))
+        self.assertEqual('text', parameter.get('DataType'))
+
     def test_tdam_parameter_exists(self) -> None:
         """
         Test that a parameter with codename TDAM exists in AWS Systems Manager Parameter Store.
