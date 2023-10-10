@@ -10,6 +10,22 @@ To run all test suites at once, execute the following commands from this directo
 pipenv run test
 ```
 
+To update the lockfile with Pipfile dependencies, execute the following command:
+
+```bash
+pipenv install
+```
+
+To format the code, execute the following commands:
+
+```bash
+pipenv shell
+black .
+
+# To check the formatting without modifying the code
+black --check .
+```
+
 Or if you want the test results to be placed in a log, execute the following command:
 
 ```bash

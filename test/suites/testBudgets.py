@@ -12,25 +12,24 @@ from boto3_type_annotations.sts import Client as STSClient
 
 
 class TestBudgets(unittest.TestCase):
-
     def setUp(self) -> None:
         """
         Perform set-up logic before executing any unit tests
         """
-        self.budgets: BudgetsClient = boto3.client('budgets')
-        self.sts: STSClient = boto3.client('sts')
+        self.budgets: BudgetsClient = boto3.client("budgets")
+        self.sts: STSClient = boto3.client("sts")
 
     def test_budget_exists(self) -> None:
         """
         Determine if an AWS Cost Management budget exists as expected.
         """
-        account_id = self.sts.get_caller_identity().get('Account')
-        budget: dict = self.budgets\
-            .describe_budget(AccountId=account_id, BudgetName='Andrew Jarombek AWS Budget')\
-            .get('Budget')
+        account_id = self.sts.get_caller_identity().get("Account")
+        budget: dict = self.budgets.describe_budget(
+            AccountId=account_id, BudgetName="Andrew Jarombek AWS Budget"
+        ).get("Budget")
 
-        self.assertEqual('Andrew Jarombek AWS Budget', budget.get('BudgetName'))
-        self.assertEqual('380.0', budget.get('BudgetLimit').get('Amount'))
-        self.assertEqual('USD', budget.get('BudgetLimit').get('Unit'))
-        self.assertEqual('MONTHLY', budget.get('TimeUnit'))
-        self.assertEqual('COST', budget.get('BudgetType'))
+        self.assertEqual("Andrew Jarombek AWS Budget", budget.get("BudgetName"))
+        self.assertEqual("380.0", budget.get("BudgetLimit").get("Amount"))
+        self.assertEqual("USD", budget.get("BudgetLimit").get("Unit"))
+        self.assertEqual("MONTHLY", budget.get("TimeUnit"))
+        self.assertEqual("COST", budget.get("BudgetType"))
