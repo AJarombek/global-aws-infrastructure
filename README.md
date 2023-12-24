@@ -54,11 +54,6 @@ repositories are referenced in separate directories and README.md files.
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
-### `iam`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
 ### `lambda`
 
 - [x] Local Deployment
@@ -114,7 +109,6 @@ repositories are referenced in separate directories and README.md files.
 | `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
 | `eks-v2`             | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
 | `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
-| `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
 | `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
 | `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
 | `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.               |

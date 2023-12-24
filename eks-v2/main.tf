@@ -363,28 +363,6 @@ resource "kubernetes_namespace" "sandox-namespace" {
   }
 }
 
-resource "kubernetes_namespace" "jenkins-namespace" {
-  metadata {
-    name = "jenkins"
-
-    labels = {
-      name        = "jenkins"
-      environment = "production"
-    }
-  }
-}
-
-resource "kubernetes_namespace" "jenkins-dev-namespace" {
-  metadata {
-    name = "jenkins-dev"
-
-    labels = {
-      name        = "jenkins-dev"
-      environment = "development"
-    }
-  }
-}
-
 resource "kubernetes_namespace" "jarombek-com-namespace" {
   metadata {
     name = "jarombek-com"

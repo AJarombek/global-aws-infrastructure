@@ -27,8 +27,6 @@ go test --kubeconfig ~/.kube/config
 | `client.go`              | Kubernetes client creation.                                                                  |
 | `cluster_object_test.go` | Kubernetes tests for objects used throughout the cluster.                                    |
 | `cluster_rbac_test.go`   | Kubernetes tests for cluster Role Based Access Control objects.                              |
-| `jenkins_rbac_test.go`   | Kubernetes tests for 'jenkins' namspace Role Based Access Control objects.                   |
-| `jenkins_test.go`        | Kubernetes tests for the 'jenkins' namespace.                                                |
 | `main_test.go`           | Setup functions for Kubernetes tests.                                                        |
 | `namespace_test.go`      | Kubernetes tests for namespaces in the cluster.                                              |
 | `go.mod`                 | Go module definition and dependency specification.                                           |
