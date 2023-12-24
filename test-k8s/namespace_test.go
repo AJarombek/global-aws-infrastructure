@@ -21,16 +21,6 @@ func TestJarombekComDevNamespaceExists(t *testing.T) {
 	k8sfuncs.NamespaceExists(t, ClientSet, "jarombek-com-dev")
 }
 
-// TestJenkinsNamespaceExists determines if the 'jenkins' namespace exists in the cluster and is active.
-func TestJenkinsNamespaceExists(t *testing.T) {
-	k8sfuncs.NamespaceExists(t, ClientSet, "jenkins")
-}
-
-// TestJenkinsDevNamespaceExists determines if the 'jenkins-dev' namespace exists in the cluster and is active.
-func TestJenkinsDevNamespaceExists(t *testing.T) {
-	k8sfuncs.NamespaceExists(t, ClientSet, "jenkins-dev")
-}
-
 // TestSaintsXCTFNamespaceExists determines if the 'saints-xctf' namespace exists in the cluster and is active.
 func TestSaintsXCTFNamespaceExists(t *testing.T) {
 	k8sfuncs.NamespaceExists(t, ClientSet, "saints-xctf")

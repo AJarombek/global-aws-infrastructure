@@ -4,6 +4,6 @@ Module which creates HTTPS certificates for `*.global.jarombek.io` and `*.jaromb
 
 ### Files
 
-| Filename     | Description                                                                                      |
-|--------------|--------------------------------------------------------------------------------------------------|
-| `main.tf`    | Generate HTTPS certificates and confirm they are validated.                                      |
+| Filename  | Description                                                 |
+|-----------|-------------------------------------------------------------|
+| `main.tf` | Generate HTTPS certificates and confirm they are validated. |

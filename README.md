@@ -54,16 +54,6 @@ repositories are referenced in separate directories and README.md files.
 - [x] Local Deployment
 - [ ] Jenkins Deployment
 
-### `iam`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `jenkins-kubernetes`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
 ### `lambda`
 
 - [x] Local Deployment
@@ -119,8 +109,6 @@ repositories are referenced in separate directories and README.md files.
 | `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
 | `eks-v2`             | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
 | `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
-| `iam`                | Terraform scripts for creating IAM users, groups, roles, and policies.      |
-| `jenkins-kubernetes` | Terraform scripts and Dockerfile for a Jenkins server hosted on EKS.        |
 | `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
 | `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
 | `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.               |
@@ -134,7 +122,13 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
-**[v2.1.1](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.2) - Kubernetes Tests Updated**
+**[v2.1.3](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.3) - Remove Jenkins Infrastructure**
+
+> Release Date: December 23rd, 2023
+
+Remove Jenkins Infrastructure code, and move it to [andy-jarombek-research](https://github.com/AJarombek/andy-jarombek-research).
+
+**[v2.1.2](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.2) - Kubernetes Tests Updated**
 
 > Release Date: June 3rd, 2023
 

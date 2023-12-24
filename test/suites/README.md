@@ -14,11 +14,7 @@ repository.
 | `testConfig.py`            | Test suite for AWS Config infrastructure.                                            |
 | `testEKS.py`               | Test suite for the EKS cluster.                                                      |
 | `testFileVault.py`         | Test suite for a file vault S3 bucket.                                               |
-| `testIAM.py`               | Test suite for IAM roles and policies used globally.                                 |
 | `testJarombekComApp.py`    | Test suite for the Amazon HTTPS certificates.                                        |
-| `testJenkins.py`           | *DEPRECATED* Test suite for the Jenkins EC2 infrastructure.                          |
-| `testJenkinsEFS.py`        | *DEPRECATED* Test suite for the EFS persistent storage for the Jenkins EC2 instance. |
-| `testJenkinsKubernetes.py` | Test suite for the Jenkins infrastructure on Kubernetes.                             |
 | `testLambda.py`            | Test suite for AWS Lambda functions.                                                 |
 | `testLambdaLayers.py`      | Test suite for reusable AWS Lambda layers.                                           |
 | `testRoot.py`              | Test suite for the Root infrastructure for my AWS cloud.                             |
