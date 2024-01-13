@@ -37,9 +37,10 @@ kubectl logs -f my-pod-name -n my-namespace
 
 ### Files
 
-| Filename   | Description                                    |
-|------------|------------------------------------------------|
-| `main.tf`  | Terraform configuration for the EKS cluster.   |
+| Filename                   | Description                                  |
+|----------------------------|----------------------------------------------|
+| `main.tf`                  | Terraform configuration for the EKS cluster. |
+| `external-dns-policy.json` | AWS IAM Policy for External DNS.             |
 
 ### Resources
 

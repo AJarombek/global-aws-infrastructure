@@ -96,29 +96,30 @@ repositories are referenced in separate directories and README.md files.
 
 ### Directories
 
-| Directory Name       | Description                                                                 |
-|----------------------|-----------------------------------------------------------------------------|
-| `.github`            | GitHub Actions for CI/CD pipelines.                                         |
-| `acm`                | HTTPS certificates for the `jarombek.io` applications.                      |
-| `api-gateway`        | Global API Gateway configuration.                                           |
-| `apps`               | Infrastructure for individual applications.                                 |
-| `backend`            | The Terraform backend, consisting of an S3 bucket.                          |
-| `budgets`            | Terraform scripts for setting AWS account budgets.                          |
-| `cloud-trail`        | Terraform scripts for AWS account auditing with CloudTrail.                 |
-| `config`             | Terraform scripts for AWS Config.                                           |
-| `dockerfiles`        | Reusable dockerfiles used throughout my infrastructure.                     |
-| `eks-v2`             | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
-| `file-vault`         | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
-| `lambda`             | Terraform scripts for AWS Lambda functions.                                 |
-| `lambda-layers`      | AWS Lambda Layer source code and Terraform scripts.                         |
-| `parameter-store`    | Terraform scripts for System Manager Parameter Store secrets.               |
-| `root`               | Root Terraform scripts for creating the accounts VPCs.                      |
-| `route53`            | Terraform scripts for creating DNS records for the account.                 |
-| `s3`                 | Terraform scripts for global S3 assets.                                     |
-| `secrets-manager`    | Terraform scripts for global secrets stored in Secrets Manager.             |
-| `sns`                | Terraform scripts for AWS SNS notifications.                                |
-| `test`               | Python AWS infrastructure test suite.                                       |
-| `test-k8s`           | Go Kubernetes infrastructure test suite.                                    |
+| Directory Name    | Description                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| `.github`         | GitHub Actions for CI/CD pipelines.                                         |
+| `acm`             | HTTPS certificates for the `jarombek.io` applications.                      |
+| `api-gateway`     | Global API Gateway configuration.                                           |
+| `apps`            | Infrastructure for individual applications.                                 |
+| `backend`         | The Terraform backend, consisting of an S3 bucket.                          |
+| `budgets`         | Terraform scripts for setting AWS account budgets.                          |
+| `cloud-trail`     | Terraform scripts for AWS account auditing with CloudTrail.                 |
+| `config`          | Terraform scripts for AWS Config.                                           |
+| `dockerfiles`     | Reusable dockerfiles used throughout my infrastructure.                     |
+| `ecs`             | Terraform configuration for an ECS cluster.                                 |
+| `eks-v2`          | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
+| `file-vault`      | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
+| `lambda`          | Terraform scripts for AWS Lambda functions.                                 |
+| `lambda-layers`   | AWS Lambda Layer source code and Terraform scripts.                         |
+| `parameter-store` | Terraform scripts for System Manager Parameter Store secrets.               |
+| `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
+| `route53`         | Terraform scripts for creating DNS records for the account.                 |
+| `s3`              | Terraform scripts for global S3 assets.                                     |
+| `secrets-manager` | Terraform scripts for global secrets stored in Secrets Manager.             |
+| `sns`             | Terraform scripts for AWS SNS notifications.                                |
+| `test`            | Python AWS infrastructure test suite.                                       |
+| `test-k8s`        | Go Kubernetes infrastructure test suite.                                    |
 
 ### Versions
 

@@ -28,7 +28,7 @@ locals {
 }
 
 resource "aws_ecs_cluster" "andrew-jarombek" {
-  name = "andrew-jarombek-ecs-cluster"
+  name = "andrew-jarombek-cluster"
 
   setting {
     name  = "containerInsights"
@@ -36,7 +36,7 @@ resource "aws_ecs_cluster" "andrew-jarombek" {
   }
 
   tags = {
-    Name        = "andrew-jarombek-ecs-cluster"
+    Name        = "andrew-jarombek-cluster"
     Application = "all"
     Environment = "all"
     Terraform   = local.terraform_tag
