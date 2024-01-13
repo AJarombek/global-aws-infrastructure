@@ -123,6 +123,12 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.1.4](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.4) - ECS Cluster**
+
+> Release Date: January 13th, 2024
+
++ Added an ECS Cluster and corresponding tests.
+
 **[v2.1.3](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.3) - Remove Jenkins Infrastructure**
 
 > Release Date: December 23rd, 2023
