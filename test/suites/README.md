@@ -5,20 +5,21 @@ repository.
 
 ### Files
 
-| Filename                   | Description                                                                          |
-|----------------------------|--------------------------------------------------------------------------------------|
-| `testApplicationVPC.py`    | Test suite for the Application VPC.                                                  |
-| `testBackend.py`           | Test suite for the Terraform S3 Backend.                                             |
-| `testBudgets.py`           | Test suite for AWS cost management budgets.                                          |
-| `testCloudTrail.py`        | Test suite for AWS CloudTrail configuration.                                         |
-| `testConfig.py`            | Test suite for AWS Config infrastructure.                                            |
-| `testEKS.py`               | Test suite for the EKS cluster.                                                      |
-| `testFileVault.py`         | Test suite for a file vault S3 bucket.                                               |
-| `testJarombekComApp.py`    | Test suite for the Amazon HTTPS certificates.                                        |
-| `testLambda.py`            | Test suite for AWS Lambda functions.                                                 |
-| `testLambdaLayers.py`      | Test suite for reusable AWS Lambda layers.                                           |
-| `testRoot.py`              | Test suite for the Root infrastructure for my AWS cloud.                             |
-| `testRoute53.py`           | Test suite for Route53 records used globally.                                        |
-| `testS3.py`                | Test suite for a global S3 bucket.                                                   |
-| `testSecretsManager.py`    | Test suite for credentials stored in Secrets Manager.                                |
-| `testSNS.py`               | Test suite for SNS topics and subscriptions.                                         |
+| Filename                | Description                                              |
+|-------------------------|----------------------------------------------------------|
+| `testApplicationVPC.py` | Test suite for the Application VPC.                      |
+| `testBackend.py`        | Test suite for the Terraform S3 Backend.                 |
+| `testBudgets.py`        | Test suite for AWS cost management budgets.              |
+| `testCloudTrail.py`     | Test suite for AWS CloudTrail configuration.             |
+| `testConfig.py`         | Test suite for AWS Config infrastructure.                |
+| `testECS.py`            | Test suite for the ECS cluster.                          |
+| `testEKS.py`            | Test suite for the EKS cluster.                          |
+| `testFileVault.py`      | Test suite for a file vault S3 bucket.                   |
+| `testJarombekComApp.py` | Test suite for the Amazon HTTPS certificates.            |
+| `testLambda.py`         | Test suite for AWS Lambda functions.                     |
+| `testLambdaLayers.py`   | Test suite for reusable AWS Lambda layers.               |
+| `testRoot.py`           | Test suite for the Root infrastructure for my AWS cloud. |
+| `testRoute53.py`        | Test suite for Route53 records used globally.            |
+| `testS3.py`             | Test suite for a global S3 bucket.                       |
+| `testSecretsManager.py` | Test suite for credentials stored in Secrets Manager.    |
+| `testSNS.py`            | Test suite for SNS topics and subscriptions.             |
