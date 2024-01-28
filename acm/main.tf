@@ -9,12 +9,12 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "~> 1.3.9"
+  required_version = "~> 1.6.6"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.58.0"
+      version = "~> 5.34.0"
     }
   }
 
@@ -42,33 +42,6 @@ data "aws_route53_zone" "jarombek-io-zone" {
 #--------------------------
 # New AWS Resources for ACM
 #--------------------------
-
-#--------------------------------
-# Protects '*.global.jarombek.io'
-#--------------------------------
-
-module "jarombek-io-global-acm-certificate" {
-  source = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"
-
-  # Mandatory arguments
-  name              = "jarombek-io-global-acm-certificate"
-  route53_zone_name = "jarombek.io."
-  acm_domain_name   = "*.global.jarombek.io"
-
-  # Optional arguments
-  route53_zone_private = false
-
-  tags = {
-    Name        = "jarombek-io-global-acm-certificate"
-    Application = "jarombek-io"
-    Environment = "production"
-    Terraform   = local.terraform_tag
-  }
-}
-
-#-------------------------
-# Protects '*.jarombek.io'
-#-------------------------
 
 module "jarombek-io-acm-certificate" {
   source = "github.com/ajarombek/cloud-modules//terraform-modules/acm-certificate?ref=v0.2.13"

@@ -9,12 +9,12 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "~> 1.3.9"
+  required_version = "~> 1.6.6"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.58.0"
+      version = "~> 5.34.0"
     }
   }
 
@@ -37,17 +37,12 @@ locals {
   }
 
   # A unique identifier for the S3 origin.  This is needed for CloudFront.
-  s3_origin_id     = "globalJarombekIO"
-  www_s3_origin_id = "wwwGlobalJarombekIO"
+  s3_origin_id = "globalJarombekIO"
 }
 
 #-----------------------
 # Existing AWS Resources
 #-----------------------
-
-data "aws_acm_certificate" "global-jarombek-io-cert" {
-  domain = "*.global.jarombek.io"
-}
 
 data "aws_acm_certificate" "jarombek-io-cert" {
   domain = "*.jarombek.io"
@@ -83,11 +78,6 @@ resource "aws_s3_bucket" "global-jarombek-io" {
   }
 }
 
-resource "aws_s3_bucket_acl" "global-jarombek-io" {
-  bucket = aws_s3_bucket.global-jarombek-io.id
-  acl    = "private"
-}
-
 resource "aws_s3_bucket_website_configuration" "global-jarombek-io" {
   bucket = aws_s3_bucket.global-jarombek-io.id
 
@@ -121,21 +111,6 @@ data "aws_iam_policy_document" "global-jarombek-io" {
 
     principals {
       identifiers = [aws_cloudfront_origin_access_identity.origin-access-identity.iam_arn]
-      type        = "AWS"
-    }
-
-    actions = ["s3:GetObject", "s3:ListBucket"]
-    resources = [
-      aws_s3_bucket.global-jarombek-io.arn,
-      "${aws_s3_bucket.global-jarombek-io.arn}/*"
-    ]
-  }
-
-  statement {
-    sid = "WWWCloudfrontOAI"
-
-    principals {
-      identifiers = [aws_cloudfront_origin_access_identity.origin-access-identity-www.iam_arn]
       type        = "AWS"
     }
 
@@ -234,84 +209,6 @@ resource "aws_cloudfront_origin_access_identity" "origin-access-identity" {
   comment = "global.jarombek.io origin access identity"
 }
 
-resource "aws_cloudfront_distribution" "www-global-jarombek-io-distribution" {
-  origin {
-    domain_name = aws_s3_bucket.global-jarombek-io.bucket_regional_domain_name
-    origin_id   = local.www_s3_origin_id
-
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.origin-access-identity-www.cloudfront_access_identity_path
-    }
-  }
-
-  # Whether the cloudfront distribution is enabled to accept user requests
-  enabled = true
-
-  # Whether the cloudfront distribution can use ipv6
-  is_ipv6_enabled = true
-
-  # Which HTTP version to use for requests
-  http_version = "http2"
-
-  comment             = "www.global.jarombek.io CloudFront Distribution"
-  default_root_object = "index.json"
-
-  # Extra CNAMEs for this distribution
-  aliases = ["www.global.jarombek.io"]
-
-  # The pricing model for CloudFront
-  price_class = "PriceClass_100"
-
-  default_cache_behavior {
-    # Which HTTP verbs CloudFront processes
-    allowed_methods = ["HEAD", "GET", "OPTIONS"]
-
-    # Which HTTP verbs CloudFront caches responses to requests
-    cached_methods = ["HEAD", "GET", "OPTIONS"]
-
-    forwarded_values {
-      cookies {
-        forward = "none"
-      }
-      headers      = ["Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
-      query_string = false
-    }
-
-    target_origin_id = local.www_s3_origin_id
-
-    # Which protocols to use which accessing items from CloudFront
-    viewer_protocol_policy = "redirect-to-https"
-
-    # Determines the amount of time an object exists in the CloudFront cache
-    min_ttl     = 0
-    default_ttl = 3600
-    max_ttl     = 86400
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  # The SSL certificate for CloudFront
-  viewer_certificate {
-    acm_certificate_arn = data.aws_acm_certificate.global-jarombek-io-cert.arn
-    ssl_support_method  = "sni-only"
-  }
-
-  tags = {
-    Name        = "www-global-jarombek-io-cloudfront"
-    Application = "global-jarombek-io"
-    Environment = "production"
-    Terraform   = local.terraform_tag
-  }
-}
-
-resource "aws_cloudfront_origin_access_identity" "origin-access-identity-www" {
-  comment = "www.global.jarombek.io origin access identity"
-}
-
 resource "aws_route53_record" "global-jarombek-io-a" {
   name    = "global.jarombek.io."
   type    = "A"
@@ -322,18 +219,6 @@ resource "aws_route53_record" "global-jarombek-io-a" {
     evaluate_target_health = false
     name                   = aws_cloudfront_distribution.global-jarombek-io-distribution.domain_name
     zone_id                = aws_cloudfront_distribution.global-jarombek-io-distribution.hosted_zone_id
-  }
-}
-
-resource "aws_route53_record" "www-global-jarombek-io-a" {
-  name    = "www.global.jarombek.io."
-  type    = "A"
-  zone_id = data.aws_route53_zone.jarombek-io.zone_id
-
-  alias {
-    evaluate_target_health = false
-    name                   = aws_cloudfront_distribution.www-global-jarombek-io-distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.www-global-jarombek-io-distribution.hosted_zone_id
   }
 }
 
