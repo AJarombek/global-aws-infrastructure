@@ -123,6 +123,12 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.1.5](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.5) - ACM & CloudFront Updates**
+
+> Release Date: January 28th, 2024
+
++ Remove `www.global.jarombek.io` subdomain ACM certificate and CloudFront distribution.
+
 **[v2.1.4](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.4) - ECS Cluster**
 
 > Release Date: January 13th, 2024
