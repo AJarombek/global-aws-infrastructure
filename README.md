@@ -123,6 +123,13 @@ repositories are referenced in separate directories and README.md files.
 
 ### Versions
 
+**[v2.1.6](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.6) - EKS 1.29 Upgrade**
+
+> Release Date: April 6th, 2024
+
++ Upgrade the EKS cluster from version 1.24 (entered extended support) to version 1.29.
+  + Kubernetes Versions on EKS [Support Timeline](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html)
+
 **[v2.1.5](https://github.com/AJarombek/global-aws-infrastructure/tree/v2.1.5) - ACM & CloudFront Updates**
 
 > Release Date: January 28th, 2024

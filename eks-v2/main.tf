@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "~> 1.3.9"
+  required_version = "~> 1.7.5"
 
   required_providers {
     aws        = "~> 4.61.0"
@@ -28,7 +28,7 @@ terraform {
 locals {
   public_cidr     = "0.0.0.0/0"
   cluster_name    = "andrew-jarombek-eks-v2"
-  cluster_version = "1.24"
+  cluster_version = "1.29"
   terraform_tag   = "global-aws-infrastructure/eks-v2"
 }
 
