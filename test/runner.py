@@ -6,6 +6,9 @@ Date: 5/27/2019
 
 import unittest
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
     # Create the test suite
@@ -21,4 +24,7 @@ if __name__ == "__main__":
     else:
         runner = unittest.TextTestRunner(verbosity=3)
         result: unittest.TestResult = runner.run(tests)
-        exit(len(result.errors))
+        error_count = len(result.errors)
+
+        logging.info(f"exit code: {error_count}")
+        exit(error_count)
