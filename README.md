@@ -7,92 +7,14 @@
 This repository contains all the global infrastructure-as-code (IaC) for Andrew Jarombek.  All other IaC
 repositories are referenced in separate directories and README.md files.
 
-### Terraform Modules
+### Commands
 
-### `acm`
+**Running GitHub Action Workflows Locally**
 
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `api-gateway`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `apps`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `backend`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `budgets`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `cloud-trail`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `config`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `eks-v2`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `file-vault`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `lambda`
-
-- [x] Local Deployment
-- [x] Jenkins Deployment
-
-### `lambda-layers`
-
-- [x] Local Deployment
-- [x] Jenkins Deployment
-
-### `parameter-store`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `root`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `route53`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `s3`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `secrets-manager`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
-
-### `sns`
-
-- [x] Local Deployment
-- [ ] Jenkins Deployment
+```bash
+# Run a specific GitHub Actions workflow, detecting the event type automatically
+act -W '.github/workflows/aws_tests.yml' --detect-event
+```
 
 ### Directories
 

@@ -42,7 +42,7 @@ class TestEKS(unittest.TestCase):
         cluster_status = cluster.get("cluster").get("status")
 
         self.assertEqual("andrew-jarombek-eks-v2", cluster_name)
-        self.assertEqual("1.24", kubernetes_version)
+        self.assertEqual("1.29", kubernetes_version)
         self.assertEqual("eks.6", platform_version)
         self.assertEqual("ACTIVE", cluster_status)
 
