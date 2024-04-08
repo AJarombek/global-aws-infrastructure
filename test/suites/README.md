@@ -18,7 +18,6 @@ repository.
 | `testJarombekComApp.py` | Test suite for the Amazon HTTPS certificates.            |
 | `testLambda.py`         | Test suite for AWS Lambda functions.                     |
 | `testLambdaLayers.py`   | Test suite for reusable AWS Lambda layers.               |
-| `testRoot.py`           | Test suite for the Root infrastructure for my AWS cloud. |
 | `testRoute53.py`        | Test suite for Route53 records used globally.            |
 | `testS3.py`             | Test suite for a global S3 bucket.                       |
 | `testSecretsManager.py` | Test suite for credentials stored in Secrets Manager.    |
