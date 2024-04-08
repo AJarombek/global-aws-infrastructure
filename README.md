@@ -35,7 +35,6 @@ act -W '.github/workflows/aws_tests.yml' --detect-event
 | `lambda`          | Terraform scripts for AWS Lambda functions.                                 |
 | `lambda-layers`   | AWS Lambda Layer source code and Terraform scripts.                         |
 | `parameter-store` | Terraform scripts for System Manager Parameter Store secrets.               |
-| `root`            | Root Terraform scripts for creating the accounts VPCs.                      |
 | `route53`         | Terraform scripts for creating DNS records for the account.                 |
 | `s3`              | Terraform scripts for global S3 assets.                                     |
 | `secrets-manager` | Terraform scripts for global secrets stored in Secrets Manager.             |
