@@ -26,6 +26,7 @@ terraform destroy -auto-approve
 | `coin`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `COIN`. |
 | `dbrx`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `DBRX`. |
 | `fide`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FIDE`. |
+| `fnra`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `FNRA`. |
 | `gemi`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `GEMI`. |
 | `jbrn`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `JBRN`. |
 | `shwb`         | Terraform module for an AWS Systems Manager Parameter Store secret with codename `SHWB`. |

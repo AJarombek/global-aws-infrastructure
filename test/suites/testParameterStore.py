@@ -75,6 +75,12 @@ class TestLambda(unittest.TestCase):
         """
         self.parameter_exists_as_expected("/external/FIDE")
 
+    def test_fnra_parameter_exists(self) -> None:
+        """
+        Test that a parameter with codename FNRA exists in AWS Systems Manager Parameter Store.
+        """
+        self.parameter_exists_as_expected("/external/FNRA")
+
     def test_gemi_parameter_exists(self) -> None:
         """
         Test that a parameter with codename GEMI exists in AWS Systems Manager Parameter Store.
