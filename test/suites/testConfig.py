@@ -23,6 +23,7 @@ class TestConfig(unittest.TestCase):
         self.iam: IAMClient = boto3.client("iam")
         self.terraform_tag = "global-aws-infrastructure/config"
 
+    @unittest.skip('AWS Config disabled')
     def test_config_configuration_recorder_exists(self) -> None:
         """
         Determine if the AWS Config configuration recorder exists as expected.
@@ -81,6 +82,7 @@ class TestConfig(unittest.TestCase):
             sorted(recording_group.get("resourceTypes")),
         )
 
+    @unittest.skip('AWS Config disabled')
     def test_config_configuration_recorder_enabled(self) -> None:
         """
         Determine if the AWS Config configuration recorder is enabled.
@@ -100,6 +102,7 @@ class TestConfig(unittest.TestCase):
         self.assertTrue(configuration_recorder.get("recording"))
         self.assertEqual("SUCCESS", configuration_recorder.get("lastStatus"))
 
+    @unittest.skip('AWS Config disabled')
     def test_config_delivery_channel_exists(self) -> None:
         """
         Determine if the AWS Config delivery channel exists as expected.
@@ -114,6 +117,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual("aws-config-jarombek", delivery_channel.get("name"))
         self.assertEqual("aws-config-jarombek", delivery_channel.get("s3BucketName"))
 
+    @unittest.skip('AWS Config disabled')
     def test_aws_config_jarombek_role_exists(self) -> None:
         """
         Test that the aws-config-jarombek IAM Role exists
@@ -123,6 +127,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual("aws-config-jarombek", role.get("RoleName"))
         self.assertEqual("/", role.get("Path"))
 
+    @unittest.skip('AWS Config disabled')
     def test_aws_config_role_policy_attached(self) -> None:
         """
         Test that the AWS_ConfigRole policy is attached to the aws-config-jarombek role
@@ -157,6 +162,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual("Terraform", tag.get("Key"))
         self.assertEqual(self.terraform_tag, tag.get("Value"))
 
+    @unittest.skip('AWS Config disabled')
     def test_aws_config_jarombek_role_properly_tagged(self) -> None:
         """
         Test that the aws-config-jarombek IAM role has proper tags

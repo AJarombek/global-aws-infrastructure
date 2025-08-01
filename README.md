@@ -29,7 +29,6 @@ act -W '.github/workflows/aws_tests.yml' --detect-event
 | `cloud-trail`     | Terraform scripts for AWS account auditing with CloudTrail.                 |
 | `config`          | Terraform scripts for AWS Config.                                           |
 | `dockerfiles`     | Reusable dockerfiles used throughout my infrastructure.                     |
-| `ecs`             | Terraform configuration for an ECS cluster.                                 |
 | `eks-v2`          | Terraform and Kubernetes configuration for an EKS v2 cluster.               |
 | `file-vault`      | Terraform scripts for an S3 bucket that serves as a vault for secure files. |
 | `lambda`          | Terraform scripts for AWS Lambda functions.                                 |

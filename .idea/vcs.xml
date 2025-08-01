@@ -3,26 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../cloud-modules" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../devops-prototypes" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/0b71abc3505bdb2eb4990e971392bbec" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/534d9a843049848b79094620ff311b8e" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/8fd21e217d102edaa7dea17ed2ea131c" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/9e59f5a69ada7bf1f8afd59cbcfcb0c6" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/d131afc15e1205de9d277d004f9cc309" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/e81dd4816f02eeee3dce3b736772d62c" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/jarombek-com/.terraform/modules/jarombek-com-vpc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/0b9077067a115ade9f16e3893e877c45" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/2dee31127a9c6de886b139bc85d9382a" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/50666032a35279b2f5117aaf82867ba4" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/8390519edf2800bd12dfb2575e44720e" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/c16bf1d9440e98b2be6a711ce8d97b3d" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/c3acfeb61aa5fd16446dbd7800b109d8" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/e94dc3ecd5e7882b67043eee8bf02603" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/apps/saintsxctf-com/.terraform/modules/saintsxctf-com-vpc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/root/.terraform/modules/4fd83918e2a7ca4dda510a28edc6fade" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/root/.terraform/modules/65af64434d19713703f34465fa66daa6" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/root/.terraform/modules/b259574dfe34887baa8ad063f572f71a" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/root/.terraform/modules/resources-vpc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../terraform-modules" vcs="Git" />
   </component>
 </project>

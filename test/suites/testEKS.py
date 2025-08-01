@@ -30,6 +30,7 @@ class TestEKS(unittest.TestCase):
     Test the EKS Cluster
     """
 
+    @unittest.skip('AWS EKS disabled')
     def test_eks_cluster_exists(self) -> None:
         """
         Determine if the EKS cluster exists as expected.
@@ -46,6 +47,7 @@ class TestEKS(unittest.TestCase):
         self.assertEqual("eks.6", platform_version)
         self.assertEqual("ACTIVE", cluster_status)
 
+    @unittest.skip('AWS EKS disabled')
     def test_eks_cluster_vpc_subnet(self) -> None:
         """
         Test that the EKS cluster is in the expected cluster and public subnets.
@@ -76,6 +78,7 @@ class TestEKS(unittest.TestCase):
             cluster_subnets,
         )
 
+    @unittest.skip('AWS EKS disabled')
     def test_cluster_open_id_connect_provider(self):
         """
         Test that an Open ID Connect Provider is used by the cluster.
@@ -96,6 +99,7 @@ class TestEKS(unittest.TestCase):
             ["sts.amazonaws.com"], open_id_connect_provider.get("ClientIDList")
         )
 
+    @unittest.skip('AWS EKS disabled')
     def test_eks_worker_node_managed_by_eks(self) -> None:
         """
         Test that the worker node has the proper tags to be managed by the EKS cluster.
@@ -106,6 +110,7 @@ class TestEKS(unittest.TestCase):
         worker_instances = response.get("Reservations")[0].get("Instances")
         self.assertEqual(1, len(worker_instances))
 
+    @unittest.skip('AWS EKS disabled')
     def test_external_dns_policy(self) -> None:
         """
         Test that the external-dns IAM policy exists in the /kubernetes/ path.

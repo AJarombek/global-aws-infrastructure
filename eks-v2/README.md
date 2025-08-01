@@ -1,5 +1,7 @@
 ### Overview
 
+> ⚠️ Currently disabled due to cost-cutting, use ECS instead.
+
 V2 Terraform infrastructure for building an EKS cluster.
 
 ### Commands
