@@ -9,7 +9,7 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 1.3.9"
+  required_version = "~> 1.12.2"
 
   required_providers {
     aws = {
@@ -29,7 +29,7 @@ terraform {
 resource "aws_budgets_budget" "cost" {
   name              = "Andrew Jarombek AWS Budget"
   budget_type       = "COST"
-  limit_amount      = "360"
+  limit_amount      = "250"
   limit_unit        = "USD"
   time_period_start = "2021-02-01_12:00"
   time_unit         = "MONTHLY"

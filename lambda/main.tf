@@ -9,12 +9,12 @@ provider "aws" {
 }
 
 terraform {
-  required_version = "~> 1.3.9"
+  required_version = "~> 1.14.5"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.58.0"
+      version = "~> 6.57.1"
     }
   }
 
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "daily-cost" {
   description      = "AWS daily cost function"
   handler          = "lambda.handler"
   role             = aws_iam_role.daily-cost-lambda-role.arn
-  runtime          = "python3.8"
+  runtime          = "python3.14"
   source_code_hash = filebase64sha256("${path.module}/AWSDailyCost.zip")
   timeout          = 10
   memory_size      = 128
